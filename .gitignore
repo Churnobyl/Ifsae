@@ -1,8 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,git,gradle,intellij,visualstudiocode,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,git,gradle,intellij,visualstudiocode,windows
 
-### Querydsl ###
+### Custom ###
 .generated.*
+.env
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
