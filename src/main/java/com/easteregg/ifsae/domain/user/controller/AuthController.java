@@ -31,10 +31,10 @@ public class AuthController {
         return ResponseEntity.ok(CommonSuccessResponse.of("회원가입에 성공했습니다."));
     }
 
-    // TODO : 이메일 인증 로직 구현 필요, Exception 처리 필요
+    // TODO : 이메일 인증 로직 구현 필요
     @PostMapping("/email")
     public ResponseEntity<EmailAuthResponse> email(@RequestBody String email) {
-        log.info("email");
+        log.info("email 인증");
         String emailAuthCode = authService.emailAuth(email);
         return ResponseEntity.ok(EmailAuthResponse.of(emailAuthCode));
     }

@@ -4,6 +4,8 @@ import com.easteregg.ifsae.domain.user.dto.SignupDto.Request;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import com.easteregg.ifsae.entity.Role;
 import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.UserException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,17 +19,16 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // TODO : 회원가입 중 발생할 수 있는  Exception 처리 필요
     @Override
     public void signup(Request request) {
         // 이메일 중복 체크
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new UserException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // 닉네임 중복 체크
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
+            throw new UserException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         User newUser = User.builder()
@@ -40,11 +41,11 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(newUser);
     }
 
-    // TODO : 이메일 인증 로직 구현 필요, Exception 처리 필요
+    // TODO : 이메일 인증 로직 구현 필요
     @Override
     public String emailAuth(String email) {
         if(userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new UserException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // 이메일 인증 로직 구현
