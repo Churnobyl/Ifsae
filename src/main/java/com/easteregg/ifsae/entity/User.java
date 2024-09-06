@@ -1,6 +1,5 @@
 package com.easteregg.ifsae.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -39,7 +40,6 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 
-    @Nullable
     private String profileImgUrl;
 
     @Enumerated(EnumType.ORDINAL)
