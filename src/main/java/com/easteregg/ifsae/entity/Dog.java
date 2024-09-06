@@ -35,10 +35,12 @@ public class Dog {
     private Gender gender;
 
     @NotNull
-    private boolean is_adopted;
+    @Enumerated(EnumType.ORDINAL)
+    private DogStatus dogStatus;
 
     @NotNull
-    private String species;
+    @OneToOne(mappedBy = "dog")
+    private Species species;
 
     private String info;
 
