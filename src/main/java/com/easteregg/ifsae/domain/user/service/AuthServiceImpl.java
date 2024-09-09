@@ -1,11 +1,13 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto.Request;
-import com.easteregg.ifsae.domain.user.repository.UserRepository;
+import com.easteregg.ifsae.entity.EmailSubject;
 import com.easteregg.ifsae.entity.Role;
 import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.global.email.EmailService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.UserException;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,19 +18,20 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public void signup(Request request) {
         // 이메일 중복 체크
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userService.isEmailExisted(request.getEmail())) {
             throw new UserException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // 닉네임 중복 체크
-        if (userRepository.existsByNickname(request.getNickname())) {
-            throw new UserException(ErrorCode.DUPLICATE_EMAIL);
+        if (userService.isNicknameExisted(request.getNickname())) {
+            throw new UserException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
         User newUser = User.builder()
@@ -38,19 +41,21 @@ public class AuthServiceImpl implements AuthService {
                            .role(Role.fromValue(request.getRole()))
                            .build();
 
-        userRepository.save(newUser);
+        userService.saveUser(newUser);
     }
 
-    // TODO : 이메일 인증 로직 구현 필요
     @Override
-    public String emailAuth(String email) {
-        if(userRepository.existsByEmail(email)) {
+    public void sendEmailAuth(String userEmail) throws MessagingException {
+        // 1. 이메일 중복 확인
+        if (userService.isEmailExisted(userEmail)) {
             throw new UserException(ErrorCode.DUPLICATE_EMAIL);
         }
 
-        // 이메일 인증 로직 구현
+        // 2. 이메일 전송
+        String authCode = emailService.sendEmail(userEmail, EmailSubject.EMAIL_AUTH);
 
-        return "";
+        // TODO : 이메일 인증 코드 저장 (Redis)
     }
+
 
 }
