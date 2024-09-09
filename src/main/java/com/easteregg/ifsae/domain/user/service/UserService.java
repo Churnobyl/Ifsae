@@ -1,9 +1,9 @@
 package com.easteregg.ifsae.domain.user.service;
 
-import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.domain.user.dto.SignupDto;
 
 public interface UserService {
     boolean isEmailExisted(String email);
     boolean isNicknameExisted(String nickname);
-    void saveUser(User user);
+    void saveNewUser(SignupDto.Request request);
 }
