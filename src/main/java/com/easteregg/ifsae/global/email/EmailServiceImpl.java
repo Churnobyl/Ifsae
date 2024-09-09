@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.global.email;
 
 import com.easteregg.ifsae.entity.EmailSubject;
+import com.easteregg.ifsae.global.redis.RedisUtil;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
+    private final RedisUtil redisUtil;
 
     @Override
     public String sendEmail(String email, EmailSubject subject) throws MessagingException {
@@ -34,6 +36,9 @@ public class EmailServiceImpl implements EmailService {
         return UUID.randomUUID().toString().substring(0, 6);
     }
 
+    public void saveAuthCode(String email, String code) {
+        redisUtil.setData(email, code);
+    }
 
     private MimeMessage createMessage(String email, String subject, String code) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();

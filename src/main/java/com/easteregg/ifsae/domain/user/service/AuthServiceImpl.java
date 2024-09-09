@@ -54,7 +54,8 @@ public class AuthServiceImpl implements AuthService {
         // 2. 이메일 전송
         String authCode = emailService.sendEmail(userEmail, EmailSubject.EMAIL_AUTH);
 
-        // TODO : 이메일 인증 코드 저장 (Redis)
+        // 3. 이메일 인증 코드 저장
+        emailService.saveAuthCode(userEmail, authCode);
     }
 
 
