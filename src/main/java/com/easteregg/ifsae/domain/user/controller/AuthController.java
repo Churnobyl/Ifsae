@@ -1,10 +1,10 @@
 package com.easteregg.ifsae.domain.user.controller;
 
-import com.easteregg.ifsae.domain.user.dto.EmailAuthResponse;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.service.AuthService;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import com.easteregg.ifsae.global.email.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
+
     private final AuthService authService;
-    private final EmailService emailService;
 
     @PostMapping("/signin")
     public void signin() {
@@ -35,12 +35,11 @@ public class AuthController {
         return ResponseEntity.ok(CommonSuccessResponse.of("회원가입에 성공했습니다."));
     }
 
-    // TODO : 이메일 인증 로직 구현 필요
     @GetMapping("/email-auth/{email}")
-    public ResponseEntity<EmailAuthResponse> sendEmailAuth(@PathVariable String email) {
+    public ResponseEntity<CommonSuccessResponse> sendEmailAuth(@PathVariable String email) throws MessagingException {
         log.debug("[sendEmail] 이메일 인증 진행. userEmail : {} ", email);
-        return ResponseEntity.ok(EmailAuthResponse.of(emailService.sendEmailAuth(email)));
+        authService.sendEmailAuth(email);
+        return ResponseEntity.ok(CommonSuccessResponse.of("이메일 인증 메일을 전송했습니다."));
     }
-
 
 }
