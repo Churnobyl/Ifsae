@@ -1,13 +1,12 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.post.entity;
 
+import com.easteregg.ifsae.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
-import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Donation {
+public class PostLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,20 +28,7 @@ public class Donation {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "shelter_id")
-    private Shelter Shelter;
-
-    @ManyToOne
-    @JoinColumn(name = "dog_id")
-    private Dog dog;
-
-    @NotNull
-    private Date startDate;
-
-    @NotNull
-    private Date endDate;
-
-    @NotNull
-    private boolean isActive;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
 }

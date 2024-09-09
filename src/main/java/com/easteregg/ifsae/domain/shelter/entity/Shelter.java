@@ -1,4 +1,4 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.shelter.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

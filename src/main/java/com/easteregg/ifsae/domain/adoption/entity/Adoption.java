@@ -1,53 +1,47 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.adoption.entity;
 
+import com.easteregg.ifsae.domain.dog.entity.Dog;
+import com.easteregg.ifsae.domain.shelter.entity.Shelter;
+import com.easteregg.ifsae.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+public class Adoption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
-    private String content;
+    @ManyToOne
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
+
+    @ManyToOne
+    @JoinColumn(name = "shelter_id")
+    private Shelter shelter;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Timestamp createdAt;
+    private String adoptionPurpose;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Timestamp updatedAt;
+    @NotNull
+    private String absencePlan;
 
 }
