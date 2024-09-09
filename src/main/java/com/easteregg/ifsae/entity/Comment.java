@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
@@ -41,9 +43,11 @@ public class Comment {
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Timestamp createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
 }

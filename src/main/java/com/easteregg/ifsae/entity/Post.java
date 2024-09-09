@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
@@ -34,7 +36,7 @@ public class Post {
     private String content;
 
     @NotNull
-    private String video;
+    private String videoUrl;
 
     @NotNull
     @ManyToOne
@@ -58,9 +60,11 @@ public class Post {
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Timestamp createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
 }
