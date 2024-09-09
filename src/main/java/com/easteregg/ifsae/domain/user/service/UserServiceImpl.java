@@ -1,9 +1,12 @@
 package com.easteregg.ifsae.domain.user.service;
 
+import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
-import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.domain.user.type.Role;
+import com.easteregg.ifsae.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean isEmailExisted(String email) {
@@ -24,7 +28,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveNewUser(SignupDto.Request request) {
+
+        User user = User.builder()
+                        .email(request.getEmail())
+                        .nickname(request.getNickname())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .role(Role.fromValue(request.getRole()))
+                        .build();
+
         userRepository.save(user);
     }
 }

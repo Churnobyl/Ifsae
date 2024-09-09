@@ -1,4 +1,4 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
