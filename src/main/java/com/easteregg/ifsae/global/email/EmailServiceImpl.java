@@ -1,6 +1,5 @@
 package com.easteregg.ifsae.global.email;
 
-import com.easteregg.ifsae.entity.EmailSubject;
 import com.easteregg.ifsae.global.redis.RedisUtil;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;

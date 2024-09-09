@@ -2,8 +2,8 @@ package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
-import com.easteregg.ifsae.entity.Role;
-import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.domain.user.type.Role;
+import com.easteregg.ifsae.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

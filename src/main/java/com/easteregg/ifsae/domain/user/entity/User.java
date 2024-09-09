@@ -1,5 +1,8 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.user.entity;
 
+import com.easteregg.ifsae.domain.user.type.Grade;
+import com.easteregg.ifsae.domain.user.type.Role;
+import com.easteregg.ifsae.domain.user.type.UserStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

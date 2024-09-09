@@ -1,6 +1,5 @@
 package com.easteregg.ifsae.global.email;
 
-import com.easteregg.ifsae.entity.EmailSubject;
 import jakarta.mail.MessagingException;
 
 public interface EmailService {

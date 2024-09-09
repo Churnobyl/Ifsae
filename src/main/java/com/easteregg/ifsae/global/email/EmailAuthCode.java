@@ -1,4 +1,4 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.global.email;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

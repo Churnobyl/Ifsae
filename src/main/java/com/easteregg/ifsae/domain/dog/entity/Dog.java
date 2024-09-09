@@ -1,7 +1,7 @@
 package com.easteregg.ifsae.domain.dog.entity;
 
 import com.easteregg.ifsae.domain.dog.type.DogStatus;
-import com.easteregg.ifsae.entity.Gender;
+import com.easteregg.ifsae.domain.dog.type.Gender;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import jakarta.persistence.Entity;

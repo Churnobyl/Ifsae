@@ -1,7 +1,7 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto.Request;
-import com.easteregg.ifsae.entity.EmailSubject;
+import com.easteregg.ifsae.global.email.EmailSubject;
 import com.easteregg.ifsae.global.email.EmailService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.UserException;

@@ -1,4 +1,4 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.user.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

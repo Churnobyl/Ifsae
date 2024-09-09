@@ -1,6 +1,6 @@
 package com.easteregg.ifsae.domain.shelter.entity;
 
-import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.domain.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

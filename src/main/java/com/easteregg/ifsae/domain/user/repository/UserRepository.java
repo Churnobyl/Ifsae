@@ -1,6 +1,6 @@
 package com.easteregg.ifsae.domain.user.repository;
 
-import com.easteregg.ifsae.entity.User;
+import com.easteregg.ifsae.domain.user.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
