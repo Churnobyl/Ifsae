@@ -1,12 +1,13 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.shelter.entity;
 
+import com.easteregg.ifsae.domain.dog.entity.Dog;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,28 +18,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Adoption {
+public class ShelterDog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "dog_id")
-    private Dog dog;
-
-    @ManyToOne
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
-    @NotNull
-    private String adoptionPurpose;
-
-    @NotNull
-    private String absencePlan;
-
+    @OneToOne
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
 }
