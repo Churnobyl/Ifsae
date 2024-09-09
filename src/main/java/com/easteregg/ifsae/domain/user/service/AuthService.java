@@ -5,6 +5,4 @@ import com.easteregg.ifsae.domain.user.dto.SignupDto;
 public interface AuthService {
 
     void signup(SignupDto.Request request);
-
-    String emailAuth(String email);
 }
