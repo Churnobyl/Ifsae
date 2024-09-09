@@ -10,13 +10,12 @@ public enum Role {
 
     private final int value;
 
-    // TODO: 잘못된 값이 들어왔을때 Exception 처리 필요
     public static Role fromValue(int value) {
         for (Role role : Role.values()) {
             if (role.getValue() == value) {
                 return role;
             }
         }
-        throw new IllegalArgumentException("Invalid Role value: " + value);
+        throw new IllegalArgumentException("잘못된 값입니다. : " + value);
     }
 }
