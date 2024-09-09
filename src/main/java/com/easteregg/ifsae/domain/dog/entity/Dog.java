@@ -1,5 +1,9 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.dog.entity;
 
+import com.easteregg.ifsae.domain.dog.type.DogStatus;
+import com.easteregg.ifsae.entity.Gender;
+import com.easteregg.ifsae.domain.post.entity.PostDog;
+import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,7 +28,7 @@ public class Dog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     private String name;

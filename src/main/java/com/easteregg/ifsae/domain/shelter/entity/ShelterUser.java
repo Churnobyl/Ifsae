@@ -1,33 +1,26 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.shelter.entity;
 
+import com.easteregg.ifsae.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.OneToOne;
 
 @Entity
-@Builder
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class PostLike {
+public class ShelterUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userId;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
+    @JoinColumn(name = "shelter_id")
+    private Shelter shelterId;
 }

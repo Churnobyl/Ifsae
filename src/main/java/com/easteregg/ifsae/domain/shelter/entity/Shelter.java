@@ -1,4 +1,4 @@
-package com.easteregg.ifsae.entity;
+package com.easteregg.ifsae.domain.shelter.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class Shelter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     private String name;
