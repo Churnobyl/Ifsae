@@ -41,8 +41,14 @@ public class Post {
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
+    @OneToMany(mappedBy = "postDog")
+    private List<PostDog> dogs;
+
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "postLike")
+    private List<PostLike> likes;
 
     @NotNull
     private int likeCnt;

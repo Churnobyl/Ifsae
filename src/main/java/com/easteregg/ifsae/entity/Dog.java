@@ -6,8 +6,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,4 +50,8 @@ public class Dog {
 
     @OneToOne(mappedBy = "dog")
     private ShelterDog shelterDog;
+
+    @OneToMany(mappedBy = "dog")
+    private List<PostDog> posts;
+
 }
