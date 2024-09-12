@@ -44,13 +44,13 @@ public class Post {
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
-    @OneToMany(mappedBy = "postDog")
+    @OneToMany(mappedBy = "post")
     private List<PostDog> dogs;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "postLike")
+    @OneToMany(mappedBy = "post")
     private List<PostLike> likes;
 
     @NotNull

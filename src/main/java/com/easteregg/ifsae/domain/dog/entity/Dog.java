@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
@@ -45,7 +46,8 @@ public class Dog {
     private DogStatus dogStatus;
 
     @NotNull
-    @OneToOne(mappedBy = "dog")
+    @OneToOne
+    @JoinColumn(name = "species_id")
     private Species species;
 
     private String info;
