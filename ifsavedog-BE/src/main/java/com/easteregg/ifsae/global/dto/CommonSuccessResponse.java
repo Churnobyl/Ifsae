@@ -2,9 +2,12 @@ package com.easteregg.ifsae.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Getter
 public class CommonSuccessResponse {
     private String message;
 
