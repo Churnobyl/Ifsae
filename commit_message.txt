@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Feat/video (#32)
 
 <!-- 제목에 옮길 것
@@ -20,3 +21,13 @@ Feat/video (#32)
 
 ### issue 링크
 - [ifsavedog-BE #(issue번호)]
+=======
+BE-feat: #34 DogRepository 추가
+
+- Repository 추가
+- Service 일부 기능 추가
+   - 강아지 상세 조회
+
+[TODO]
+-서비스 기능 추가 구현 예정
+>>>>>>> fef1172 (BE-feat: #34 DogRepository 추가)
