@@ -1,0 +1,14 @@
+feat: #36 add BaseEntity for Post, Comment (#39)
+
+<!-- 제목에 옮길 것
+[feat]: #36 Base Entity 추가
+-->
+### 요약(Summary)
+- Post, Comment에 있는 createdAt, updatedAt을 BaseEntity로 묶음
+
+### 상세 내용(Describe your changes)
+- 테스트 내용 참조
+
+
+### issue 링크
+- [ifsavedog-BE #36]
