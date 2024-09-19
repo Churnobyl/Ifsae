@@ -10,6 +10,6 @@ public interface DogService {
 
     public List<DogListDto> findDogsByName(String name);
 
-    public List<DogListDto> findDogsByShelterName(String shelterName);
+    public List<DogListDto> findDogsByShelterId(long shelterId);
 
 }

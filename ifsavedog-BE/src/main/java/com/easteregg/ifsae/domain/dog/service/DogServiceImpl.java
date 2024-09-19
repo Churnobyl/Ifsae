@@ -29,6 +29,7 @@ public class DogServiceImpl implements DogService {
         Dog dog = dogRepository.findById(id).orElseThrow(NoSuchElementException::new);
 
         return DogDetailDto.builder()
+                           .id(dog.getId())
                            .name(dog.getName())
                            .age(dog.getAge())
                            .gender(dog.getGender())
@@ -54,8 +55,8 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public List<DogListDto> findDogsByShelterName(String shelterName) {
-        List<ShelterDog> shelterDogs = shelterDogRepository.findShelterDogsByShelterName(shelterName);
+    public List<DogListDto> findDogsByShelterId(long shelterId) {
+        List<ShelterDog> shelterDogs = shelterDogRepository.findShelterDogsByShelterId(shelterId);
 
         List<Dog> dogs = dogRepository.findDogsByShelterDogIn(shelterDogs);
 

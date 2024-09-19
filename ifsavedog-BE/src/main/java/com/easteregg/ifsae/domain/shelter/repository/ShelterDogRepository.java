@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShelterDogRepository extends JpaRepository<ShelterDog, Long> {
 
-    List<ShelterDog> findShelterDogsByShelterName(String shelterName);
+    List<ShelterDog> findShelterDogsByShelterId(long shelterId);
 
 }

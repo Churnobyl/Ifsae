@@ -10,6 +10,8 @@ import lombok.Getter;
 @Builder
 public class DogDetailDto {
 
+    private long id;
+
     private String name;
 
     private int age;
