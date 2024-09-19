@@ -22,7 +22,13 @@ public class VideoCompressor {
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "ffmpeg", "-i", inputFile.getAbsolutePath(),
-                "-vcodec", "h264", "-acodec", "mp2", outputFilePath);
+                "-vcodec", "h264", // 비디오 코덱
+                "-acodec", "mp3",  // 오디오 코덱
+                "-b:a", "256k",  // 오디오 비트레이트
+                "-vf", "scale=" + "1280:720", // 해상도 조정
+                "-crf", "42", // Constant Rate Factor 사용
+                outputFilePath // 출력 파일 경로
+        );
 
         Process process = processBuilder.start();
 
@@ -32,7 +38,7 @@ public class VideoCompressor {
         double totalDuration = 0;
         double currentProgress = 0;
 
-        // 총 길이(Duration)를 먼저 추출
+        // Duration 추출
         while ((line = stdError.readLine()) != null) {
             Matcher durationMatcher = DURATION_PATTERN.matcher(line);
             if (durationMatcher.find()) {

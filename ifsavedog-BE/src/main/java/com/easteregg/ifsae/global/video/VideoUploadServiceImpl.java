@@ -8,20 +8,25 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 
 @Service
-public class VideoUploadServiceImpl {
+public class VideoUploadServiceImpl implements VideoUploadService {
 
-    @Autowired private VideoCompressor videoCompressor;
-    @Autowired private S3VideoUploader s3VideoUploader;
+    private final VideoCompressor videoCompressor;
+    private final S3VideoUploader s3VideoUploader;
 
-    @Async("threadPoolTaskExecutor")
-    public void compressAndUploadVideo(MultipartFile inputFile, SseEmitter emitter) throws Exception {
+    public VideoUploadServiceImpl(VideoCompressor videoCompressor, S3VideoUploader s3VideoUploader) {
+        this.videoCompressor = videoCompressor;
+        this.s3VideoUploader = s3VideoUploader;
+    }
+
+    public void compressAndUploadVideo(MultipartFile inputFile, SseEmitter emitter) {
         try {
-            // 비디오 압축 상태 전송
-            File compressedFile = videoCompressor.compressVideo(inputFile, "comped_" + inputFile.getOriginalFilename(), emitter);
-
-            // 압축 완료 후 업로드 상태 전송
+            // 비디오 압축
+            File compressedFile = videoCompressor.compressVideo(inputFile, inputFile.getOriginalFilename(), emitter);
+            
+            // 비디오 업로드
             s3VideoUploader.uploadFile(compressedFile, emitter);
 
             emitter.complete();
