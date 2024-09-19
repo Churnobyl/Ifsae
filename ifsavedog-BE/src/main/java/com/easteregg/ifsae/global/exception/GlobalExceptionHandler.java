@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.global.exception;
 
+import com.easteregg.ifsae.global.exception.type.EmailAuthException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,10 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
-    // 기타 예상치 못한 모든 예외 처리
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleGeneralException(Exception e) {
-        log.error("[Unhandled Exception] - {}", e.getMessage(), e);
-        return ErrorResponse.toResponseEntity(ErrorCode.UNEXPECTED_ERROR);
+    @ExceptionHandler(EmailAuthException.class)
+    protected ResponseEntity<ErrorResponse> handleEmailAuthException(EmailAuthException e) {
+        log.error("[EmailAuthException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
     // 추가적인 예외 처리 예시 (예: NullPointerException)
@@ -30,4 +30,13 @@ public class GlobalExceptionHandler {
         log.error("[NullPointerException] : {}", e.getMessage(), e);
         return ErrorResponse.toResponseEntity("필수 값이 누락되었습니다.", HttpStatus.BAD_REQUEST);
     }
+
+    // 기타 예상치 못한 모든 예외 처리
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ErrorResponse> handleGeneralException(Exception e) {
+        log.error("[Unhandled Exception] - {}", e.getMessage(), e);
+        return ErrorResponse.toResponseEntity(ErrorCode.UNEXPECTED_ERROR);
+    }
+
+
 }

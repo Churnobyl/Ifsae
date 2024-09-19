@@ -1,5 +1,7 @@
 package com.easteregg.ifsae.global.email;
 
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.EmailAuthException;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -40,6 +42,13 @@ public class EmailServiceImpl implements EmailService {
                                                .email(email)
                                                .code(code)
                                                .build());
+    }
+
+    @Override
+    public boolean isCorrectEmailAuthCode(String email, String code) {
+        EmailAuthCode byId = emailRedisRepository.findById(email)
+                                                 .orElseThrow(() -> new EmailAuthException(ErrorCode.INVALID_EMAIL));
+        return byId.getCode().equals(code);
     }
 
     private MimeMessage createMessage(String email, String subject, String code) throws MessagingException {
