@@ -20,10 +20,6 @@ import java.util.regex.Pattern;
 @Slf4j
 @Service
 public class VideoCompressor {
-
-    private static final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
-    private static final Pattern TIME_PATTERN = Pattern.compile("time=(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
-
     /**
      * 비디오 압축 메서드
      * @param multipartFile 압축할 파일
@@ -32,6 +28,9 @@ public class VideoCompressor {
      * @return 압축된 파일 경로
      */
     public File compressVideo(MultipartFile multipartFile, String outputFilePath, SseEmitter emitter) throws IOException, InterruptedException {
+        final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
+        final Pattern TIME_PATTERN = Pattern.compile("time=(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
+
         File inputFile = convertMultipartFileToFile(multipartFile);
 
         ProcessBuilder processBuilder = new ProcessBuilder(
@@ -82,6 +81,7 @@ public class VideoCompressor {
         if (exitCode == 0) {
             // 완료 상태 100%
             emitter.send(SseEmitter.event().name("progress").data(100));
+
             return new File(outputFilePath);
         } else {
             log.error("[video] 압축 실패. 에러코드 - {}", exitCode);
@@ -98,6 +98,7 @@ public class VideoCompressor {
         int hours = Integer.parseInt(matcher.group(1));
         int minutes = Integer.parseInt(matcher.group(2));
         double seconds = Double.parseDouble(matcher.group(3));
+
         return hours * 3600 + minutes * 60 + seconds;
     }
 
@@ -114,6 +115,7 @@ public class VideoCompressor {
             log.error("[video] MultipartFile을 File객체로 변환하는데 에러 발생");
             throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
         }
+
         return convFile;
     }
 }
