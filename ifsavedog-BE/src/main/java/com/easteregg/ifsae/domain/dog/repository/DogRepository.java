@@ -16,6 +16,5 @@ public interface DogRepository extends JpaRepository<Dog, Long> {
 
     List<Dog> findDogsByShelterDogIn(List<ShelterDog> shelterDogs);
 
-    
 
 }
