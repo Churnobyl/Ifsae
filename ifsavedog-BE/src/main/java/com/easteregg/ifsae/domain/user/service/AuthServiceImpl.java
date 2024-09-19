@@ -1,9 +1,11 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto.Request;
-import com.easteregg.ifsae.global.email.EmailSubject;
+import com.easteregg.ifsae.domain.user.dto.VerifyEmailCodeRequest;
 import com.easteregg.ifsae.global.email.EmailService;
+import com.easteregg.ifsae.global.email.EmailSubject;
 import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.EmailAuthException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
@@ -45,6 +47,13 @@ public class AuthServiceImpl implements AuthService {
 
         // 3. 이메일 인증 코드 저장
         emailService.saveAuthCode(userEmail, authCode);
+    }
+
+    @Override
+    public void verifyEmailCode(VerifyEmailCodeRequest request) {
+        if (!emailService.isCorrectEmailAuthCode(request.getEmail(), request.getCode())) {
+            throw new EmailAuthException(ErrorCode.INVALID_EMAIL_AUTH_CODE);
+        }
     }
 
 
