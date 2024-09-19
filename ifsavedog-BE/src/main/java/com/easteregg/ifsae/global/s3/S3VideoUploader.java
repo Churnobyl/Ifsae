@@ -2,23 +2,27 @@ package com.easteregg.ifsae.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.VideoUploadException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
+/**
+ * S3로 비디오를 업로드하는 서비스
+ */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class S3VideoUploader {
-
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -28,22 +32,28 @@ public class S3VideoUploader {
     private String region;
 
     private List<PartETag> partETags = new ArrayList<>();
+    private final long PART_SIZE = 1024 * 1024; // 1MB
+    private final String URL = "video/"; // s3상의 url
 
-    public void uploadFile(File file, SseEmitter emitter) throws IOException, ExecutionException, InterruptedException {
+    /**
+     *
+     * @param file 업로드할 파일
+     * @param emitter 프론트단에 진행상황 전달
+     */
+    public void uploadFile(File file, SseEmitter emitter) {
         long contentLength = file.length();
-        long partSize = 5 * 1024 * 1024; // 5MB
-
-        String url = "video/";
-        String fileName = url + file.getName();
+        String fileName = URL + file.getName();
 
         String uploadId = amazonS3Client.initiateMultipartUpload(new InitiateMultipartUploadRequest(bucket, fileName)).getUploadId();
 
         try {
-            long uploadedBytes = 0;
-            int partNumber = 1;
+            long uploadedBytes = 0; // 업로드된 Byte
+            int partNumber = 1; // 업로드 Chunk 넘버
+
+            // 업로드된 Byte < 전체 Byte
             while (uploadedBytes < contentLength) {
                 long remainingBytes = contentLength - uploadedBytes;
-                long currentPartSize = Math.min(partSize, remainingBytes);
+                long currentPartSize = Math.min(PART_SIZE, remainingBytes);
 
                 // 각 파트를 업로드
                 UploadPartRequest uploadPartRequest = new UploadPartRequest()
@@ -70,15 +80,13 @@ public class S3VideoUploader {
 
         } catch (Exception e) {
             amazonS3Client.abortMultipartUpload(new AbortMultipartUploadRequest(bucket, fileName, uploadId));
-            throw new RuntimeException("Multipart upload failed: " + e.getMessage());
+            throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
         } finally {
-            // 로컬 파일 삭제
+            // 임시 파일 삭제
             if (file.exists()) {
                 boolean deleted = file.delete();
                 if (!deleted) {
-                    System.err.println("Failed to delete temporary file: " + file.getAbsolutePath());
-                } else {
-                    System.out.println("Temporary file deleted successfully: " + file.getAbsolutePath());
+                    log.info("[video] 임시 파일 삭제 실패 : {}", file.getAbsolutePath());
                 }
             }
         }

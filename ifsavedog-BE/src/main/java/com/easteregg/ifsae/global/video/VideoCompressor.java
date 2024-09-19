@@ -1,5 +1,8 @@
 package com.easteregg.ifsae.global.video;
 
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.VideoUploadException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -11,12 +14,23 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 비디오 압축 서비스
+ */
+@Slf4j
 @Service
 public class VideoCompressor {
 
     private static final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
     private static final Pattern TIME_PATTERN = Pattern.compile("time=(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
 
+    /**
+     * 비디오 압축 메서드
+     * @param multipartFile 압축할 파일
+     * @param outputFilePath 아웃풋 파일 경로
+     * @param emitter 프론트단에 진행상황 전달
+     * @return 압축된 파일 경로
+     */
     public File compressVideo(MultipartFile multipartFile, String outputFilePath, SseEmitter emitter) throws IOException, InterruptedException {
         File inputFile = convertMultipartFileToFile(multipartFile);
 
@@ -26,7 +40,7 @@ public class VideoCompressor {
                 "-acodec", "mp3",  // 오디오 코덱
                 "-b:a", "256k",  // 오디오 비트레이트
                 "-vf", "scale=" + "1280:720", // 해상도 조정
-                "-crf", "42", // Constant Rate Factor 사용
+                "-crf", "42", // Constant Rate Factor 사용 (변경 가능 default: 23)
                 outputFilePath // 출력 파일 경로
         );
 
@@ -58,7 +72,8 @@ public class VideoCompressor {
                 try {
                     emitter.send(SseEmitter.event().name("progress").data((int) currentProgress));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.info("[video] sse 전송 실패");
+                    throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
                 }
             }
         }
@@ -69,10 +84,16 @@ public class VideoCompressor {
             emitter.send(SseEmitter.event().name("progress").data(100));
             return new File(outputFilePath);
         } else {
-            throw new RuntimeException("Failed to compress video, error code: " + exitCode);
+            log.error("[video] 압축 실패. 에러코드 - {}", exitCode);
+            throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
         }
     }
 
+    /**
+     * Video 시간을 초로 변환하는 메서드
+     * @param matcher - Time 매처
+     * @return 초
+     */
     private double parseTimeToSeconds(Matcher matcher) {
         int hours = Integer.parseInt(matcher.group(1));
         int minutes = Integer.parseInt(matcher.group(2));
@@ -80,9 +101,19 @@ public class VideoCompressor {
         return hours * 3600 + minutes * 60 + seconds;
     }
 
-    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
+    /**
+     * Web으로 전달받은 MultipartFile을 File객체로 변환
+     * @param file - MultipartFile
+     * @return File 객체
+     */
+    private File convertMultipartFileToFile(MultipartFile file) {
         File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
-        file.transferTo(convFile); // MultipartFile을 로컬 파일로 저장
+        try {
+            file.transferTo(convFile); // MultipartFile을 로컬 파일로 저장
+        } catch (IOException e) {
+            log.error("[video] MultipartFile을 File객체로 변환하는데 에러 발생");
+            throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
+        }
         return convFile;
     }
 }
