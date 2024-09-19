@@ -23,17 +23,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class S3VideoUploader {
+
+    @Value("${cloud.aws.s3.bucket}") private String bucket;
+    @Value("${cloud.aws.region.static}") private String region;
+    @Value("${video.directory.s3}") private String URL;
+    @Value("${video.chunk-size}") private long PART_SIZE;
+    @Value("${video.emitter.event-name}") private String emitterName;
+
     private final AmazonS3Client amazonS3Client;
-
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
-    @Value("${cloud.aws.region.static}")
-    private String region;
-
     private List<PartETag> partETags = new ArrayList<>();
-    private final long PART_SIZE = 1024 * 1024; // 1MB
-    private final String URL = "video/"; // s3상의 url
 
     /**
      *
@@ -71,12 +69,12 @@ public class S3VideoUploader {
 
                 // 진행 상태 계산 (50%에서 100% 사이로)
                 int progress = 50 + (int) ((uploadedBytes * 50) / contentLength);
-                emitter.send(SseEmitter.event().name("progress").data(progress));
+                emitter.send(SseEmitter.event().name(emitterName).data(progress));
             }
 
             // 업로드 완료
             amazonS3Client.completeMultipartUpload(new CompleteMultipartUploadRequest(bucket, fileName, uploadId, partETags));
-            emitter.send(SseEmitter.event().name("progress").data(100)); // 100% 완료
+            emitter.send(SseEmitter.event().name(emitterName).data(100)); // 100% 완료
 
         } catch (Exception e) {
             amazonS3Client.abortMultipartUpload(new AbortMultipartUploadRequest(bucket, fileName, uploadId));

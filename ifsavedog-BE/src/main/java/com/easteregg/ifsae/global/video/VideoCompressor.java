@@ -3,6 +3,7 @@ package com.easteregg.ifsae.global.video;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.VideoUploadException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -20,6 +21,17 @@ import java.util.regex.Pattern;
 @Slf4j
 @Service
 public class VideoCompressor {
+
+    // ffmpeg variable
+    @Value("${video.ffmpeg.video-codec}") private String videoCodec;
+    @Value("${video.ffmpeg.audio-codec}") private String audioCodec;
+    @Value("${video.ffmpeg.crf}") private String crf;
+    @Value("${video.ffmpeg.audio-bitrate}") private String audioBitrate;
+    @Value("${video.ffmpeg.scale}") private String scale;
+
+    @Value("${video.emitter.event-name}") private String emitterName;
+
+
     /**
      * 비디오 압축 메서드
      * @param multipartFile 압축할 파일
@@ -35,11 +47,11 @@ public class VideoCompressor {
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "ffmpeg", "-i", inputFile.getAbsolutePath(),
-                "-vcodec", "h264", // 비디오 코덱
-                "-acodec", "mp3",  // 오디오 코덱
-                "-b:a", "256k",  // 오디오 비트레이트
-                "-vf", "scale=" + "1280:720", // 해상도 조정
-                "-crf", "42", // Constant Rate Factor 사용 (변경 가능 default: 23)
+                "-vcodec", videoCodec, // 비디오 코덱
+                "-acodec", audioCodec,  // 오디오 코덱
+                "-b:a", audioBitrate,  // 오디오 비트레이트
+                "-vf", "scale=" + scale, // 해상도 조정
+                "-crf", crf, // Constant Rate Factor 사용 (변경 가능 default: 23)
                 outputFilePath // 출력 파일 경로
         );
 
@@ -69,7 +81,7 @@ public class VideoCompressor {
 
                 // 진행 상태 SSE로 전송
                 try {
-                    emitter.send(SseEmitter.event().name("progress").data((int) currentProgress));
+                    emitter.send(SseEmitter.event().name(emitterName).data((int) currentProgress));
                 } catch (IOException e) {
                     log.info("[video] sse 전송 실패");
                     throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
@@ -80,7 +92,7 @@ public class VideoCompressor {
         int exitCode = process.waitFor();
         if (exitCode == 0) {
             // 완료 상태 100%
-            emitter.send(SseEmitter.event().name("progress").data(100));
+            emitter.send(SseEmitter.event().name(emitterName).data(100));
 
             return new File(outputFilePath);
         } else {

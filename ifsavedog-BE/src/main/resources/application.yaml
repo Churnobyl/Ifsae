@@ -94,6 +94,7 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
 
 video:
+  chunk-size: 1048576 # 1024 * 1024 = 1MB
   ffmpeg:
     video-codec: h264
     audio-codec: mp3
@@ -103,5 +104,4 @@ video:
   emitter:
     event-name: progress
   directory:
-    local-temp: temp
-    s3: video
+    s3: video/
