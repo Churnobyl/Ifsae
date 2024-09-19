@@ -3,7 +3,6 @@ package com.easteregg.ifsae.domain.user.controller;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.service.AuthService;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
-import com.easteregg.ifsae.global.email.EmailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
