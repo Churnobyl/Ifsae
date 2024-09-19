@@ -1,9 +1,9 @@
 package com.easteregg.ifsae.global.email;
 
-import com.easteregg.ifsae.global.redis.RedisUtil;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final RedisUtil redisUtil;
+    private final EmailRedisRepository emailRedisRepository;
 
     @Override
     public String sendEmail(String email, EmailSubject subject) throws MessagingException {
@@ -36,7 +36,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     public void saveAuthCode(String email, String code) {
-        redisUtil.setData(email, code);
+        emailRedisRepository.save(EmailAuthCode.builder()
+                                               .email(email)
+                                               .code(code)
+                                               .build());
     }
 
     private MimeMessage createMessage(String email, String subject, String code) throws MessagingException {
@@ -72,5 +75,11 @@ public class EmailServiceImpl implements EmailService {
 
         message.setText(msg, "utf-8", "html");
         return message;
+    }
+
+    // 이메일 인증 코드 조회. RedisRepository 테스트용
+    public String getCode(String email) {
+        Optional<EmailAuthCode> byId = emailRedisRepository.findById(email);
+        return byId.map(EmailAuthCode::getCode).orElse("인증코드가 없습니다.");
     }
 }
