@@ -13,6 +13,8 @@ public enum ErrorCode {
     // 인증 관련 에러
     UNAUTHORIZED("인증되지 않은 사용자입니다.", HttpStatus.UNAUTHORIZED),
     FORBIDDEN("권한이 없습니다.", HttpStatus.FORBIDDEN),
+    EXPIRED_TOKEN(" 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
 
     // 사용자 관련 에러
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

@@ -1,9 +1,9 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
+import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import com.easteregg.ifsae.domain.user.type.Role;
-import com.easteregg.ifsae.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,5 +38,11 @@ public class UserServiceImpl implements UserService {
                         .build();
 
         userRepository.save(user);
+    }
+
+    @Override
+    public User getUserByEmail(String userEmail) {
+        return userRepository.findByEmail(userEmail)
+                             .orElseThrow(() -> new IllegalArgumentException("해당 이메일을 가진 사용자가 없습니다."));
     }
 }
