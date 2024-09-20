@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.global.exception;
 
+import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
 import com.easteregg.ifsae.global.exception.type.EmailAuthException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(CustomSecurityException.class)
+    protected ResponseEntity<ErrorResponse> handleCustomSecurityException(CustomSecurityException e) {
+        log.error("[CustomSecurityException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
 
     @ExceptionHandler(UserException.class)
     protected ResponseEntity<ErrorResponse> handleUserException(UserException e) {
