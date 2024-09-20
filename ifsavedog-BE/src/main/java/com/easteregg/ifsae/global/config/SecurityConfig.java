@@ -36,10 +36,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // token인증 없이 테스트하고 싶을때 아래 코드 주석처리
-        http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/auth/**", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated());
+        // TODO : 인증 구현 끝나면 주석 해제 후 사용
+//        // token인증 없이 테스트하고 싶을때 아래 코드 주석처리
+//        http.authorizeHttpRequests((authorize) -> authorize
+//                .requestMatchers("/api/auth/**", "/swagger-ui/**").permitAll()
+//                .anyRequest().authenticated());
 
         // exceptionHandler
         http.exceptionHandling(exceptionHandling -> exceptionHandling
