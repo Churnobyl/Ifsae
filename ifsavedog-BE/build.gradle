@@ -62,9 +62,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-
     reports {
-        junitXml.enabled = true
-        junitXml.destination = file("$buildDir/test-results/junitXml")
+        junitXml {
+            required.set(true)
+            outputLocation.set(file("$buildDir/test-results/junitXml"))
+        }
     }
 }
