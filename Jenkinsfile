@@ -165,13 +165,12 @@ def prepareEnvironment(branch) {
 }
 
 // 환경 파일 복사 및 설정 함수
-def prepareEnv(envFile, directory, dockerImage) {
+def prepareEnv(envFile, dockerImage) {
     sh """
-        mkdir -p "$WORKSPACE/${directory}"
-        cp "${envFile}" "$WORKSPACE/${directory}/.env"
-        echo "DOCKER_TAG=${DOCKER_TAG}" >> "$WORKSPACE/${directory}/.env"
-        echo "DOCKER_IMAGE=${dockerImage}" >> "$WORKSPACE/${directory}/.env"
-        cat "$WORKSPACE/${directory}/.env"
+        cp "${envFile}" "$WORKSPACE/.env"
+        echo "DOCKER_TAG=${DOCKER_TAG}" >> "$WORKSPACE/.env"
+        echo "DOCKER_IMAGE=${dockerImage}" >> "$WORKSPACE/.env"
+        cat "$WORKSPACE/.env"
     """
 }
 
