@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'https://registry.hub.docker.com'
+        DOCKER_IMAGE_BACKEND = "sdeogi/IfSae-BE"
+        DOCKER_IMAGE_FRONTEND = "sdeogi/IfSae-FE"
         DOCKER_TAG = "${BUILD_NUMBER}"
+        DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
 
     stages {
@@ -18,75 +20,80 @@ pipeline {
             }
         }
 
-        // 소나큐브 분석
+        // SonarQube 분석
         stage('SonarQube Analysis') {
+            when {
+                anyOf {
+                    branch 'develop-BE'
+                    branch 'develop-FE'
+                }
+            }
             steps {
-                script {
-                    def projectDir = getProjectDirectory()
-                    echo "Running SonarQube analysis for directory: ${projectDir}"
-                    withSonarQubeEnv('SonarQube') {
-                        dir(projectDir) {
-                            sh 'chmod +x ./gradlew'
-                            sh './gradlew clean'
-                            sh './gradlew sonarqube'
-                        }
+                echo "Running SonarQube analysis..."
+                withSonarQubeEnv('SonarQube') {
+                    dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
+                        sh './gradlew clean'
+                        sh './gradlew sonarqube'
                     }
                 }
                 echo "SonarQube analysis completed."
             }
         }
 
-        // 환경 준비
+        // 환경 설정
         stage('Prepare Environment') {
             steps {
+                echo "Preparing environment..."
                 script {
-                    def projectDir = getProjectDirectory()
-                    def dockerImage = getDockerImage()
-                    def envFile = getEnvFile()
-
-                    echo "Preparing environment for ${projectDir}"
-                    sh """
-                        mkdir -p $WORKSPACE/${projectDir}
-                        cp $envFile $WORKSPACE/${projectDir}/.env
-                        echo "DOCKER_TAG=${DOCKER_TAG}" >> $WORKSPACE/${projectDir}/.env
-                        echo "DOCKER_IMAGE=${dockerImage}" >> $WORKSPACE/${projectDir}/.env
-                        cat $WORKSPACE/${projectDir}/.env
-                    """
-                    echo "Environment preparation completed."
+                    prepareEnvironment(env.BRANCH_NAME)
                 }
+                echo "Environment preparation completed."
             }
         }
 
-        // 도커 이미지 빌드
+        // 도커 이미지 생성
         stage('Build Docker Images') {
-            steps {
-                script {
-                    def projectDir = getProjectDirectory()
-                    def dockerImage = getDockerImage()
-
-                    echo "Building Docker image for ${projectDir}"
-                    buildDockerImage(dockerImage, projectDir)
+            parallel {
+                stage('Build Backend') {
+                    when { branch 'develop-BE' }
+                    steps {
+                        echo "Building backend Docker image..."
+                        script {
+                            buildDockerImage(DOCKER_IMAGE_BACKEND, 'IfSae_develop-BE')
+                        }
+                    }
                 }
-            }
-        }
-
-        // 도커 이미지 푸쉬
-        stage('Push Docker Images') {
-            steps {
-                script {
-                    def dockerImage = getDockerImage()
-                    echo "Pushing Docker image: ${dockerImage}"
-
-                    docker.withRegistry("$DOCKER_REGISTRY", 'docker-hub-credentials') {
-                        docker.image("${dockerImage}:${DOCKER_TAG}").push()
-                        docker.image("${dockerImage}:latest").push()
+                stage('Build Frontend') {
+                    when { branch 'develop-FE' }
+                    steps {
+                        echo "Building frontend Docker image..."
+                        script {
+                            buildDockerImage(DOCKER_IMAGE_FRONTEND, 'IfSae_develop-FE')
+                        }
                     }
                 }
             }
         }
 
-        // 배포
+        // 도커 이미지 push
+        stage('Push Docker Images') {
+            steps {
+                echo "Pushing Docker images to registry..."
+                script {
+                    pushDockerImage(env.BRANCH_NAME)
+                }
+            }
+        }
+
+        // EC2 배포
         stage('Deploy to EC2') {
+            when {
+                anyOf {
+                    branch 'develop-BE'
+                    branch 'develop-FE'
+                }
+            }
             steps {
                 echo "Deploying to EC2..."
                 sshagent(['jenkins-ssh-key']) {
@@ -103,7 +110,7 @@ pipeline {
             }
         }
 
-        // 테스트
+        // Test
         stage('Test') {
             steps {
                 echo 'Jenkins Mattermost Connection'
@@ -111,7 +118,7 @@ pipeline {
         }
     }
 
-    // 알림
+    // MM 알람
     post {
         success {
             script {
@@ -144,35 +151,39 @@ def buildDockerImage(imageName, directory) {
     }
 }
 
-// 브랜치에 따라 디렉토리 설정
-def getProjectDirectory() {
-    if (env.BRANCH_NAME == 'develop-BE') {
-        return 'IfSae_develop-BE'
-    } else if (env.BRANCH_NAME == 'develop-FE') {
-        return 'IfSae_develop-FE'
-    } else {
-        error "Unsupported branch: ${env.BRANCH_NAME}"
+// 공통 환경 설정 함수 정의
+def prepareEnvironment(branch) {
+    if (branch == 'develop-BE') {
+        withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
+            prepareEnv(ENV_FILE_BACKEND, 'IfSae_develop-BE', DOCKER_IMAGE_BACKEND)
+        }
+    } else if (branch == 'develop-FE') {
+        withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
+            prepareEnv(ENV_FILE_FRONTEND, 'IfSae_develop-FE', DOCKER_IMAGE_FRONTEND)
+        }
     }
 }
 
-// 브랜치에 따라 Docker 이미지 설정
-def getDockerImage() {
-    if (env.BRANCH_NAME == 'develop-BE') {
-        return "sdeogi/IfSae-BE"
-    } else if (env.BRANCH_NAME == 'develop-FE') {
-        return "sdeogi/IfSae-FE"
-    } else {
-        error "Unsupported branch: ${env.BRANCH_NAME}"
-    }
+// 환경 파일 복사 및 설정 함수
+def prepareEnv(envFile, directory, dockerImage) {
+    sh """
+        mkdir -p "$WORKSPACE/${directory}"
+        cp "${envFile}" "$WORKSPACE/${directory}/.env"
+        echo "DOCKER_TAG=${DOCKER_TAG}" >> "$WORKSPACE/${directory}/.env"
+        echo "DOCKER_IMAGE=${dockerImage}" >> "$WORKSPACE/${directory}/.env"
+        cat "$WORKSPACE/${directory}/.env"
+    """
 }
 
-// 브랜치에 따라 환경 파일 설정
-def getEnvFile() {
-    if (env.BRANCH_NAME == 'develop-BE') {
-        return 'IfSae-back-env-file'
-    } else if (env.BRANCH_NAME == 'develop-FE') {
-        return 'IfSae-front-env-file'
-    } else {
-        error "Unsupported branch: ${env.BRANCH_NAME}"
+// 공통 Docker 이미지 푸쉬 함수 정의
+def pushDockerImage(branch) {
+    docker.withRegistry("${DOCKER_REGISTRY}", 'docker-hub-credentials') {
+        if (branch == 'develop-BE') {
+            docker.image("${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}").push()
+            docker.image("${DOCKER_IMAGE_BACKEND}:latest").push()
+        } else if (branch == 'develop-FE') {
+            docker.image("${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}").push()
+            docker.image("${DOCKER_IMAGE_FRONTEND}:latest").push()
+        }
     }
 }
