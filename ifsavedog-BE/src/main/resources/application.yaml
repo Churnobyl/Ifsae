@@ -92,3 +92,16 @@ springdoc:
   model-and-view-allowed: true
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+
+video:
+  chunk-size: 1048576 # 1024 * 1024 = 1MB
+  ffmpeg:
+    video-codec: h264
+    audio-codec: mp3
+    crf: 42
+    audio-bitrate: 256k
+    scale: 1280:720
+  emitter:
+    event-name: progress
+  directory:
+    s3: video/
