@@ -163,12 +163,12 @@ def prepareEnvironment(branch) {
 
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
-    sh """
-        cp ${envFile} ${WORKSPACE}/.env
-        echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
-        echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
+    sh '''
+        sudo cp $ENV_FILE_BACKEND ${WORKSPACE}/.env
+        echo DOCKER_TAG=$DOCKER_TAG >> ${WORKSPACE}/.env
+        echo DOCKER_IMAGE=$DOCKER_IMAGE >> ${WORKSPACE}/.env
         cat ${WORKSPACE}/.env
-    """
+    '''
 }
 
 // 공통 Docker 이미지 푸쉬 함수 정의
