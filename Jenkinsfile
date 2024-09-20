@@ -30,7 +30,9 @@ pipeline {
             steps {
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
-                    sh './gradlew sonar'
+                    dir('ifsavedog-BE') {
+                        sh './gradlew sonar'
+                    }
                 }
                 echo "SonarQube analysis completed."
             }
