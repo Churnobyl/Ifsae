@@ -34,7 +34,7 @@ pipeline {
                     dir('ifsavedog-BE') {
                         sh 'chmod +x ./gradlew'
                         sh './gradlew clean'
-                        sh './gradlew sonarqube'
+                        sh './gradlew sonar'
                     }
                 }
                 echo "SonarQube analysis completed."
@@ -164,9 +164,9 @@ def prepareEnvironment(branch) {
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh '''
-        sudo cp $ENV_FILE_BACKEND ${WORKSPACE}/.env
+        cp ${envFile} ${WORKSPACE}/.env
         echo DOCKER_TAG=$DOCKER_TAG >> ${WORKSPACE}/.env
-        echo DOCKER_IMAGE=$DOCKER_IMAGE >> ${WORKSPACE}/.env
+        echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
         cat ${WORKSPACE}/.env
     '''
 }
