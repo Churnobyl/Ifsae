@@ -64,29 +64,40 @@ public class JwtTokenProvider {
                    .compact();
     }
 
-    // 토큰으로 인증 객체(Authentication) 얻기
     public Authentication getAuthentication(String token) {
         log.debug("[getAuthentication] 토큰 인증 정보 조회");
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmailFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    // 토큰에서 유저 email 추출
     public String getUserEmailFromToken(String token) {
         log.debug("[getMemberEmail] token 에서 이메일 정보 추출");
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // 토큰 유효 기간 확인
     public boolean validateTokenExpiration(String token) {
         log.debug("[validateTokenExpiration] 토큰 유효 기간 확인");
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return !claims.getBody().getExpiration().before(new Date());
     }
 
-    // header에서 token 값 추출
     public String resolveToken(HttpServletRequest request) {
         log.debug("[resolveToken] HTTP 헤더에서 Token 값 추출");
-        return request.getHeader("X-AUTH-TOKEN");
+        String bearerToken = request.getHeader("Authorization");
+
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    // TODO: accessToken으로 refeshToken 가져오기
+    public String getRefreshToken(String accessToken) {
+        return null;
+    }
+
+    // TODO: refreshToken으로 accessToken 재발급
+    public String reissueAccessToken(String refreshToken) {
+        return null;
     }
 }
