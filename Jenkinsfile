@@ -164,7 +164,7 @@ def prepareEnvironment(branch) {
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh """
-        cp ${envFile} ${WORKSPACE}/.env
+        sudo cp ${envFile} ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
         cat ${WORKSPACE}/.env
