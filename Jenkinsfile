@@ -31,6 +31,7 @@ pipeline {
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
                         sh './gradlew sonar'
                     }
                 }
