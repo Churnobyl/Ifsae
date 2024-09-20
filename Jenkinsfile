@@ -24,8 +24,8 @@ pipeline {
         stage('SonarQube Analysis') {
             when {
                 anyOf {
-                    branch 'develop-BE'
-                    branch 'develop-FE'
+                    expression { env.BRANCH_NAME == 'develop-BE' }
+                    expression { env.BRANCH_NAME == 'develop-FE' }
                 }
             }
             steps {
@@ -56,7 +56,9 @@ pipeline {
         stage('Build Docker Images') {
             parallel {
                 stage('Build Backend') {
-                    when { branch 'develop-BE' }
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-BE' }
+                    }
                     steps {
                         echo "Building backend Docker image..."
                         script {
@@ -65,7 +67,9 @@ pipeline {
                     }
                 }
                 stage('Build Frontend') {
-                    when { branch 'develop-FE' }
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-FE' }
+                    }
                     steps {
                         echo "Building frontend Docker image..."
                         script {
@@ -90,8 +94,8 @@ pipeline {
         stage('Deploy to EC2') {
             when {
                 anyOf {
-                    branch 'develop-BE'
-                    branch 'develop-FE'
+                    expression { env.BRANCH_NAME == 'develop-BE' }
+                    expression { env.BRANCH_NAME == 'develop-FE' }
                 }
             }
             steps {
@@ -107,13 +111,6 @@ pipeline {
                     """
                 }
                 echo "Deployment completed."
-            }
-        }
-
-        // Test
-        stage('Test') {
-            steps {
-                echo 'Jenkins Mattermost Connection'
             }
         }
     }
@@ -155,11 +152,11 @@ def buildDockerImage(imageName, directory) {
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
-            prepareEnv(ENV_FILE_BACKEND, 'IfSae_develop-BE', DOCKER_IMAGE_BACKEND)
+            prepareEnv(ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
         }
     } else if (branch == 'develop-FE') {
         withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
-            prepareEnv(ENV_FILE_FRONTEND, 'IfSae_develop-FE', DOCKER_IMAGE_FRONTEND)
+            prepareEnv(ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
         }
     }
 }
@@ -167,10 +164,10 @@ def prepareEnvironment(branch) {
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh """
-        cp "${envFile}" "$WORKSPACE/.env"
-        echo "DOCKER_TAG=${DOCKER_TAG}" >> "$WORKSPACE/.env"
-        echo "DOCKER_IMAGE=${dockerImage}" >> "$WORKSPACE/.env"
-        cat "$WORKSPACE/.env"
+        cp ${envFile} ${WORKSPACE}/.env
+        echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
+        echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
+        cat ${WORKSPACE}/.env
     """
 }
 
