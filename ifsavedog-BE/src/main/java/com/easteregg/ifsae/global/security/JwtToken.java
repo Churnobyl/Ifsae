@@ -1,5 +1,7 @@
 package com.easteregg.ifsae.global.security;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -11,6 +13,7 @@ import org.springframework.data.redis.core.RedisHash;
 public class JwtToken {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String accessToken;
