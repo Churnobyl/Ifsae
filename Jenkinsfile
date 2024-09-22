@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = "sdeogi/ifSae-be"
-        DOCKER_IMAGE_FRONTEND = "sdeogi/ifSae-fe"
+        DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
+        DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
         DOCKER_TAG = "${BUILD_NUMBER}"
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
