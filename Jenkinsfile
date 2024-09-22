@@ -163,6 +163,7 @@ def prepareEnvironment(branch) {
 
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
+    sh "echo 'ENV_FILE_BACKEND: \$envFile'" // 복사 여부 확인
     sh """
         cp \$envFile ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
