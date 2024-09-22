@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        PATH = "/usr/bin:/usr/local/bin:/bin:/usr/sbin:/sbin:$PATH"
         DOCKER_IMAGE_BACKEND = "sdeogi/IfSae-BE"
         DOCKER_IMAGE_FRONTEND = "sdeogi/IfSae-FE"
         DOCKER_TAG = "${BUILD_NUMBER}"
