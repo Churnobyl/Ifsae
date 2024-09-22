@@ -164,11 +164,11 @@ def prepareEnvironment(branch) {
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh """
-        sudo cp ${envFile} ${WORKSPACE}/.env
+        cp \$envFile ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
-        cat ${WORKSPACE}/.env
     """
+    sh "chmod 775 ${WORKSPACE}/.env"
 }
 
 // 공통 Docker 이미지 푸쉬 함수 정의
