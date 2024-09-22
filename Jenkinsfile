@@ -144,7 +144,7 @@ pipeline {
 // 공통 Docker 이미지 빌드를 위한 함수 정의
 def buildDockerImage(imageName, directory) {
     dir(directory) {
-        sh "docker build -t ${imageName}:${DOCKER_TAG} -f /home/ubuntu/Dockerfile ."
+        sh "docker build -t ${imageName}:${DOCKER_TAG} ."
     }
 }
 
