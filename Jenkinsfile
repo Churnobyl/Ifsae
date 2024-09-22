@@ -152,6 +152,8 @@ def buildDockerImage(imageName, directory) {
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
+            echo "Backend ENV file path: ${env.ENV_FILE_BACKEND}" // 파일 경로 출력
+            sh "cat ${env.ENV_FILE_BACKEND}" // 파일 내용 출력
             prepareEnv(ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
         }
     } else if (branch == 'develop-FE') {
@@ -163,9 +165,9 @@ def prepareEnvironment(branch) {
 
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
-    sh "echo 'ENV_FILE_BACKEND: \$envFile'" // 복사 여부 확인
     sh """
-        cp \$envFile ${WORKSPACE}/.env
+        echo 'ENV_FILE: ${envFile}' // ENV_FILE 값이 있는지 확인
+        cp ${envFile} ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
     """
