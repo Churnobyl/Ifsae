@@ -9,20 +9,15 @@ pipeline {
     }
 
     stages {
-        // 체크아웃
         stage('Checkout') {
             steps {
                 echo "Checking out the repository..."
                 deleteDir()
                 checkout scm
                 sh 'ls -la'
-                echo "Checkout completed. Confirming Dockerfile location:"
-                // 추가: Dockerfile 위치 확인
-                sh 'find . -name Dockerfile'
             }
         }
 
-        // SonarQube 분석
         stage('SonarQube Analysis') {
             when {
                 anyOf {
@@ -43,7 +38,6 @@ pipeline {
             }
         }
 
-        // 환경 설정
         stage('Prepare Environment') {
             steps {
                 echo "Preparing environment..."
@@ -54,7 +48,16 @@ pipeline {
             }
         }
 
-        // 도커 이미지 생성
+        stage('Build JAR') {
+            steps {
+                echo "Building JAR file with Gradle..."
+                dir('ifsavedog-BE') {
+                    sh './gradlew build'
+                }
+                echo "JAR build completed."
+            }
+        }
+
         stage('Build Docker Images') {
             parallel {
                 stage('Build Backend') {
@@ -88,7 +91,6 @@ pipeline {
             }
         }
 
-        // 도커 이미지 push
         stage('Push Docker Images') {
             steps {
                 echo "Pushing Docker images to registry..."
@@ -98,7 +100,6 @@ pipeline {
             }
         }
 
-        // EC2 배포
         stage('Deploy to EC2') {
             when {
                 anyOf {
@@ -123,7 +124,6 @@ pipeline {
         }
     }
 
-    // MM 알람
     post {
         success {
             script {
@@ -149,10 +149,8 @@ pipeline {
     }
 }
 
-// 공통 Docker 이미지 빌드를 위한 함수 정의
 def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
-        // Dockerfile 유효성 검사
         sh """
         if [ -f ${directory}/Dockerfile ]; then
             echo 'Dockerfile exists'
@@ -161,11 +159,14 @@ def validateAndBuildDockerImage(imageName, directory) {
             exit 1
         fi
         """
+        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계 추가
+        sh "cp ./ifsavedog-BE/build/libs/ifsavedog-be-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
+
+        // Docker 이미지 빌드
         sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
     }
 }
 
-// 공통 환경 설정 함수 정의
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
@@ -180,19 +181,16 @@ def prepareEnvironment(branch) {
     }
 }
 
-// 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh """
         echo 'Preparing ENV_FILE: ${envFile}'
-        touch ${WORKSPACE}/.env
         cp ${envFile} ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
+        chmod 775 ${WORKSPACE}/.env
     """
-    sh "chmod 775 ${WORKSPACE}/.env"
 }
 
-// 공통 Docker 이미지 푸쉬 함수 정의
 def pushDockerImage(branch) {
     docker.withRegistry("${DOCKER_REGISTRY}", 'docker-hub-credentials') {
         if (branch == 'develop-BE') {
