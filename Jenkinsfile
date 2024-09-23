@@ -161,7 +161,8 @@ def validateAndBuildDockerImage(imageName, directory) {
         echo "Copying JAR file to Dockerfile context..."
         sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
         sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
-        sh 'ls -la ${directory}/app.jar'  // 복사된 JAR 파일 확인
+        sh "ls -la ${directory}/app.jar"  // 복사된 JAR 파일 확인
+
 
         // Docker 이미지 빌드
         echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
