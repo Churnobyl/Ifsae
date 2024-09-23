@@ -10,7 +10,7 @@ public interface PostService {
 
     Slice<Post> getPostSlice(Pageable pageable);
     PostDto.Response read(Long postId);
-    void create(PostDto.Request request, MultipartFile multipartFile);
-    void update(Long postId, PostDto.Request request);
+    Long create(PostDto.Request request, MultipartFile multipartFile);
+    void update(Long postId, PostDto.UpdateRequest request);
     void delete(Long postId);
 }

@@ -26,6 +26,12 @@ public enum ErrorCode {
     // 이메일 인증 관련 에러
     INVALID_EMAIL_AUTH_CODE("잘못된 인증 코드입니다.", HttpStatus.BAD_REQUEST),
 
+
+    // 센터 관련 에러
+    SHELTER_NOT_FOUND("센터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    // 포스트 관련 에러
+    POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
     ;
 
     private final String message;
