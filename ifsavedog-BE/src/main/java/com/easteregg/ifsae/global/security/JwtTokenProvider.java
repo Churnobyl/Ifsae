@@ -1,5 +1,8 @@
 package com.easteregg.ifsae.global.security;
 
+import com.easteregg.ifsae.domain.user.service.UserService;
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -23,16 +27,16 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
+
+    private final UserService userService;
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenRedisRepository jwtTokenRepository;
     @Value("${jwt.secret.key}")
     private String secretKey;
-
     @Value("${jwt.access.expiration}")
     private long ACCESS_TOKEN_VALID_TIME;
-
     @Value("${jwt.refresh.expiration}")
     private long REFRESH_TOKEN_VALID_TIME;
-
-    private final UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -60,7 +64,7 @@ public class JwtTokenProvider {
                    .setClaims(claims)
                    .setIssuedAt(now)
                    .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
-                   .signWith(SignatureAlgorithm.HS256, this.secretKey)
+                   .signWith(SignatureAlgorithm.HS512, this.secretKey)
                    .compact();
     }
 
@@ -91,13 +95,24 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // TODO: accessToken으로 refeshToken 가져오기
-    public String getRefreshToken(String accessToken) {
-        return null;
+    public String getRefreshTokenByAccessToken(String accessToken) {
+        log.debug("[getRefreshTokenByAccessToken] accessToken으로 refreshToken 조회");
+        JwtToken jwtToken = jwtTokenRepository.findByAccessToken(accessToken).orElse(null);
+
+        return jwtToken != null ? jwtToken.getRefreshToken() : null;
     }
 
-    // TODO: refreshToken으로 accessToken 재발급
     public String reissueAccessToken(String refreshToken) {
-        return null;
+        log.debug("[reissueAccessToken] refreshToken으로 accessToken 재발급");
+        JwtToken jwtToken = jwtTokenRepository.findByRefreshToken(refreshToken)
+                                              .orElseThrow(() -> new CustomSecurityException(ErrorCode.INVALID_TOKEN));
+
+        String userEmail = getUserEmailFromToken(refreshToken);
+        List<String> roles = userDetailsService.loadUserByUsername(userEmail).getAuthorities().stream()
+                                               .map(GrantedAuthority::getAuthority).toList();
+        String newAccessToken = this.createAccessToken(userEmail, roles);
+        jwtToken.updateAccessToken(newAccessToken);
+        JwtToken save = jwtTokenRepository.save(jwtToken);
+        return save.getAccessToken();
     }
 }

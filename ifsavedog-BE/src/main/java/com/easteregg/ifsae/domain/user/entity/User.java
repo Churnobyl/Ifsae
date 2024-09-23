@@ -16,6 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -72,5 +73,12 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
+    }
+
+    public List<String> getUserRoles() {
+        List<String> roles = new ArrayList<>();
+        roles.add(this.role.toString());
+        roles.add(this.grade.toString());
+        return roles;
     }
 }

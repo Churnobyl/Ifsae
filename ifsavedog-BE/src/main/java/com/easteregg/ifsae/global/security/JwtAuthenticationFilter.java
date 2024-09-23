@@ -1,5 +1,7 @@
 package com.easteregg.ifsae.global.security;
 
+import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,8 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 만료일 때
         else if (token != null && !jwtTokenProvider.validateTokenExpiration(token)) {
             log.info("[doFilterInternal] : accessToken이 만료되었습니다.");
-            // 1. redis에서 해당 accessToken값으로 저장된 refresh token 가져오기
-            String refreshToken = jwtTokenProvider.getRefreshToken(token);
+            // 1. redis에서 해당 accessToken값으로 저장된 refreshToken 가져오기
+            String refreshToken = jwtTokenProvider.getRefreshTokenByAccessToken(token);
+
             // 2. refresh token이 존재하면
             if (refreshToken != null) {
                 // 3. refresh token이 유효한지 확인
@@ -51,6 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     Authentication authentication = jwtTokenProvider.getAuthentication(newAccessToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+            } else {
+                log.info("[doFilterInternal] : refreshToken이 만료되었습니다.");
+                throw new CustomSecurityException(ErrorCode.EXPIRED_TOKEN);
             }
         }
         filterChain.doFilter(request, response);
