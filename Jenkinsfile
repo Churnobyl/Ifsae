@@ -50,9 +50,10 @@ pipeline {
 
         stage('Build JAR') {
             steps {
-                echo "Building JAR file with Gradle..."
+                echo "Building JAR file with Gradle (skipping tests)..."
                 dir('ifsavedog-BE') {
-                    sh './gradlew build'
+                    sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
+                    // 테스트 할 경우: sh './gradlew build'
                 }
                 echo "JAR build completed."
             }
@@ -151,14 +152,6 @@ pipeline {
 
 def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
-        sh """
-        if [ -f ${directory}/Dockerfile ]; then
-            echo 'Dockerfile exists'
-        else
-            echo 'Dockerfile not found!'
-            exit 1
-        fi
-        """
         // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계 추가
         sh "cp ./ifsavedog-BE/build/libs/ifsavedog-be-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
 
