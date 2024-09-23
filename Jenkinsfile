@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = "sdeogi/IfSae-BE"
-        DOCKER_IMAGE_FRONTEND = "sdeogi/IfSae-FE"
+        DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
+        DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
         DOCKER_TAG = "${BUILD_NUMBER}"
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
@@ -16,7 +16,9 @@ pipeline {
                 deleteDir()
                 checkout scm
                 sh 'ls -la'
-                echo "Checkout completed."
+                echo "Checkout completed. Confirming Dockerfile location:"
+                // 추가: Dockerfile 위치 확인
+                sh 'find . -name Dockerfile'
             }
         }
 
@@ -34,7 +36,7 @@ pipeline {
                     dir('ifsavedog-BE') {
                         sh 'chmod +x ./gradlew'
                         sh './gradlew clean'
-                        sh './gradlew sonarqube'
+                        sh './gradlew sonar'
                     }
                 }
                 echo "SonarQube analysis completed."
@@ -60,9 +62,15 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-BE' }
                     }
                     steps {
+                        echo "Copying Dockerfile from EC2..."
+                        sshagent(['jenkins-ssh-key']) {
+                            sh """
+                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/home/ubuntu/Dockerfile ${WORKSPACE}/Dockerfile
+                            """
+                        }
                         echo "Building backend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_BACKEND, 'IfSae_develop-BE')
+                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -73,7 +81,7 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_FRONTEND, 'IfSae_develop-FE')
+                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -142,9 +150,18 @@ pipeline {
 }
 
 // 공통 Docker 이미지 빌드를 위한 함수 정의
-def buildDockerImage(imageName, directory) {
+def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
-        sh "docker build -t ${imageName}:${DOCKER_TAG} ."
+        // Dockerfile 유효성 검사
+        sh """
+        if [ -f ${directory}/Dockerfile ]; then
+            echo 'Dockerfile exists'
+        else
+            echo 'Dockerfile not found!'
+            exit 1
+        fi
+        """
+        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
     }
 }
 
@@ -152,11 +169,13 @@ def buildDockerImage(imageName, directory) {
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
-            prepareEnv(ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
+            echo "Using backend environment file."
+            prepareEnv(env.ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
         }
     } else if (branch == 'develop-FE') {
         withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
-            prepareEnv(ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
+            echo "Using frontend environment file."
+            prepareEnv(env.ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
         }
     }
 }
@@ -164,11 +183,13 @@ def prepareEnvironment(branch) {
 // 환경 파일 복사 및 설정 함수
 def prepareEnv(envFile, dockerImage) {
     sh """
+        echo 'Preparing ENV_FILE: ${envFile}'
+        touch ${WORKSPACE}/.env
         cp ${envFile} ${WORKSPACE}/.env
         echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
-        cat ${WORKSPACE}/.env
     """
+    sh "chmod 775 ${WORKSPACE}/.env"
 }
 
 // 공통 Docker 이미지 푸쉬 함수 정의
