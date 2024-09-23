@@ -78,7 +78,6 @@ public class PostServiceImpl implements PostService {
         // Request객체로부터 Post객체 생성 및 영속화
         Post post = request.toEntity(fileUrl, shelter);
         Post savedPost = postRepository.save(post);
-        System.out.println("savedPost = " + savedPost);
 
         // PostDog에 저장
         List<Long> dogIds = request.getDogIds();
@@ -110,12 +109,14 @@ public class PostServiceImpl implements PostService {
         Optional<Post> postOptional = postRepository.findPostById(postId);
         Post post = postOptional.orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
 
+        // 기존 포스트에 업데이트
         Post updatedPost = request.toEntity(post);
+
+        // PostDog 확인
         List<PostDog> postDogs = postDogRepository.findByIdIn(request.getDogIds());
+        // PostDog 업데이트
+        updatedPost.updateDogs(postDogs);
 
-        updatedPost.setDogs(postDogs);
-
-        post.setId(postId);
         postRepository.save(post);
     }
 

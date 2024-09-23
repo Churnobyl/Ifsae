@@ -22,8 +22,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Post extends BaseEntity {
-
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,17 +31,14 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    @Setter
     @NotNull
     private String videoUrl;
 
-    @Setter
     @NotNull
     @ManyToOne
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
-    @Setter
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PostDog> dogs = new ArrayList<>();
@@ -77,5 +72,9 @@ public class Post extends BaseEntity {
                 .likeCnt(likeCnt)
                 .viewCnt(viewCnt)
                 .build();
+    }
+
+    public void updateDogs(List<PostDog> postDogs) {
+        this.dogs = postDogs;
     }
 }
