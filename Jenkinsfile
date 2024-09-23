@@ -101,7 +101,10 @@ pipeline {
             steps {
                 echo "Pushing Docker images to registry..."
                 script {
-                    pushDockerImage(env.BRANCH_NAME)
+                    withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
+                        sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
+                        sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
+                    }
                 }
             }
         }
@@ -162,7 +165,6 @@ def validateAndBuildDockerImage(imageName, directory) {
         sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
         sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
         sh "ls -la ${directory}/app.jar"  // 복사된 JAR 파일 확인
-
 
         // Docker 이미지 빌드
         echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
