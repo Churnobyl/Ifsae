@@ -155,7 +155,6 @@ def validateAndBuildDockerImage(imageName, directory) {
             exit 1
         fi
         """
-        // Docker 이미지 빌드 (캐시 없이)
         sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
     }
 }
