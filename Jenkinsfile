@@ -146,7 +146,8 @@ pipeline {
 // 공통 Docker 이미지 빌드를 위한 함수 정의
 def buildDockerImage(imageName, directory) {
     dir(directory) {
-        sh "docker build -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ." // Dockerfile 위치를 명확히 사용
+        echo "Building Docker image in directory: ${directory}"
+        sh "docker build -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ."
     }
 }
 
