@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.user.entity;
 
+import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ public class UserProfile {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "housing_type_id")
     private HousingType housingType;
 
     private int birth;
@@ -48,4 +50,19 @@ public class UserProfile {
     private List<UserProfileAllergy> allergies;
 
     private String petExperience;
+
+    public UserProfileDto toDto() {
+        return UserProfileDto.builder()
+                             .housingType(housingType.getName())
+                             .birth(birth)
+                             .address(address)
+                             .phoneNumber(phoneNumber)
+                             .familyCnt(familyCnt)
+                             .curPets(curPets)
+                             .petExperience(petExperience)
+                             .allergies(allergies.stream()
+                                                 .map(userProfileAllergy -> userProfileAllergy.getAllergy().getName())
+                                                 .toList())
+                             .build();
+    }
 }

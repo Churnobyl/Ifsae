@@ -1,7 +1,10 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
+import com.easteregg.ifsae.domain.user.dto.UserInfo;
+import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.domain.user.entity.UserProfile;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
@@ -50,5 +53,26 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
                              .orElseThrow(() -> new UserException(ErrorCode.INVALID_EMAIL));
+    }
+
+    @Override
+    public UserInfo getUserInfo(User user) {
+        UserProfile userProfile = user.getUserProfile();
+
+        return UserInfo.builder()
+                       .id(user.getId())
+                       .email(user.getEmail())
+                       .nickname(user.getNickname())
+                       .profileImgUrl(user.getProfileImgUrl())
+                       .grade(user.getGrade().name())
+                       .role(user.getRole().name())
+                       .userProfile(userProfile != null ? userProfile.toDto() : UserProfileDto.builder().build())
+                       .build();
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                             .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 }
