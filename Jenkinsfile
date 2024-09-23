@@ -53,7 +53,9 @@ pipeline {
                 echo "Building JAR file with Gradle (skipping tests)..."
                 dir('ifsavedog-BE') {
                     sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
+                    // JAR 파일 존재 여부를 확인하는 로그 추가
                     // 테스트 할 경우: sh './gradlew build'
+                    sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
                 }
                 echo "JAR build completed."
             }
@@ -72,12 +74,15 @@ pipeline {
                                 scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/home/ubuntu/Dockerfile ${WORKSPACE}/Dockerfile
                             """
                         }
+                        // Dockerfile 복사 후 확인하는 로그 추가
+                        sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile 위치 및 파일 확인
                         echo "Building backend Docker image..."
                         script {
                             validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
                         }
                     }
                 }
+
                 stage('Build Frontend') {
                     when {
                         expression { env.BRANCH_NAME == 'develop-FE' }
@@ -152,11 +157,16 @@ pipeline {
 
 def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
-        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계 추가
+        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계
+        echo "Copying JAR file to Dockerfile context..."
+        sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
         sh "cp ./ifsavedog-BE/build/libs/ifsavedog-be-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
+        sh 'ls -la ${directory}/app.jar'  // 복사된 JAR 파일 확인
 
         // Docker 이미지 빌드
+        echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
         sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
+        echo "Docker image build completed."
     }
 }
 
