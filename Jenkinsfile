@@ -160,7 +160,7 @@ def validateAndBuildDockerImage(imageName, directory) {
         // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계
         echo "Copying JAR file to Dockerfile context..."
         sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
-        sh "cp ./ifsavedog-BE/build/libs/ifsavedog-be-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
+        sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
         sh 'ls -la ${directory}/app.jar'  // 복사된 JAR 파일 확인
 
         // Docker 이미지 빌드
