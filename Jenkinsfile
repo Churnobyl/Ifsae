@@ -62,6 +62,12 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-BE' }
                     }
                     steps {
+                        echo "Copying Dockerfile from EC2..."
+                        sshagent(['jenkins-ssh-key']) {
+                            sh """
+                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/home/ubuntu/Dockerfile ${WORKSPACE}/Dockerfile
+                            """
+                        }
                         echo "Building backend Docker image..."
                         script {
                             validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
