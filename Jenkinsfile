@@ -64,7 +64,7 @@ pipeline {
                     steps {
                         echo "Building backend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -75,7 +75,7 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -144,10 +144,19 @@ pipeline {
 }
 
 // 공통 Docker 이미지 빌드를 위한 함수 정의
-def buildDockerImage(imageName, directory) {
+def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
-        echo "Building Docker image in directory: ${directory}"
-        sh "docker build -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ."
+        // Dockerfile 유효성 검사
+        sh """
+        if [ -f ${directory}/Dockerfile ]; then
+            echo 'Dockerfile exists'
+        else
+            echo 'Dockerfile not found!'
+            exit 1
+        fi
+        """
+        // Docker 이미지 빌드 (캐시 없이)
+        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ."
     }
 }
 
