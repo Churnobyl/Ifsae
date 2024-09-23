@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.user.controller;
 
 import com.easteregg.ifsae.domain.user.dto.EmailAuthRequest;
+import com.easteregg.ifsae.domain.user.dto.SigninDto;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.VerifyEmailCodeRequest;
 import com.easteregg.ifsae.domain.user.service.AuthService;
@@ -23,8 +24,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public void signin() {
+    public ResponseEntity<SigninDto.Response> signin(@RequestBody SigninDto.Request request) {
         log.info("signin");
+        return ResponseEntity.ok(authService.signin(request.getEmail(), request.getPassword()));
     }
 
     @PostMapping("/signup")
