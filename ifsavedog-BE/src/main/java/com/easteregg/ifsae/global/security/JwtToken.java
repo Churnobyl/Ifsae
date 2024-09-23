@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
 @Builder
@@ -11,10 +12,9 @@ import org.springframework.data.redis.core.RedisHash;
 public class JwtToken {
 
     @Id
-    private long id;
-
     private String accessToken;
 
+    @Indexed
     private String refreshToken;
 
     public void updateAccessToken(String accessToken) {

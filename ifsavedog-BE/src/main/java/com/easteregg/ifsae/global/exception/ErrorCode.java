@@ -12,9 +12,10 @@ public enum ErrorCode {
 
     // 인증 관련 에러
     UNAUTHORIZED("인증되지 않은 사용자입니다.", HttpStatus.UNAUTHORIZED),
-    FORBIDDEN("권한이 없습니다.", HttpStatus.FORBIDDEN),
     EXPIRED_TOKEN(" 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_TOKEN("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_PASSWORD("비밀번호가 옳지 않습니다.", HttpStatus.UNAUTHORIZED),
+    FORBIDDEN("사용자의 권한이 없습니다.", HttpStatus.FORBIDDEN),
 
     // 사용자 관련 에러
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -24,6 +25,7 @@ public enum ErrorCode {
 
     // 이메일 인증 관련 에러
     INVALID_EMAIL_AUTH_CODE("잘못된 인증 코드입니다.", HttpStatus.BAD_REQUEST),
+
     ;
 
     private final String message;

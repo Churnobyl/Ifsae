@@ -18,4 +18,5 @@ public enum Role {
         }
         throw new IllegalArgumentException("잘못된 값입니다. : " + value);
     }
+
 }

@@ -1,15 +1,14 @@
 package com.easteregg.ifsae.global.security;
 
-import com.easteregg.ifsae.domain.user.service.UserService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final JwtTokenRedisRepository jwtTokenRepository;
     @Value("${jwt.secret.key}")
@@ -40,16 +38,16 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+        secretKey = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
     }
 
     public String createAccessToken(String email, List<String> roles) {
-        log.debug("[createAccessToken]");
+        log.info("[createAccessToken]");
         return this.createToken(email, roles, ACCESS_TOKEN_VALID_TIME);
     }
 
     public String createRefreshToken(String email, List<String> roles) {
-        log.debug("[createRefreshToken]");
+        log.info("[createRefreshToken]");
         return this.createToken(email, roles, REFRESH_TOKEN_VALID_TIME);
     }
 
@@ -69,24 +67,24 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        log.debug("[getAuthentication] 토큰 인증 정보 조회");
+        log.info("[getAuthentication] 토큰 인증 정보 조회");
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmailFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getUserEmailFromToken(String token) {
-        log.debug("[getMemberEmail] token 에서 이메일 정보 추출");
+        log.info("[getMemberEmail] token 에서 이메일 정보 추출");
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateTokenExpiration(String token) {
-        log.debug("[validateTokenExpiration] 토큰 유효 기간 확인");
+        log.info("[validateTokenExpiration] 토큰 유효 기간 확인");
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return !claims.getBody().getExpiration().before(new Date());
     }
 
     public String resolveToken(HttpServletRequest request) {
-        log.debug("[resolveToken] HTTP 헤더에서 Token 값 추출");
+        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
         String bearerToken = request.getHeader("Authorization");
 
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -96,14 +94,14 @@ public class JwtTokenProvider {
     }
 
     public String getRefreshTokenByAccessToken(String accessToken) {
-        log.debug("[getRefreshTokenByAccessToken] accessToken으로 refreshToken 조회");
+        log.info("[getRefreshTokenByAccessToken] accessToken으로 refreshToken 조회");
         JwtToken jwtToken = jwtTokenRepository.findByAccessToken(accessToken).orElse(null);
 
         return jwtToken != null ? jwtToken.getRefreshToken() : null;
     }
 
     public String reissueAccessToken(String refreshToken) {
-        log.debug("[reissueAccessToken] refreshToken으로 accessToken 재발급");
+        log.info("[reissueAccessToken] refreshToken으로 accessToken 재발급");
         JwtToken jwtToken = jwtTokenRepository.findByRefreshToken(refreshToken)
                                               .orElseThrow(() -> new CustomSecurityException(ErrorCode.INVALID_TOKEN));
 
@@ -114,5 +112,14 @@ public class JwtTokenProvider {
         jwtToken.updateAccessToken(newAccessToken);
         JwtToken save = jwtTokenRepository.save(jwtToken);
         return save.getAccessToken();
+    }
+
+    public void saveAuthToken(String accessToken, String refreshToken) {
+        log.info("[saveRefreshToken] refreshToken 저장");
+        JwtToken jwtToken = JwtToken.builder()
+                                    .accessToken(accessToken)
+                                    .refreshToken(refreshToken)
+                                    .build();
+        jwtTokenRepository.save(jwtToken);
     }
 }
