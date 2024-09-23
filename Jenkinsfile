@@ -120,8 +120,6 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io '
                         cd /home/ubuntu/
-                        docker-compose down
-                        docker-compose pull
                         docker-compose up -d --build
                         '
                     """
