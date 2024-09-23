@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
         DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
-        DOCKER_TAG = "${BUILD_NUMBER}"
+        DOCKER_TAG = "${env.BUILD_NUMBER}"  // BUILD_NUMBER를 환경 변수로 사용
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
 
@@ -53,8 +53,6 @@ pipeline {
                 echo "Building JAR file with Gradle (skipping tests)..."
                 dir('ifsavedog-BE') {
                     sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
-                    // JAR 파일 존재 여부를 확인하는 로그 추가
-                    // 테스트 진행할 경우: sh './gradlew build'
                     sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
                 }
                 echo "JAR build completed."
@@ -74,7 +72,6 @@ pipeline {
                                 scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/home/ubuntu/Dockerfile ${WORKSPACE}/Dockerfile
                             """
                         }
-                        // Dockerfile 복사 후 확인하는 로그 추가
                         sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile 위치 및 파일 확인
                         echo "Building backend Docker image..."
                         script {
@@ -103,6 +100,7 @@ pipeline {
                 script {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
                         sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
+                        sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"  // 태그를 latest로 지정
                         sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
                     }
                 }
@@ -195,16 +193,4 @@ def prepareEnv(envFile, dockerImage) {
         echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
         chmod 775 ${WORKSPACE}/.env
     """
-}
-
-def pushDockerImage(branch) {
-    docker.withRegistry("${DOCKER_REGISTRY}", 'docker-hub-credentials') {
-        if (branch == 'develop-BE') {
-            docker.image("${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}").push()
-            docker.image("${DOCKER_IMAGE_BACKEND}:latest").push()
-        } else if (branch == 'develop-FE') {
-            docker.image("${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}").push()
-            docker.image("${DOCKER_IMAGE_FRONTEND}:latest").push()
-        }
-    }
 }
