@@ -54,7 +54,7 @@ pipeline {
                 dir('ifsavedog-BE') {
                     sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
                     // JAR 파일 존재 여부를 확인하는 로그 추가
-                    // 테스트 할 경우: sh './gradlew build'
+                    // 테스트 진행할 경우: sh './gradlew build'
                     sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
                 }
                 echo "JAR build completed."
