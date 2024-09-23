@@ -16,7 +16,9 @@ pipeline {
                 deleteDir()
                 checkout scm
                 sh 'ls -la'
-                echo "Checkout completed."
+                echo "Checkout completed. Confirming Dockerfile location:"
+                // 추가: Dockerfile 위치 확인
+                sh 'find . -name Dockerfile'
             }
         }
 
@@ -62,7 +64,7 @@ pipeline {
                     steps {
                         echo "Building backend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_BACKEND, 'IfSae_develop-BE')
+                            buildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -73,7 +75,7 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            buildDockerImage(DOCKER_IMAGE_FRONTEND, 'IfSae_develop-FE')
+                            buildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -144,7 +146,7 @@ pipeline {
 // 공통 Docker 이미지 빌드를 위한 함수 정의
 def buildDockerImage(imageName, directory) {
     dir(directory) {
-        sh "docker build -t ${imageName}:${DOCKER_TAG} -f ${WORKSPACE}/IfSae_develop-BE/Dockerfile ."  // Dockerfile 위치 수정
+        sh "docker build -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ." // Dockerfile 위치를 명확히 사용
     }
 }
 
