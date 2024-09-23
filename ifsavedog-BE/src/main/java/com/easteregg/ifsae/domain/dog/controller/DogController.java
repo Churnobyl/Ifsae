@@ -37,7 +37,7 @@ public class DogController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("{dogId}")
+    @GetMapping("/{dogId}")
     public ResponseEntity<?> getDogDetail(@PathVariable long dogId) {
         return new ResponseEntity<>(dogService.findById(dogId), HttpStatus.OK);
     }
