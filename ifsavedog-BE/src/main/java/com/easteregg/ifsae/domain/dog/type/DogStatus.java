@@ -17,6 +17,6 @@ public enum DogStatus {
                 return dogStatus;
             }
         }
-        throw new IllegalArgumentException("Invalid Role value: " + value);
+        throw new IllegalArgumentException("Invalid DogStatus value: " + value);
     }
 }
