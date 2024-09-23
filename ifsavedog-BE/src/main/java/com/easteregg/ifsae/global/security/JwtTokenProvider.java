@@ -3,12 +3,14 @@ package com.easteregg.ifsae.global.security;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +40,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public String createAccessToken(String email, List<String> roles) {
@@ -62,7 +64,7 @@ public class JwtTokenProvider {
                    .setClaims(claims)
                    .setIssuedAt(now)
                    .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
-                   .signWith(SignatureAlgorithm.HS512, this.secretKey)
+                   .signWith(SignatureAlgorithm.HS256, this.secretKey)
                    .compact();
     }
 
@@ -73,14 +75,22 @@ public class JwtTokenProvider {
     }
 
     public String getUserEmailFromToken(String token) {
-        log.info("[getMemberEmail] token 에서 이메일 정보 추출");
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        try {
+            log.debug("[getMemberEmail] token 에서 이메일 정보 추출");
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        }
     }
 
     public boolean validateTokenExpiration(String token) {
-        log.info("[validateTokenExpiration] 토큰 유효 기간 확인");
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-        return !claims.getBody().getExpiration().before(new Date());
+        try {
+            log.info("[validateTokenExpiration] 토큰 유효 기간 확인");
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String resolveToken(HttpServletRequest request) {
