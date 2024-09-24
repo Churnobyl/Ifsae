@@ -13,7 +13,7 @@ public interface DogService {
 
     Dog createDog(User user, DogCreateRequest dogCreateRequest);
 
-    void updateDogProfileImage(MultipartFile file, Dog dog) throws IOException;
+    void updateDogProfileImage(MultipartFile dogImage, Dog dog) throws IOException;
 
     void updateDog(long dogId, DogCreateRequest dogCreateRequest);
 

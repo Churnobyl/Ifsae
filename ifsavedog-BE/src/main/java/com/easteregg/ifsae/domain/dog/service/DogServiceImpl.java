@@ -67,8 +67,8 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public void updateDogProfileImage(MultipartFile file, Dog dog) throws IOException {
-        String imageUrl = s3ImageUploader.upload(file);
+    public void updateDogProfileImage(MultipartFile dogImage, Dog dog) throws IOException {
+        String imageUrl = s3ImageUploader.upload(dogImage);
 
         dog.updateDogProfileImage(imageUrl);
     }
