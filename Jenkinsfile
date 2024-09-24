@@ -50,39 +50,6 @@ pipeline {
             }
         }
 
-        stage('Copy Environment File to Docker Context') {
-            steps {
-                script {
-                    // 해당 브랜치의 환경 변수 파일을 워크스페이스로 복사
-                    if (env.BRANCH_NAME == 'develop-BE') {
-                        withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
-                            sh """
-                                echo "Copying backend .env file..."
-                                cp ${ENV_FILE_BACKEND} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-FE') {
-                        withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
-                            sh """
-                                echo "Copying frontend .env file..."
-                                cp ${ENV_FILE_FRONTEND} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-DATA') {
-                        withCredentials([file(credentialsId: 'IfSae-data-env-file', variable: 'ENV_FILE_DATA')]) {
-                            sh """
-                                echo "Copying data .env file..."
-                                cp ${ENV_FILE_DATA} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env
-                            """
-                        }
-                    }
-                }
-            }
-        }
-
         stage('Build JAR') {
             steps {
                 echo "Building JAR file with Gradle (skipping tests)..."
