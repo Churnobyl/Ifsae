@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * S3로 비디오를 업로드하는 서비스
@@ -38,10 +41,27 @@ public class S3VideoUploader {
      * @param file 업로드할 파일
      * @param emitter 프론트단에 진행상황 전달
      */
-    public void uploadFile(File file, SseEmitter emitter) {
+    public String uploadFile(File file) {
         long contentLength = file.length();
-        String fileName = URL + file.getName();
 
+        ///////// 파일 익명화 ///////////////
+        LocalDateTime now = LocalDateTime.now();
+        String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String formattedTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
+
+        // UUID 생성
+        String uuid = UUID.randomUUID().toString();
+
+        // 파일 확장자 추출
+        String originalFileName = file.getName();
+        String extension = "";
+        int extensionIndex = originalFileName.lastIndexOf(".");
+        if (extensionIndex > 0) {
+            extension = originalFileName.substring(extensionIndex); // 확장자 포함
+        }
+
+        // 파일 이름에 날짜, 시간, UUID 적용
+        String fileName = URL + formattedDate + "/" + formattedTime + "/" + uuid + extension;
         String uploadId = amazonS3Client.initiateMultipartUpload(new InitiateMultipartUploadRequest(bucket, fileName)).getUploadId();
 
         try {
@@ -66,16 +86,11 @@ public class S3VideoUploader {
                 partETags.add(result.getPartETag());
 
                 uploadedBytes += currentPartSize;
-
-                // 진행 상태 계산 (50%에서 100% 사이로)
-                int progress = 50 + (int) ((uploadedBytes * 50) / contentLength);
-                emitter.send(SseEmitter.event().name(emitterName).data(progress));
             }
 
             // 업로드 완료
             amazonS3Client.completeMultipartUpload(new CompleteMultipartUploadRequest(bucket, fileName, uploadId, partETags));
-            emitter.send(SseEmitter.event().name(emitterName).data(100)); // 100% 완료
-
+            return fileName;
         } catch (Exception e) {
             amazonS3Client.abortMultipartUpload(new AbortMultipartUploadRequest(bucket, fileName, uploadId));
             throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
