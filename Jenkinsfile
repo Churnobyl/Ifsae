@@ -24,14 +24,15 @@ pipeline {
                 anyOf {
                     expression { env.BRANCH_NAME == 'develop-BE' }
                     expression { env.BRANCH_NAME == 'develop-FE' }
+                    expression { env.BRANCH_NAME == 'develop-DATA' }
                 }
             }
             steps {
-                echo "Setting executable permission for gradlew..."
-                sh 'chmod +x ./ifsavedog-BE/gradlew'  // 실행 권한 추가
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
+                        sh './gradlew clean'
                         sh './gradlew sonar'
                     }
                 }
@@ -64,16 +65,26 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'develop-BE') {
-                        echo "Copying BE Dockerfile..."
-                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-BE/Dockerfile ${WORKSPACE}/Dockerfile'
+                        echo "Copying Dockerfile for Backend from EC2..."
+                        sshagent(['jenkins-ssh-key']) {
+                            sh """
+                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-BE/Dockerfile ${WORKSPACE}/Dockerfile
+                            """
+                        }
                     } else if (env.BRANCH_NAME == 'develop-FE') {
-                        echo "Copying FE Dockerfile..."
-                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-FE/Dockerfile ${WORKSPACE}/Dockerfile'
+                        echo "Copying Dockerfile for Frontend from EC2..."
+                        sshagent(['jenkins-ssh-key']) {
+                            sh """
+                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-FE/Dockerfile ${WORKSPACE}/Dockerfile
+                            """
+                        }
                     } else if (env.BRANCH_NAME == 'develop-DATA') {
-                        echo "Copying DATA Dockerfile..."
-                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-DATA/Dockerfile ${WORKSPACE}/Dockerfile'
-                    } else {
-                        error "Unknown branch: ${env.BRANCH_NAME}. Unable to determine Dockerfile."
+                        echo "Copying Dockerfile for Data from EC2..."
+                        sshagent(['jenkins-ssh-key']) {
+                            sh """
+                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-DATA/Dockerfile ${WORKSPACE}/Dockerfile
+                            """
+                        }
                     }
                 }
                 sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile이 정상적으로 복사되었는지 확인
@@ -183,11 +194,22 @@ pipeline {
                 )
             }
         }
+        always {
+            echo "Cleaning workspace..."
+            cleanWs()
+            echo "Workspace cleaned."
+        }
     }
 }
 
 def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
+        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계
+        echo "Copying JAR file to Dockerfile context..."
+        sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
+        sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
+        sh "ls -la ${directory}/app.jar"  // 복사된 JAR 파일 확인
+
         // Docker 이미지 빌드
         echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
         sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
