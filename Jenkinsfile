@@ -59,7 +59,7 @@ pipeline {
                             sh """
                                 echo "Copying backend .env file..."
                                 cp ${ENV_FILE_BACKEND} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env  // 확인을 위해 .env 파일 리스트 출력
+                                ls -la ${WORKSPACE}/.env
                             """
                         }
                     } else if (env.BRANCH_NAME == 'develop-FE') {
@@ -67,7 +67,7 @@ pipeline {
                             sh """
                                 echo "Copying frontend .env file..."
                                 cp ${ENV_FILE_FRONTEND} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env  // 확인을 위해 .env 파일 리스트 출력
+                                ls -la ${WORKSPACE}/.env
                             """
                         }
                     } else if (env.BRANCH_NAME == 'develop-DATA') {
@@ -75,7 +75,7 @@ pipeline {
                             sh """
                                 echo "Copying data .env file..."
                                 cp ${ENV_FILE_DATA} ${WORKSPACE}/.env
-                                ls -la ${WORKSPACE}/.env  // 확인을 위해 .env 파일 리스트 출력
+                                ls -la ${WORKSPACE}/.env
                             """
                         }
                     }
