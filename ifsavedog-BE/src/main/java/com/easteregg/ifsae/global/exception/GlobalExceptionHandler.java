@@ -1,8 +1,6 @@
 package com.easteregg.ifsae.global.exception;
 
-import com.easteregg.ifsae.global.exception.type.CustomSecurityException;
-import com.easteregg.ifsae.global.exception.type.EmailAuthException;
-import com.easteregg.ifsae.global.exception.type.UserException;
+import com.easteregg.ifsae.global.exception.type.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +26,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailAuthException.class)
     protected ResponseEntity<ErrorResponse> handleEmailAuthException(EmailAuthException e) {
         log.error("[EmailAuthException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(PostException.class)
+    protected ResponseEntity<ErrorResponse> handlePostException(PostException e) {
+        log.error("[PostException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(VideoUploadException.class)
+    protected ResponseEntity<ErrorResponse> handleVideoUploadException(VideoUploadException e) {
+        log.error("[VideoUploadException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(ShelterUserException.class)
+    protected ResponseEntity<ErrorResponse> handleShelterUserException(ShelterUserException e) {
+        log.error("[ShelterUserException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
