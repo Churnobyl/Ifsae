@@ -27,6 +27,7 @@ public class ShelterServiceImpl implements ShelterService {
     public void createShelter(User user, ShelterCreateRequest shelterCreateRequest) {
         Shelter shelter = Shelter.builder()
                                  .name(shelterCreateRequest.getName())
+                                 .address(shelterCreateRequest.getAddress())
                                  .phone(shelterCreateRequest.getPhone())
                                  .content(shelterCreateRequest.getContent())
                                  .canBeDonated(shelterCreateRequest.isCanBeDonated())
