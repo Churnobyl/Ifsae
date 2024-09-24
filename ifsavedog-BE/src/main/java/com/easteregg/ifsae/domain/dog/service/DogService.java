@@ -19,8 +19,6 @@ public interface DogService {
 
     public DogDetailDto findById(long dogId);
 
-    public List<DogListDto> findDogsByName(String name);
-
     public List<DogListDto> findDogsByShelterId(long shelterId);
 
 }

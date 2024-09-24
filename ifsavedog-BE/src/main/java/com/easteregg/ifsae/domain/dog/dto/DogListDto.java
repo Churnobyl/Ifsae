@@ -1,6 +1,5 @@
 package com.easteregg.ifsae.domain.dog.dto;
 
-import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,6 +13,8 @@ public class DogListDto {
 
     private String image;
 
-    private Shelter shelter;
+    private long shelterId;
+
+    private String shleterName;
 
 }

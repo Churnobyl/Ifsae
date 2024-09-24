@@ -104,20 +104,6 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public List<DogListDto> findDogsByName(String name) {
-        List<Dog> dogs = dogRepository.findDogsByName(name);
-
-        return dogs.stream()
-                   .map(dog -> DogListDto.builder()
-                                         .id(dog.getId())
-                                         .name(dog.getName())
-                                         .image(dog.getImage())
-                                         .shelter(dog.getShelterDog() != null ? dog.getShelterDog().getShelter() : null)
-                                         .build())
-                   .collect(Collectors.toList());
-    }
-
-    @Override
     public List<DogListDto> findDogsByShelterId(long shelterId) {
         List<ShelterDog> shelterDogs = shelterDogRepository.findShelterDogsByShelterId(shelterId);
 
@@ -128,7 +114,8 @@ public class DogServiceImpl implements DogService {
                                          .id(dog.getId())
                                          .name(dog.getName())
                                          .image(dog.getImage())
-                                         .shelter(dog.getShelterDog() != null ? dog.getShelterDog().getShelter() : null)
+                                         .shelterId(dog.getShelterDog().getShelter().getId())
+                                         .shleterName(dog.getShelterDog().getShelter().getName())
                                          .build())
                    .collect(Collectors.toList());
     }
