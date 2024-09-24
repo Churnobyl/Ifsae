@@ -23,40 +23,45 @@ public class PostController {
 
     private final PostService postService;
 
+    /**
+     * 게시글 상세 조회
+     *
+     * @param postId 게시글 아이디
+     * @return PostDto.Response 상세 게시글 정보
+     */
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable("postId") Long postId) {
         PostDto.Response response = postService.read(postId);
-
-        if (response == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    @PreAuthorize("hasAuthority('user')")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> writePost(
             @AuthenticationPrincipal User user,
-            @RequestPart(value = "info") PostDto.Request request,
-            @RequestPart(value = "file") MultipartFile multipartFile
+            @RequestPart(value = "data") PostDto.Request request,
+            @RequestPart(value = "video") MultipartFile multipartFile
     ) {
-
-
-        postService.create(request, multipartFile);
+        postService.create(user, request, multipartFile);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> updatePost(@PathVariable("postId") Long postId, @RequestBody PostDto.UpdateRequest uRequest) {
-        postService.update(postId, uRequest);
+    public ResponseEntity<?> updatePost(
+            @AuthenticationPrincipal User user,
+            @PathVariable("postId") Long postId,
+            @RequestBody PostDto.UpdateRequest uRequest
+    ) {
+        postService.update(user, postId, uRequest);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable("postId") Long postId) {
-        postService.delete(postId);
+    public ResponseEntity<?> deletePost(
+            @AuthenticationPrincipal User user,
+            @PathVariable("postId") Long postId
+    ) {
+        postService.delete(user, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
