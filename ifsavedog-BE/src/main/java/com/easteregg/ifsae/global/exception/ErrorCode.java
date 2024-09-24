@@ -26,12 +26,18 @@ public enum ErrorCode {
     // 이메일 인증 관련 에러
     INVALID_EMAIL_AUTH_CODE("잘못된 인증 코드입니다.", HttpStatus.BAD_REQUEST),
 
-
     // 센터 관련 에러
     SHELTER_NOT_FOUND("센터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 포스트 관련 에러
-    POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    INVALID_PAGE_REQUEST("잘못된 페이지 요청입니다.", HttpStatus.NOT_FOUND),
+
+    // 센터 - 유저 관련 에러
+    USER_NOT_FOUND_IN_SHELTER("해당 쉘터에 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+
+    // 댓글 관련 에러
+    UNAUTHORIZED_USER("댓글을 수정할 수 없는 사용자입니다.", HttpStatus.UNAUTHORIZED),
+    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", HttpStatus.NO_CONTENT)
     ;
 
     private final String message;
