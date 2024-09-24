@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
         DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
+        DOCKER_IMAGE_DATA = "sdeogi/ifsae-data"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
@@ -59,6 +60,26 @@ pipeline {
             }
         }
 
+        stage('Copy Dockerfile') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'develop-BE') {
+                        echo "Copying BE Dockerfile..."
+                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-BE/Dockerfile ${WORKSPACE}/Dockerfile'
+                    } else if (env.BRANCH_NAME == 'develop-FE') {
+                        echo "Copying FE Dockerfile..."
+                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-FE/Dockerfile ${WORKSPACE}/Dockerfile'
+                    } else if (env.BRANCH_NAME == 'develop-DATA') {
+                        echo "Copying DATA Dockerfile..."
+                        sh 'cp /var/jenkins_home/workspace/IfSae_develop-DATA/Dockerfile ${WORKSPACE}/Dockerfile'
+                    } else {
+                        error "Unknown branch: ${env.BRANCH_NAME}. Unable to determine Dockerfile."
+                    }
+                }
+                sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile이 정상적으로 복사되었는지 확인
+            }
+        }
+
         stage('Build Docker Images') {
             parallel {
                 stage('Build Backend') {
@@ -84,6 +105,18 @@ pipeline {
                         }
                     }
                 }
+
+                stage('Build Data') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-DATA' }
+                    }
+                    steps {
+                        echo "Building data Docker image..."
+                        script {
+                            validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
+                        }
+                    }
+                }
             }
         }
 
@@ -92,9 +125,19 @@ pipeline {
                 echo "Pushing Docker images to registry..."
                 script {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
-                        sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
-                        sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"  // 태그를 latest로 지정
-                        sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
+                        if (env.BRANCH_NAME == 'develop-BE') {
+                            sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
+                            sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"  // 태그를 latest로 지정
+                            sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
+                        } else if (env.BRANCH_NAME == 'develop-FE') {
+                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
+                            sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
+                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
+                        } else if (env.BRANCH_NAME == 'develop-DATA') {
+                            sh "docker push ${DOCKER_IMAGE_DATA}:${DOCKER_TAG}"
+                            sh "docker tag ${DOCKER_IMAGE_DATA}:${DOCKER_TAG} ${DOCKER_IMAGE_DATA}:latest"
+                            sh "docker push ${DOCKER_IMAGE_DATA}:latest"
+                        }
                     }
                 }
             }
@@ -105,6 +148,7 @@ pipeline {
                 anyOf {
                     expression { env.BRANCH_NAME == 'develop-BE' }
                     expression { env.BRANCH_NAME == 'develop-FE' }
+                    expression { env.BRANCH_NAME == 'develop-DATA' }
                 }
             }
             steps {
@@ -161,6 +205,11 @@ def prepareEnvironment(branch) {
         withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
             echo "Using frontend environment file."
             prepareEnv(env.ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
+        }
+    } else if (branch == 'develop-DATA') {
+        withCredentials([file(credentialsId: 'IfSae-data-env-file', variable: 'ENV_FILE_DATA')]) {
+            echo "Using data environment file."
+            prepareEnv(env.ENV_FILE_DATA, DOCKER_IMAGE_DATA)
         }
     }
 }
