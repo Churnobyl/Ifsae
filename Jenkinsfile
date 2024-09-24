@@ -59,6 +59,7 @@ pipeline {
             }
         }
 
+        // 도커 이미지 생성
         stage('Build Docker Images') {
             parallel {
                 stage('Build Backend') {
@@ -66,20 +67,12 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-BE' }
                     }
                     steps {
-                        echo "Copying Dockerfile from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/home/ubuntu/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
-                        sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile 위치 및 파일 확인
                         echo "Building backend Docker image..."
                         script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}", "Dockerfile.springboot")
                         }
                     }
                 }
-
                 stage('Build Frontend') {
                     when {
                         expression { env.BRANCH_NAME == 'develop-FE' }
@@ -87,7 +80,7 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}", "Dockerfile.frontend")
                         }
                     }
                 }
@@ -154,17 +147,11 @@ pipeline {
     }
 }
 
-def validateAndBuildDockerImage(imageName, directory) {
+def validateAndBuildDockerImage(imageName, directory, dockerfile) {
     dir(directory) {
-        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계
-        echo "Copying JAR file to Dockerfile context..."
-        sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
-        sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
-        sh "ls -la ${directory}/app.jar"  // 복사된 JAR 파일 확인
-
         // Docker 이미지 빌드
         echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
-        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
+        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/${dockerfile} ${directory}"
         echo "Docker image build completed."
     }
 }
