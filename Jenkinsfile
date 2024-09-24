@@ -26,6 +26,8 @@ pipeline {
                 }
             }
             steps {
+                echo "Setting executable permission for gradlew..."
+                sh 'chmod +x ./ifsavedog-BE/gradlew'  // 실행 권한 추가
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
