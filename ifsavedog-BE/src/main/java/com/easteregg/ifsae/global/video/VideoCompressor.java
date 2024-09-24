@@ -39,7 +39,7 @@ public class VideoCompressor {
      * @param emitter 프론트단에 진행상황 전달
      * @return 압축된 파일 경로
      */
-    public File compressVideo(MultipartFile multipartFile, String outputFilePath, SseEmitter emitter) throws IOException, InterruptedException {
+    public File compressVideo(MultipartFile multipartFile, String outputFilePath) throws IOException, InterruptedException {
         final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
         final Pattern TIME_PATTERN = Pattern.compile("time=(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
 
@@ -78,22 +78,11 @@ public class VideoCompressor {
             if (timeMatcher.find()) {
                 double currentTime = parseTimeToSeconds(timeMatcher);
                 currentProgress = (currentTime / totalDuration) * 100;
-
-                // 진행 상태 SSE로 전송
-                try {
-                    emitter.send(SseEmitter.event().name(emitterName).data((int) currentProgress));
-                } catch (IOException e) {
-                    log.info("[video] sse 전송 실패");
-                    throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
-                }
             }
         }
 
         int exitCode = process.waitFor();
         if (exitCode == 0) {
-            // 완료 상태 100%
-            emitter.send(SseEmitter.event().name(emitterName).data(100));
-
             return new File(outputFilePath);
         } else {
             log.error("[video] 압축 실패. 에러코드 - {}", exitCode);
