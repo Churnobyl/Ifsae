@@ -33,10 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 1. SecurityContextHolder에 인증정보 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-        // 만료일 때
-        else if (token != null && !jwtTokenProvider.validateTokenExpiration(token)) {
+        } else if (token != null && !jwtTokenProvider.validateTokenExpiration(token)) {
             log.info("[doFilterInternal] : accessToken이 만료되었습니다.");
             // 1. redis에서 해당 accessToken값으로 저장된 refreshToken 가져오기
             String refreshToken = jwtTokenProvider.getRefreshTokenByAccessToken(token);
