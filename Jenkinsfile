@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
         DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
-        DOCKER_TAG = "${env.BUILD_NUMBER}"  // BUILD_NUMBER를 환경 변수로 사용
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
 
@@ -29,8 +29,6 @@ pipeline {
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
-                        sh 'chmod +x ./gradlew'
-                        sh './gradlew clean'
                         sh './gradlew sonar'
                     }
                 }
@@ -59,7 +57,6 @@ pipeline {
             }
         }
 
-        // 도커 이미지 생성
         stage('Build Docker Images') {
             parallel {
                 stage('Build Backend') {
@@ -69,10 +66,11 @@ pipeline {
                     steps {
                         echo "Building backend Docker image..."
                         script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}", "Dockerfile.springboot")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
                         }
                     }
                 }
+
                 stage('Build Frontend') {
                     when {
                         expression { env.BRANCH_NAME == 'develop-FE' }
@@ -80,7 +78,7 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}", "Dockerfile.frontend")
+                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
                         }
                     }
                 }
@@ -139,19 +137,14 @@ pipeline {
                 )
             }
         }
-        always {
-            echo "Cleaning workspace..."
-            cleanWs()
-            echo "Workspace cleaned."
-        }
     }
 }
 
-def validateAndBuildDockerImage(imageName, directory, dockerfile) {
+def validateAndBuildDockerImage(imageName, directory) {
     dir(directory) {
         // Docker 이미지 빌드
         echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
-        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/${dockerfile} ${directory}"
+        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
         echo "Docker image build completed."
     }
 }
