@@ -81,8 +81,13 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogDetailDto findById(Long id) {
-        Dog dog = dogRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public DogDetailDto findById(long dogId) {
+        Dog dog = dogRepository.findById(dogId).orElseThrow(NoSuchElementException::new);
+
+        ShelterDog shelterDog = shelterDogRepository.findShelterDogsByDogId(dogId)
+                                                    .orElseThrow(NoSuchElementException::new);
+
+        Shelter shelter = shelterDog.getShelter();
 
         return DogDetailDto.builder()
                            .id(dog.getId())
@@ -93,6 +98,8 @@ public class DogServiceImpl implements DogService {
                            .species(dog.getSpecies().getName())
                            .info(dog.getInfo())
                            .image(dog.getImage())
+                           .shelterId(shelter.getId())
+                           .shelterName(shelter.getName())
                            .build();
     }
 

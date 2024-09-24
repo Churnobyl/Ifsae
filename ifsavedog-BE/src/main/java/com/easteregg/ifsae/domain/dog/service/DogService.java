@@ -17,7 +17,7 @@ public interface DogService {
 
     void updateDog(long dogId, DogCreateRequest dogCreateRequest);
 
-    public DogDetailDto findById(Long id);
+    public DogDetailDto findById(long dogId);
 
     public List<DogListDto> findDogsByName(String name);
 

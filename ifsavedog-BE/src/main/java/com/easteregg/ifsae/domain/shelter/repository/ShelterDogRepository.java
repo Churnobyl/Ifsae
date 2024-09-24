@@ -3,6 +3,7 @@ package com.easteregg.ifsae.domain.shelter.repository;
 
 import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ShelterDogRepository extends JpaRepository<ShelterDog, Long> {
 
     List<ShelterDog> findShelterDogsByShelterId(long shelterId);
+
+    Optional<ShelterDog> findShelterDogsByDogId(long dogId);
 
 }
