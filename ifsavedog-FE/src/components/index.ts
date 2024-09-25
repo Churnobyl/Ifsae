@@ -1,3 +1,4 @@
-import Button from '@/components/common/Button/Button';
+import { Input, InputProps } from '@/components/common/Input/Input';
 
-export { Button };
+export { Input };
+export type { InputProps };
