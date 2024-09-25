@@ -1,7 +1,7 @@
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
-import { PATH } from '@/routers/Constants';
+import { PATH } from '@/routers/pathConstants';
 import {
   RouteObject,
   RouterProvider,
