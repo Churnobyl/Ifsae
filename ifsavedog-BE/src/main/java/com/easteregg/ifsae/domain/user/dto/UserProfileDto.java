@@ -1,12 +1,12 @@
 package com.easteregg.ifsae.domain.user.dto;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
 public class UserProfileDto {
+
     private String housingType;
     private int birth;
     private String address;
@@ -14,5 +14,5 @@ public class UserProfileDto {
     private int familyCnt;
     private String curPets;
     private String petExperience;
-    private List<String> allergies;
+    private boolean hasAllergy;
 }

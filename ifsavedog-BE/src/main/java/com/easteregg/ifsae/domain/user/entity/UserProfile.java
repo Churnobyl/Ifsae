@@ -8,10 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +19,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProfile {
@@ -47,9 +47,8 @@ public class UserProfile {
 
     private String curPets;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "allergy_id")
-    private List<UserProfileAllergy> allergies;
+    @ColumnDefault("false")
+    private boolean hasAllergy;
 
     private String petExperience;
 
@@ -62,9 +61,7 @@ public class UserProfile {
                              .familyCnt(familyCnt)
                              .curPets(curPets)
                              .petExperience(petExperience)
-                             .allergies(allergies.stream()
-                                                 .map(userProfileAllergy -> userProfileAllergy.getAllergy().getName())
-                                                 .toList())
+                             .hasAllergy(hasAllergy)
                              .build();
     }
 }

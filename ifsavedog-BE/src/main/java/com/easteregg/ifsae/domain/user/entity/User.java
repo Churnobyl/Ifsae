@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.user.entity;
 
+import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
 import com.easteregg.ifsae.domain.user.type.UserStatus;
@@ -81,4 +82,13 @@ public class User implements UserDetails {
         roles.add(this.grade.toString());
         return roles;
     }
+
+    public void updateUserBasicInfo(UpdateUserBasicInfoDto updateUserBasicInfoDto) {
+        this.nickname = updateUserBasicInfoDto.getNickname();
+        this.role = Role.valueOf(updateUserBasicInfoDto.getRole());
+        this.grade = Grade.valueOf(updateUserBasicInfoDto.getGrade());
+        this.userStatus = UserStatus.valueOf(updateUserBasicInfoDto.getUserStatus());
+    }
+
+
 }

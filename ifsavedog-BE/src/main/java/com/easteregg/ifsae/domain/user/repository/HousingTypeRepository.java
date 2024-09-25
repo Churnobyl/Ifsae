@@ -1,12 +1,12 @@
 package com.easteregg.ifsae.domain.user.repository;
 
-import com.easteregg.ifsae.domain.user.entity.UserProfile;
+import com.easteregg.ifsae.domain.user.entity.HousingType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
+public interface HousingTypeRepository extends JpaRepository<HousingType, Long> {
 
-    Optional<UserProfile> findByUserId(Long id);
+    Optional<HousingType> findByName(String housingType);
 }

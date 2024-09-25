@@ -26,7 +26,7 @@ public enum ErrorCode {
     // 이메일 인증 관련 에러
     INVALID_EMAIL_AUTH_CODE("잘못된 인증 코드입니다.", HttpStatus.BAD_REQUEST),
 
-    ;
+    INVALID_HOUSING_TYPE("잘못된 주거형태 값 입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
