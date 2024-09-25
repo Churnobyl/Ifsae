@@ -22,11 +22,11 @@ public enum ErrorCode {
     DUPLICATE_EMAIL("중복된 이메일 입니다.", HttpStatus.CONFLICT),
     DUPLICATE_NICKNAME("중복된 닉네임 입니다.", HttpStatus.CONFLICT),
     INVALID_EMAIL("잘못된 이메일 입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_HOUSING_TYPE("잘못된 주거형태 값 입니다.", HttpStatus.BAD_REQUEST),
 
     // 이메일 인증 관련 에러
     INVALID_EMAIL_AUTH_CODE("잘못된 인증 코드입니다.", HttpStatus.BAD_REQUEST),
 
-    INVALID_HOUSING_TYPE("잘못된 주거형태 값 입니다.", HttpStatus.BAD_REQUEST);
     // 센터 관련 에러
     SHELTER_NOT_FOUND("센터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
