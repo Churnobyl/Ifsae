@@ -50,6 +50,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 6. SecurityContextHolder에 인증정보 저장
                     Authentication authentication = jwtTokenProvider.getAuthentication(newAccessToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.info("[doFilterInternal] : refreshToken이 만료되었습니다.");
+                    throw new CustomSecurityException(ErrorCode.EXPIRED_TOKEN);
                 }
             } else {
                 log.info("[doFilterInternal] : refreshToken이 만료되었습니다.");

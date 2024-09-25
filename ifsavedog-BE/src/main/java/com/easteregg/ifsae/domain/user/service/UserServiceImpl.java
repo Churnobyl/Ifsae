@@ -1,27 +1,35 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
+import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
 import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.entity.UserProfile;
+import com.easteregg.ifsae.domain.user.repository.HousingTypeRepository;
+import com.easteregg.ifsae.domain.user.repository.UserProfileRepository;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
 import com.easteregg.ifsae.domain.user.type.UserStatus;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.UserException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final HousingTypeRepository housingTypeRepository;
+    private final UserProfileRepository userProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -57,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfo getUserInfo(User user) {
-        UserProfile userProfile = user.getUserProfile();
+        UserProfile userProfile = userProfileRepository.findByUserId(user.getId()).orElse(UserProfile.builder().build());
 
         return UserInfo.builder()
                        .id(user.getId())
@@ -66,7 +74,7 @@ public class UserServiceImpl implements UserService {
                        .profileImgUrl(user.getProfileImgUrl())
                        .grade(user.getGrade().name())
                        .role(user.getRole().name())
-                       .userProfile(userProfile != null ? userProfile.toDto() : UserProfileDto.builder().build())
+                       .userProfile(userProfile.toDto())
                        .build();
     }
 
@@ -75,4 +83,47 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                              .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
+
+
+    @Override
+    public void updateUserBasicInfo(UpdateUserBasicInfoDto updateUserBasicInfoDto, User user) {
+        user.updateUserBasicInfo(updateUserBasicInfoDto);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUserProfileInfo(UserProfileDto userProfileDto, User user) {
+        UserProfile userProfile = user.getUserProfile();
+        UserProfile newUserProfile = createNewUserProfile(userProfileDto, user);
+
+        if (userProfile != null) {
+            newUserProfile.setId(userProfile.getId());
+        }
+
+        userProfileRepository.save(newUserProfile);
+    }
+
+    @Override
+    public void updateUserProfileImg(User user, MultipartFile profileImg) {
+        // 프로필 이미지 update
+        userRepository.save(user);
+    }
+
+    private UserProfile createNewUserProfile(UserProfileDto userProfileDto, User user) {
+        return UserProfile.builder()
+                          .user(user)
+                          .housingType(housingTypeRepository.findByName(userProfileDto.getHousingType())
+                                                            .orElseThrow(() -> new UserException(
+                                                                    ErrorCode.INVALID_HOUSING_TYPE)))
+                          .birth(userProfileDto.getBirth())
+                          .address(userProfileDto.getAddress())
+                          .phoneNumber(userProfileDto.getPhoneNumber())
+                          .familyCnt(userProfileDto.getFamilyCnt())
+                          .curPets(userProfileDto.getCurPets())
+                          .petExperience(userProfileDto.getPetExperience())
+                          .hasAllergy(userProfileDto.isHasAllergy())
+                          .build();
+    }
+
+
 }

@@ -1,8 +1,11 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
+import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
+import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import com.easteregg.ifsae.domain.user.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
@@ -17,4 +20,11 @@ public interface UserService {
     UserInfo getUserInfo(User user);
 
     User getUserById(Long id);
+
+    void updateUserBasicInfo(UpdateUserBasicInfoDto updateUserBasicInfoDto, User user);
+
+    void updateUserProfileInfo(UserProfileDto userProfileDto, User user);
+
+    void updateUserProfileImg(User user, MultipartFile profileImg);
 }
+
