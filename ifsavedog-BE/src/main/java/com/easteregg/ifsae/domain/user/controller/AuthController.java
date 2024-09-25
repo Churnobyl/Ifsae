@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.user.controller;
 
 import com.easteregg.ifsae.domain.user.dto.EmailAuthRequest;
+import com.easteregg.ifsae.domain.user.dto.FindPasswordRequest;
 import com.easteregg.ifsae.domain.user.dto.SigninDto;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.VerifyEmailCodeRequest;
@@ -39,16 +40,23 @@ public class AuthController {
     @PostMapping("/email-auth")
     public ResponseEntity<CommonSuccessResponse> sendEmailAuth(@RequestBody EmailAuthRequest request)
             throws MessagingException {
-        log.debug("[sendEmail] 이메일 인증 진행. userEmail : {} ", request.getEmail());
+        log.info("[sendEmail] 이메일 인증 진행. userEmail : {} ", request.getEmail());
         authService.sendEmailAuth(request.getEmail());
         return ResponseEntity.ok(CommonSuccessResponse.of("이메일 인증 메일을 전송했습니다."));
     }
 
     @PostMapping("/verify-emailcode")
     public ResponseEntity<CommonSuccessResponse> verifyEmailCode(@RequestBody VerifyEmailCodeRequest request) {
-        log.debug("[verifyEmailCode] 이메일 코드 검증. email : {} ", request.getEmail());
+        log.info("[verifyEmailCode] 이메일 코드 검증. email : {} ", request.getEmail());
         authService.verifyEmailCode(request);
         return ResponseEntity.ok(CommonSuccessResponse.of("이메일 인증에 성공했습니다."));
+    }
+
+    @PostMapping("/find-password")
+    public ResponseEntity<CommonSuccessResponse> findPassword(@RequestBody FindPasswordRequest request) {
+        log.info("[findPassword] 비밀번호 수정. userEmail : {} ", request.getEmail());
+        authService.findPassword(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok(CommonSuccessResponse.of("비밀번호 수정 완료. 새로운 비밀번호로 로그인해주세요."));
     }
 
 }

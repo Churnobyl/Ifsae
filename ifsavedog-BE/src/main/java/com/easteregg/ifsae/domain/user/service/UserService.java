@@ -27,5 +27,7 @@ public interface UserService {
     void updateUserProfileInfo(UserProfileDto userProfileDto, User user);
 
     void updateUserProfileImg(User user, MultipartFile profileImg) throws IOException;
+
+    void saveUser(User user);
 }
 

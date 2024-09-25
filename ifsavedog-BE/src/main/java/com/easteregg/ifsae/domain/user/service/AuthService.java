@@ -14,4 +14,6 @@ public interface AuthService {
     void verifyEmailCode(VerifyEmailCodeRequest request);
 
     Response signin(String email, String password);
+
+    void findPassword(String email, String password);
 }
