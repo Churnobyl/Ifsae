@@ -90,5 +90,7 @@ public class User implements UserDetails {
         this.userStatus = UserStatus.valueOf(updateUserBasicInfoDto.getUserStatus());
     }
 
-
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
