@@ -5,6 +5,7 @@ import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
 import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import com.easteregg.ifsae.domain.user.entity.User;
+import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -25,6 +26,6 @@ public interface UserService {
 
     void updateUserProfileInfo(UserProfileDto userProfileDto, User user);
 
-    void updateUserProfileImg(User user, MultipartFile profileImg);
+    void updateUserProfileImg(User user, MultipartFile profileImg) throws IOException;
 }
 

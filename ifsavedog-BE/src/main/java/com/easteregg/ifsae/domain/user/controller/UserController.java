@@ -6,6 +6,7 @@ import com.easteregg.ifsae.domain.user.dto.UserProfileDto;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.service.UserService;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,7 +64,8 @@ public class UserController {
      */
     @PutMapping("/profile-img")
     public ResponseEntity<CommonSuccessResponse> updateUserProfileImg(@AuthenticationPrincipal User user,
-                                                                      @RequestPart MultipartFile profileImg) {
+                                                                      @RequestParam MultipartFile profileImg)
+            throws IOException {
         userService.updateUserProfileImg(user, profileImg);
         return ResponseEntity.ok(CommonSuccessResponse.of("프로필 사진 수정에 성공했습니다."));
     }

@@ -14,7 +14,9 @@ import com.easteregg.ifsae.domain.user.type.Role;
 import com.easteregg.ifsae.domain.user.type.UserStatus;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.UserException;
+import com.easteregg.ifsae.global.s3.S3ImageUploader;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final HousingTypeRepository housingTypeRepository;
     private final UserProfileRepository userProfileRepository;
+    private final S3ImageUploader s3ImageUploader;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -65,7 +68,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfo getUserInfo(User user) {
-        UserProfile userProfile = userProfileRepository.findByUserId(user.getId()).orElse(UserProfile.builder().build());
+        UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
+                                                       .orElse(UserProfile.builder().build());
 
         return UserInfo.builder()
                        .id(user.getId())
@@ -104,8 +108,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserProfileImg(User user, MultipartFile profileImg) {
-        // 프로필 이미지 update
+    public void updateUserProfileImg(User user, MultipartFile profileImg) throws IOException {
+        String profileImgUrl = user.getProfileImgUrl();
+
+        // 기존 이미지 s3에서 삭제
+        if (profileImgUrl != null) {
+            s3ImageUploader.delete(profileImgUrl);
+        }
+
+        String upload = s3ImageUploader.upload(profileImg);
+        user.setProfileImgUrl(upload);
+
         userRepository.save(user);
     }
 
