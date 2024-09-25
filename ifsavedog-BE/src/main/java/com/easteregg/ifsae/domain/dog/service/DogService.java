@@ -13,13 +13,11 @@ public interface DogService {
 
     Dog createDog(User user, DogCreateRequest dogCreateRequest);
 
-    void updateDogProfileImage(MultipartFile file, Dog dog) throws IOException;
+    void updateDogProfileImage(MultipartFile dogImage, Dog dog) throws IOException;
 
     void updateDog(long dogId, DogCreateRequest dogCreateRequest);
 
-    public DogDetailDto findById(Long id);
-
-    public List<DogListDto> findDogsByName(String name);
+    public DogDetailDto findById(long dogId);
 
     public List<DogListDto> findDogsByShelterId(long shelterId);
 
