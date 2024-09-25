@@ -1,5 +1,6 @@
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
-import LandingPage from '@/pages/mainLogic/LandingPage';
+import LandingPage from '@/pages/LandingPage';
+import LoginPage from '@/pages/LoginPage';
 import { PATH } from '@/routers/Constants';
 import {
   RouteObject,
@@ -19,6 +20,11 @@ const Router = () => {
         },
         { path: PATH.LANDING, element: <LandingPage /> },
       ],
+    },
+    {
+      path: PATH.LOGIN,
+      errorElement: <NotFoundPage />,
+      element: <LoginPage />,
     },
   ];
 
