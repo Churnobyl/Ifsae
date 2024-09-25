@@ -131,6 +131,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
     private void deleteOldProfileImg(String profileImgUrl) {
         if (profileImgUrl != null) {
             s3ImageUploader.delete(profileImgUrl);
