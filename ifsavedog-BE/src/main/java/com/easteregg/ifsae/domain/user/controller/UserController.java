@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -41,10 +41,9 @@ public class UserController {
     /**
      * 기본 정보 수정 (내 정보 수정). 닉네임, 역할, 등급, 상태 수정 가능
      */
-    @PostMapping("/basic")
+    @PutMapping("/basic")
     public ResponseEntity<CommonSuccessResponse> updateUserBasicInfo(@AuthenticationPrincipal User user,
                                                                      @RequestBody UpdateUserBasicInfoDto updateUserBasicInfoDto) {
-        System.out.println("user: " + user.getId());
         userService.updateUserBasicInfo(updateUserBasicInfoDto, user);
         return ResponseEntity.ok(CommonSuccessResponse.of("회원정보 수정에 성공했습니다."));
     }
@@ -52,7 +51,7 @@ public class UserController {
     /**
      * 추가 정보 수정. UserProfile에 있는 정보 수정
      */
-    @PostMapping("/profile")
+    @PutMapping("/profile")
     public ResponseEntity<CommonSuccessResponse> updateUserProfile(@AuthenticationPrincipal User user,
                                                                    @RequestBody UserProfileDto userProfileDto) {
         userService.updateUserProfileInfo(userProfileDto, user);
@@ -62,7 +61,7 @@ public class UserController {
     /**
      * 프로필 사진 수정
      */
-    @PostMapping("/profile-img")
+    @PutMapping("/profile-img")
     public ResponseEntity<CommonSuccessResponse> updateUserProfileImg(@AuthenticationPrincipal User user,
                                                                       @RequestPart MultipartFile profileImg) {
         userService.updateUserProfileImg(user, profileImg);

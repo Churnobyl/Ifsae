@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo getUserInfo(User user) {
         UserProfile userProfile = userProfileRepository.findByUserId(user.getId()).orElse(UserProfile.builder().build());
-        System.out.println("userProfile: " + userProfile.getId());
 
         return UserInfo.builder()
                        .id(user.getId())
