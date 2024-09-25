@@ -1,9 +1,11 @@
 package com.easteregg.ifsae.global.exception;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@Getter
 @Builder
 public class ErrorResponse {
 

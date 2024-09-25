@@ -1,7 +1,6 @@
 package com.easteregg.ifsae.domain.user.dto;
 
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

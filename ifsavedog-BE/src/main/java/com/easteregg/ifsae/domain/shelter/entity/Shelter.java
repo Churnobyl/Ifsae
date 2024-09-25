@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.shelter.entity;
 
+import com.easteregg.ifsae.domain.shelter.dto.ShelterCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,5 +41,13 @@ public class Shelter {
 
     @OneToMany(mappedBy = "shelter")
     private List<ShelterDog> shelterDogList;
+
+    public void updateShelterInfo(ShelterCreateRequest shelterCreateRequest) {
+        this.name = shelterCreateRequest.getName();
+        this.address = shelterCreateRequest.getAddress();
+        this.phone = shelterCreateRequest.getPhone();
+        this.content = shelterCreateRequest.getContent();
+        this.canBeDonated = shelterCreateRequest.isCanBeDonated();
+    }
 }
 

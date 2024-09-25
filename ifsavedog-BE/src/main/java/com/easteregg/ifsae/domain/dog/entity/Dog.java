@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.dog.entity;
 
+import com.easteregg.ifsae.domain.dog.dto.DogCreateRequest;
 import com.easteregg.ifsae.domain.dog.type.DogStatus;
 import com.easteregg.ifsae.domain.dog.type.Gender;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
@@ -59,5 +60,18 @@ public class Dog {
 
     @OneToMany(mappedBy = "dog")
     private List<PostDog> posts;
+
+    public void updateDogProfileImage(String imageUrl) {
+        this.image = imageUrl;
+    }
+
+    public void updateDogInfo(DogCreateRequest dogCreateRequest) {
+        this.name = dogCreateRequest.getName();
+        this.age = dogCreateRequest.getAge();
+        this.gender = Gender.valueOf(dogCreateRequest.getGender());
+        this.dogStatus = DogStatus.valueOf(dogCreateRequest.getDogStatus());
+        this.info = dogCreateRequest.getInfo();
+
+    }
 
 }

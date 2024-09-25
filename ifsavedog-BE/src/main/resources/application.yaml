@@ -16,11 +16,17 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 5
+      idle-timeout: 30000  # 30초
+      connection-timeout: 20000  # 20초
+      max-lifetime: 1800000  # 30분
 
   # JPA Settings
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -92,3 +98,16 @@ springdoc:
   model-and-view-allowed: true
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+
+video:
+  chunk-size: 1048576 # 1024 * 1024 = 1MB
+  ffmpeg:
+    video-codec: h264
+    audio-codec: mp3
+    crf: 42
+    audio-bitrate: 256k
+    scale: 1280:720
+  emitter:
+    event-name: progress
+  directory:
+    s3: video/
