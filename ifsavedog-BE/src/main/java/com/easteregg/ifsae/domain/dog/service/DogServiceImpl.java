@@ -67,8 +67,8 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public void updateDogProfileImage(MultipartFile file, Dog dog) throws IOException {
-        String imageUrl = s3ImageUploader.upload(file);
+    public void updateDogProfileImage(MultipartFile dogImage, Dog dog) throws IOException {
+        String imageUrl = s3ImageUploader.upload(dogImage);
 
         dog.updateDogProfileImage(imageUrl);
     }
@@ -81,8 +81,13 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogDetailDto findById(Long id) {
-        Dog dog = dogRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public DogDetailDto findById(long dogId) {
+        Dog dog = dogRepository.findById(dogId).orElseThrow(NoSuchElementException::new);
+
+        ShelterDog shelterDog = shelterDogRepository.findShelterDogsByDogId(dogId)
+                                                    .orElseThrow(NoSuchElementException::new);
+
+        Shelter shelter = shelterDog.getShelter();
 
         return DogDetailDto.builder()
                            .id(dog.getId())
@@ -93,21 +98,9 @@ public class DogServiceImpl implements DogService {
                            .species(dog.getSpecies().getName())
                            .info(dog.getInfo())
                            .image(dog.getImage())
+                           .shelterId(shelter.getId())
+                           .shelterName(shelter.getName())
                            .build();
-    }
-
-    @Override
-    public List<DogListDto> findDogsByName(String name) {
-        List<Dog> dogs = dogRepository.findDogsByName(name);
-
-        return dogs.stream()
-                   .map(dog -> DogListDto.builder()
-                                         .id(dog.getId())
-                                         .name(dog.getName())
-                                         .image(dog.getImage())
-                                         .shelter(dog.getShelterDog() != null ? dog.getShelterDog().getShelter() : null)
-                                         .build())
-                   .collect(Collectors.toList());
     }
 
     @Override
@@ -121,7 +114,8 @@ public class DogServiceImpl implements DogService {
                                          .id(dog.getId())
                                          .name(dog.getName())
                                          .image(dog.getImage())
-                                         .shelter(dog.getShelterDog() != null ? dog.getShelterDog().getShelter() : null)
+                                         .shelterId(dog.getShelterDog().getShelter().getId())
+                                         .shleterName(dog.getShelterDog().getShelter().getName())
                                          .build())
                    .collect(Collectors.toList());
     }

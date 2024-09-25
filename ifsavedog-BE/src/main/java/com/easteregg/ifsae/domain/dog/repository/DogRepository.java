@@ -12,9 +12,7 @@ public interface DogRepository extends JpaRepository<Dog, Long> {
 
     Optional<Dog> findById(Long id);
 
-    List<Dog> findDogsByName(String name);
-
     List<Dog> findDogsByShelterDogIn(List<ShelterDog> shelterDogs);
 
-
+    List<Dog> findByIdIn(List<Long> dogIds);
 }

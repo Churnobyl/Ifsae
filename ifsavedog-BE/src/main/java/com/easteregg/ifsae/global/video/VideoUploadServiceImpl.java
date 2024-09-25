@@ -25,15 +25,13 @@ public class VideoUploadServiceImpl implements VideoUploadService {
     private final VideoCompressor videoCompressor;
     private final S3VideoUploader s3VideoUploader;
 
-    public void compressAndUploadVideo(MultipartFile inputFile, SseEmitter emitter) {
+    public String compressAndUploadVideo(MultipartFile inputFile) {
         try {
             // 비디오 압축
-            File compressedFile = videoCompressor.compressVideo(inputFile, inputFile.getOriginalFilename(), emitter);
+            File compressedFile = videoCompressor.compressVideo(inputFile, inputFile.getOriginalFilename());
             
             // 비디오 업로드
-            s3VideoUploader.uploadFile(compressedFile, emitter);
-
-            emitter.complete();
+            return s3VideoUploader.uploadFile(compressedFile);
         } catch (Exception e) {
             log.error("[video] 업로드 과정 중 에러 발생 - {}", e);
             throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);

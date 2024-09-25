@@ -38,10 +38,8 @@ class VideoUploadServiceImplTest {
                 inputFile // 파일 내용 (InputStream)
         );
 
-        SseEmitter emitter = new SseEmitter();
-
         // S3 업로드 테스트
-        videoUploadService.compressAndUploadVideo(mockMultipartFile, emitter);
+        videoUploadService.compressAndUploadVideo(mockMultipartFile);
 
         boolean isUploaded = amazonS3Client.doesObjectExist(bucket, "video/test_video.mp4");
 
