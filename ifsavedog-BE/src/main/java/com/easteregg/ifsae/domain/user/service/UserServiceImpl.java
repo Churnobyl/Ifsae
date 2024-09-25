@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.user.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
@@ -13,8 +14,11 @@ import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
 import com.easteregg.ifsae.domain.user.type.UserStatus;
 import com.easteregg.ifsae.global.exception.ErrorCode;
+import com.easteregg.ifsae.global.exception.type.InvalidFileFormatException;
 import com.easteregg.ifsae.global.exception.type.UserException;
+import com.easteregg.ifsae.global.s3.S3ImageUploader;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final HousingTypeRepository housingTypeRepository;
     private final UserProfileRepository userProfileRepository;
+    private final S3ImageUploader s3ImageUploader;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -65,7 +70,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfo getUserInfo(User user) {
-        UserProfile userProfile = userProfileRepository.findByUserId(user.getId()).orElse(UserProfile.builder().build());
+        UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
+                                                       .orElse(UserProfile.builder().build());
 
         return UserInfo.builder()
                        .id(user.getId())
@@ -105,8 +111,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserProfileImg(User user, MultipartFile profileImg) {
-        // 프로필 이미지 update
-        userRepository.save(user);
+        if (profileImg == null || profileImg.isEmpty()) {
+            throw new InvalidFileFormatException(ErrorCode.INVALID_FILE_FORMAT);
+        }
+
+        try {
+            // 기존 이미지가 있을 경우 삭제
+            deleteOldProfileImg(user.getProfileImgUrl());
+
+            // 새로운 이미지 업로드 및 URL 설정
+            String newImgUrl = uploadNewProfileImg(profileImg);
+
+            if (!newImgUrl.equals(user.getProfileImgUrl())) {
+                user.setProfileImgUrl(newImgUrl);
+                userRepository.save(user);
+            }
+        } catch (AmazonServiceException e){
+            throw new UserException(ErrorCode.FAILED_TO_UPLOAD_PROFILE_IMG);
+        }
+    }
+
+    private void deleteOldProfileImg(String profileImgUrl) {
+        if (profileImgUrl != null) {
+            s3ImageUploader.delete(profileImgUrl);
+        }
+    }
+
+    private String uploadNewProfileImg(MultipartFile profileImg) {
+        try {
+            return s3ImageUploader.upload(profileImg);
+        } catch (IOException e) {
+            throw new UserException(ErrorCode.FAILED_TO_UPLOAD_PROFILE_IMG);
+        }
     }
 
     private UserProfile createNewUserProfile(UserProfileDto userProfileDto, User user) {

@@ -55,7 +55,7 @@ public class S3ImageUploader {
         return amazonS3Client.getUrl(bucket, filename).toString();
     }
 
-    public void delete(String bucket, String filename) {
+    public void delete(String filename) {
         amazonS3Client.deleteObject(bucket, filename);
     }
 

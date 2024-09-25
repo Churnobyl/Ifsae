@@ -34,7 +34,8 @@ public enum ErrorCode {
     POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 파일 업로드 관련 에러
-    INVALID_FILE_FORMAT("잘못된 파일 형식입니다.", HttpStatus.BAD_REQUEST);
+    INVALID_FILE_FORMAT("잘못된 파일 형식입니다.", HttpStatus.BAD_REQUEST),
+    FAILED_TO_UPLOAD_PROFILE_IMG("업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
     private final HttpStatus httpStatus;
