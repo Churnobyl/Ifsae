@@ -111,3 +111,7 @@ video:
     event-name: progress
   directory:
     s3: video/
+
+# 프론트엔드 관련
+frontend:
+  url: ${FRONTEND_URL}
