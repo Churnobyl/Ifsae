@@ -87,7 +87,7 @@ const LoginPage = () => {
           </button>
           <div className="flex flex-row justify-end gap-1 text-sm text-black">
             <NavLink to={`${PATH.PASSWORD_RESET}`} className="text-main">
-              비밀번호 초기화
+              비밀번호 재설정
             </NavLink>
             <div> | </div>
             <NavLink to={`${PATH.SIGNUP}`} className="text-main">
