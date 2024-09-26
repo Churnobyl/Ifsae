@@ -91,5 +91,16 @@ public class AuthServiceImpl implements AuthService {
                                  .build();
     }
 
+    @Override
+    public void findPassword(String email, String password) {
+        User user = userService.getUserByEmail(email);
+
+        String newPassword = passwordEncoder.encode(password);
+
+        user.updatePassword(newPassword);
+
+        userService.saveUser(user);
+    }
+
 
 }

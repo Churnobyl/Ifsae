@@ -9,6 +9,8 @@ import com.easteregg.ifsae.domain.dog.repository.DogRepository;
 import com.easteregg.ifsae.domain.dog.repository.SpeciesRepository;
 import com.easteregg.ifsae.domain.dog.type.DogStatus;
 import com.easteregg.ifsae.domain.dog.type.Gender;
+import com.easteregg.ifsae.domain.follow.entity.Follow;
+import com.easteregg.ifsae.domain.follow.repository.FollowRepository;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterDogRepository;
@@ -36,6 +38,8 @@ public class DogServiceImpl implements DogService {
 
     private final ShelterUserRepository shelterUserRepository;
     private final ShelterDogRepository shelterDogRepository;
+
+    private final FollowRepository followRepository;
 
     private final S3ImageUploader s3ImageUploader;
 
@@ -100,6 +104,7 @@ public class DogServiceImpl implements DogService {
                            .image(dog.getImage())
                            .shelterId(shelter.getId())
                            .shelterName(shelter.getName())
+                           .followerCnt(dog.getFollows().size())
                            .build();
     }
 
@@ -110,14 +115,19 @@ public class DogServiceImpl implements DogService {
         List<Dog> dogs = dogRepository.findDogsByShelterDogIn(shelterDogs);
 
         return dogs.stream()
-                   .map(dog -> DogListDto.builder()
-                                         .id(dog.getId())
-                                         .name(dog.getName())
-                                         .image(dog.getImage())
-                                         .shelterId(dog.getShelterDog().getShelter().getId())
-                                         .shleterName(dog.getShelterDog().getShelter().getName())
-                                         .build())
-                   .collect(Collectors.toList());
+                   .map(Dog::toDogListDto).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<DogListDto> findDogsByFollowerId(long followerId) {
+        List<Follow> followList = followRepository.findFollowsByUserId(followerId);
+
+        List<Dog> dogs = followList.stream()
+                                   .map(Follow::getDog).toList();
+
+        return dogs.stream().map(Dog::toDogListDto).collect(Collectors.toList());
+
     }
 
 }
