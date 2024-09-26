@@ -61,7 +61,7 @@ public class Dog {
     @OneToOne(mappedBy = "dog")
     private ShelterDog shelterDog;
 
-    @OneToMany(mappedBy = "dog")
+    @OneToMany(mappedBy = "dog", fetch = FetchType.LAZY)
     private List<PostDog> posts;
 
     @OneToMany(mappedBy = "dog", fetch = FetchType.LAZY)

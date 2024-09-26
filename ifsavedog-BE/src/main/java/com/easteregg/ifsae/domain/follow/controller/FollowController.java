@@ -1,16 +1,42 @@
 package com.easteregg.ifsae.domain.follow.controller;
 
+import com.easteregg.ifsae.domain.follow.service.FollowService;
+import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/dog")
+@RequestMapping("/api/follow")
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class FollowController {
+
+    private final FollowService followService;
+
+    @PostMapping
+    public ResponseEntity<CommonSuccessResponse> createFollow(@AuthenticationPrincipal User user,
+                                                              @RequestParam long dogId) {
+        followService.createFollow(user.getId(), dogId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<CommonSuccessResponse> deleteFollow(@AuthenticationPrincipal User user,
+                                                              @RequestParam long dogId) {
+        followService.deleteFollow(user.getId(), dogId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }

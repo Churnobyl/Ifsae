@@ -104,6 +104,7 @@ public class DogServiceImpl implements DogService {
                            .image(dog.getImage())
                            .shelterId(shelter.getId())
                            .shelterName(shelter.getName())
+                           .followCnt(dog.getFollows().size())
                            .build();
     }
 
