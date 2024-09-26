@@ -31,7 +31,8 @@
       "@/stores/*": ["stores/*"],
       "@/constants/*": ["constants/*"],
       "@/queries/*": ["queries/*"],
-      "@/routers/*": ["routers/*"]
+      "@/routers/*": ["routers/*"],
+      "@/layouts/*": ["layouts/*"]
     }
   },
   "include": ["vite.config.ts"]
