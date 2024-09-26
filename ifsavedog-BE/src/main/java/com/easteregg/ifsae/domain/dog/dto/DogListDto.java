@@ -15,6 +15,6 @@ public class DogListDto {
 
     private long shelterId;
 
-    private String shleterName;
+    private String shelterName;
 
 }

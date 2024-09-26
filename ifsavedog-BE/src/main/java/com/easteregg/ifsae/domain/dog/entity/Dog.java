@@ -86,7 +86,7 @@ public class Dog {
                          .name(this.getName())
                          .image(this.getImage())
                          .shelterId(this.getShelterDog().getShelter().getId())
-                         .shleterName(this.getShelterDog().getShelter().getName())
+                         .shelterName(this.getShelterDog().getShelter().getName())
                          .build();
     }
 }

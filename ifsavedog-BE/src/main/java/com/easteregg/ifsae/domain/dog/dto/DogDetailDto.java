@@ -29,6 +29,6 @@ public class DogDetailDto {
 
     private String shelterName;
 
-    private int followCnt;
+    private int followerCnt;
 
 }
