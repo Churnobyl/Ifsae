@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.user.entity;
 
+import com.easteregg.ifsae.domain.follow.entity.Follow;
 import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -62,6 +64,9 @@ public class User implements UserDetails {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Follow> follows;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
