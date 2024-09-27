@@ -8,6 +8,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   icon?: IconType;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
 }
 
 export const Input = ({
@@ -17,6 +18,7 @@ export const Input = ({
   placeholder,
   onChange,
   icon: Icon,
+  type,
 }: InputProps) => {
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
@@ -37,13 +39,14 @@ export const Input = ({
           </div>
         )}
         <input
-          className="w-full h-12 pl-10 bg-transparent rounded-md outline-none bg-gray text-lightGray focus:border-main lg:h-12 md:h-12 md:text-xs sm:h-12 sm:text-xs xs:h-12 xs:text-sm"
+          className="w-full h-12 pl-10 rounded-md outline-none bg-gray text-lightGray focus:border-main lg:h-12 md:h-12 md:text-xs sm:h-12 sm:text-xs xs:h-12 xs:text-sm"
           name={name}
           value={value}
           onChange={onChange}
           placeholder={isInputFocused ? '' : placeholder}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
+          type={type}
         />
       </div>
     </div>

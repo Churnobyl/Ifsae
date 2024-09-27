@@ -1,11 +1,8 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
-import {
-  emailAuthApi,
-  signupApi,
-  verifyEmailCodeApi,
-} from '@/apis/auth/authApi';
+import { signupApi } from '@/apis/auth/authApi';
 import StepAuthNumber from '@/components/signup/StepAuthNumber';
 import StepEmail from '@/components/signup/StepEmail';
+import StepRest from '@/components/signup/StepRest';
 import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
@@ -17,10 +14,7 @@ import { UserSignupInputType } from 'types/auth/UserSignupInputType';
 enum Step {
   이메일,
   인증번호,
-  비밀번호,
-  닉네임,
-  롤,
-  가입하기,
+  기타정보,
 }
 
 const SignupPage = () => {
@@ -56,14 +50,25 @@ const SignupPage = () => {
    */
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
 
+  /**
+   * 기타정보 Step
+   */
+  const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+
   // Input 반영
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
-      setUserInput((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      if (name === 'passwordRepeat') {
+        setPasswordRepeat(value);
+      } else {
+        setUserInput((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+
+      setErrMessage('');
     },
     [],
   );
@@ -99,7 +104,7 @@ const SignupPage = () => {
 
       // if (response.status === HTTP_STATUS.OK) {
       setIsAuthed(true);
-      setStep(Step.비밀번호);
+      setStep(Step.기타정보);
       // }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -138,7 +143,7 @@ const SignupPage = () => {
   }, [navigate, tokenStore, userInput]);
 
   return (
-    <MainLayout showTopbar={false} showBottombar={false}>
+    <MainLayout showTopbar={true} showBottombar={true}>
       <main className="flex flex-col items-center gap-3 h-screen w-full pt-16">
         <div className="signup text-2xl">회원가입</div>
         <div className="signup-form flex flex-col gap-1 w-26">
@@ -156,6 +161,15 @@ const SignupPage = () => {
               value={userInput.authNumber}
               handleInputChange={handleInputChange}
               handleAuthNumber={handleAuthNumber}
+            />
+          )}
+          {step >= 2 && (
+            <StepRest
+              password={userInput.password}
+              nickname={userInput.nickname}
+              role={userInput.role}
+              handleInputChange={handleInputChange}
+              passwordRepeat={passwordRepeat}
             />
           )}
         </div>

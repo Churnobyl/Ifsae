@@ -32,7 +32,7 @@ const StepAuthNumber = ({
             'bg-main',
             'rounded-md',
             'border-none',
-            { disabled: isAuthed },
+            { disabled: isAuthed, 'bg-lightGray': isAuthed },
           )}
           onClick={handleAuthNumber}
         >
