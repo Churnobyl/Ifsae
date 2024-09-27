@@ -4,13 +4,15 @@
       "type": "keyword"
     },
     "title": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
     },
     "content": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
     },
     "dogIds": {
-      "type": "text"
+      "type": "keyword"
     },
     "shelter": {
       "type": "object",
@@ -19,10 +21,8 @@
           "type": "keyword"
         },
         "name": {
-          "type": "text"
-        },
-        "location": {
-          "type": "text"
+          "type": "text",
+          "analyzer": "my_custom_analyzer"
         }
       }
     }
