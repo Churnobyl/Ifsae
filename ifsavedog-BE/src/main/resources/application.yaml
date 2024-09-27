@@ -83,6 +83,3 @@ video:
     event-name: progress
   directory:
     s3: video/
-
-frontend:
-  url: ${FRONTEND_URL}
