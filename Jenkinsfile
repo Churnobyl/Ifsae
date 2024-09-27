@@ -46,6 +46,7 @@ pipeline {
         }
 
         stage('Copy Dockerfile') {
+            echo "Copy Dockerfile stage"
             steps {
                 script {
                     def remotePath = "/var/jenkins_home/workspace/IfSae_${env.BRANCH_NAME}/Dockerfile"
@@ -59,6 +60,7 @@ pipeline {
         }
 
         stage('Build Docker Images') {
+            echo "Build Docker Images stage"
             parallel {
                 stage('Build Backend') {
                     when {
@@ -99,6 +101,7 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
+                echo "Push Docker Images stage"
                 script {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
                         if (env.BRANCH_NAME == 'develop-BE') {
