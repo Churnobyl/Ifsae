@@ -2,10 +2,10 @@
 FROM node:20.15.0-alpine AS builder
 
 WORKDIR /app
-COPY ./ifsavedog-FE/package.json ./ifsavedog-FE/yarn.lock ./
+COPY package.json yarn.lock ./
 RUN yarn install
-COPY ./ifsavedog-FE/ ./
 
+COPY . .
 RUN mkdir -p node_modules/react-full-page/lib && \
     echo 'declare module "react-full-page" { type ControlComponentsProps = { getCurrentSlideIndex: () => number; onNext: () => void; onPrev: () => void; scrollToSlide: (n: number) => void; slidesCount: number; children: React.ReactNode; }; type FullPageProps = { initialSlide?: number; duration?: number; controls?: boolean | React.FC<ControlComponentsProps>; controlProps?: any; beforeChange?: () => void; afterChange?: () => void; scrollMode?: "full-page" | "normal"; children: React.ReactNode; }; type SlideProps = { children: React.ReactNode; style?: { maxHeight: string }; }; export const FullPage: React.FC<FullPageProps>; export const Slide: React.FC<SlideProps>; }' > node_modules/react-full-page/lib/index.d.ts
 
