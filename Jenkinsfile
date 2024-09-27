@@ -19,24 +19,24 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            when {
-                anyOf {
-                    expression { env.BRANCH_NAME == 'develop-BE' }
-                }
-            }
-            steps {
-                echo "Running SonarQube analysis..."
-                withSonarQubeEnv('SonarQube') {
-                    dir('ifsavedog-BE') {
-                        sh 'chmod +x ./gradlew'
-                        sh './gradlew clean'
-                        sh './gradlew sonar'
-                    }
-                }
-                echo "SonarQube analysis completed."
-            }
-        }
+//         stage('SonarQube Analysis') {
+//             when {
+//                 anyOf {
+//                     expression { env.BRANCH_NAME == 'develop-BE' }
+//                 }
+//             }
+//             steps {
+//                 echo "Running SonarQube analysis..."
+//                 withSonarQubeEnv('SonarQube') {
+//                     dir('ifsavedog-BE') {
+//                         sh 'chmod +x ./gradlew'
+//                         sh './gradlew clean'
+//                         sh './gradlew sonar'
+//                     }
+//                 }
+//                 echo "SonarQube analysis completed."
+//             }
+//         }
 
         stage('Prepare Environment') {
             steps {
