@@ -29,6 +29,7 @@ pipeline {
                 echo "SonarQube analysis stage."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
                         sh './gradlew sonar'
                     }
                 }
@@ -46,6 +47,7 @@ pipeline {
 
         stage('Copy Dockerfile') {
             steps {
+                echo "Copy Dockerfile stage"
                 script {
                     def remotePath = "/var/jenkins_home/workspace/IfSae_${env.BRANCH_NAME}/Dockerfile"
                     sshagent(['jenkins-ssh-key']) {
@@ -57,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build') {
             parallel {
                 stage('Build Backend') {
                     when {
@@ -66,7 +68,7 @@ pipeline {
                     steps {
                         dir('ifsavedog-BE') {
                             sh './gradlew build -x test'
-                            sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
+                            sh "cp build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
                             sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
@@ -98,6 +100,7 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
+                echo "Push Docker Images stage"
                 script {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
                         if (env.BRANCH_NAME == 'develop-BE') {
@@ -168,8 +171,8 @@ def prepareEnvironment(branch) {
 }
 
 def prepareEnv(envFile, dockerImage) {
-    sh """
-        cp ${envFile} ${WORKSPACE}/.env
-        chmod 775 ${WORKSPACE}/.env
-    """
+    sh '''
+        cp "$ENV_FILE_BACKEND" "$WORKSPACE/.env"
+        chmod 775 "$WORKSPACE/.env"
+    '''
 }
