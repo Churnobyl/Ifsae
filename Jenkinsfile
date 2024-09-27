@@ -67,11 +67,17 @@ pipeline {
                     }
                     steps {
                         dir('ifsavedog-BE') {
+                            // Gradle 빌드
                             sh './gradlew build -x test'
-                            // JAR 파일 경로 확인
+
+                            // 빌드 후 JAR 파일 위치 확인
                             sh 'ls -la build/libs/'
-                            // 파일이 정확한지 확인 후 복사
-                            sh "cp build/libs/*.jar ${WORKSPACE}/app.jar"
+
+                            // 빌드된 JAR 파일 복사
+                            sh "cp build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
+
+                            // Docker 이미지 빌드
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
                 }
