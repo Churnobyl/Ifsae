@@ -173,6 +173,13 @@ pipeline {
                 echo "Deployment completed."
             }
         }
+
+        stage('Cleanup') {
+            steps {
+                echo "Cleaning up old Docker images..."
+                sh 'docker image prune -f'
+            }
+        }
     }
 
     post {
