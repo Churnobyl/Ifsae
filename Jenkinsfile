@@ -68,10 +68,12 @@ pipeline {
                     }
                     steps {
                         echo "Building FE (React)..."
-                        // dir('ifsavedog-FE') {
-                        //     sh 'npm install --legacy-peer-deps'
-                        //     sh 'npm run build'
-                        // }
+                        dir('ifsavedog-FE') {
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ."
+                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
+                            sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
+                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
+                        }
                         echo "FE build and deployment completed."
                     }
                 }
@@ -127,7 +129,7 @@ pipeline {
                         script {
                             // validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
                             echo "Building Docker image ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}..."
-                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ."
+                            // sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ."
                             echo "Docker image build completed."
                         }
                     }
@@ -157,9 +159,9 @@ pipeline {
                             sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"
                             sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
                         } else if (env.BRANCH_NAME == 'develop-FE') {
-                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
-                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
+                            // sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
+                            // sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
+                            // sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
                         } else if (env.BRANCH_NAME == 'develop-DATA') {
                             sh "docker push ${DOCKER_IMAGE_DATA}:${DOCKER_TAG}"
                             sh "docker tag ${DOCKER_IMAGE_DATA}:${DOCKER_TAG} ${DOCKER_IMAGE_DATA}:latest"
