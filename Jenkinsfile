@@ -19,24 +19,24 @@ pipeline {
             }
         }
 
-//         stage('SonarQube Analysis') {
-//             when {
-//                 anyOf {
-//                     expression { env.BRANCH_NAME == 'develop-BE' }
-//                 }
-//             }
-//             steps {
-//                 echo "Running SonarQube analysis..."
-//                 withSonarQubeEnv('SonarQube') {
-//                     dir('ifsavedog-BE') {
-//                         sh 'chmod +x ./gradlew'
-//                         sh './gradlew clean'
-//                         sh './gradlew sonar'
-//                     }
-//                 }
-//                 echo "SonarQube analysis completed."
-//             }
-//         }
+        stage('SonarQube Analysis') {
+            when {
+                anyOf {
+                    expression { env.BRANCH_NAME == 'develop-BE' }
+                }
+            }
+            steps {
+                echo "Running SonarQube analysis..."
+                withSonarQubeEnv('SonarQube') {
+                    dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
+                        sh './gradlew clean'
+                        sh './gradlew sonar'
+                    }
+                }
+                echo "SonarQube analysis completed."
+            }
+        }
 
         stage('Prepare Environment') {
             steps {
@@ -52,7 +52,6 @@ pipeline {
             steps {
                 echo "Building JAR file with Gradle (skipping tests)..."
                 dir('ifsavedog-BE') {
-                    sh 'chmod +x ./gradlew' // 소나큐브 안할 때 권한 부여
                     sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
                     sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
                 }
