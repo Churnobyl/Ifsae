@@ -67,12 +67,12 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-FE' }
                     }
                     steps {
-                        echo "Building FE (React)..."
-                        dir('ifsavedog-FE') {
-                            sh 'npm install --legacy-peer-deps'
-                            sh 'npm run build'
-                        }
-                        echo "FE build and deployment completed."
+                        // echo "Building FE (React)..."
+                        // dir('ifsavedog-FE') {
+                        //     sh 'npm install --legacy-peer-deps'
+                        //     sh 'npm run build'
+                        // }
+                        // echo "FE build and deployment completed."
                     }
                 }
 
