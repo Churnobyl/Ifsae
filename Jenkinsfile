@@ -15,17 +15,12 @@ pipeline {
                 echo "Checking out the repository..."
                 deleteDir()
                 checkout scm
-                sh 'chmod +x ./ifsavedog-BE/gradlew'
-                sh 'chmod +x ./ifsavedog-FE/gradlew'
-                sh 'chmod +x ./ifsavedog-DATA/gradlew'
             }
         }
 
         stage('SonarQube Analysis') {
             when {
-                anyOf {
-                    expression { env.BRANCH_NAME == 'develop-BE' }
-                }
+                expression { env.BRANCH_NAME == 'develop-BE' }
             }
             steps {
                 echo "Running SonarQube analysis..."
@@ -48,24 +43,46 @@ pipeline {
             }
         }
 
-        stage('Build JAR') {
-            steps {
-                echo "Building JAR file with Gradle (skipping tests)..."
-                script {
-                    def buildDir = ""
-                    if (env.BRANCH_NAME == 'develop-BE') {
-                        buildDir = 'ifsavedog-BE'
-                    } else if (env.BRANCH_NAME == 'develop-FE') {
-                        buildDir = 'ifsavedog-FE'
-                    } else if (env.BRANCH_NAME == 'develop-DATA') {
-                        buildDir = 'ifsavedog-DATA'
+        stage('Build') {
+            parallel {
+                stage('Build BE') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-BE' }
                     }
+                    steps {
+                        echo "Building JAR file for BE..."
+                        dir('ifsavedog-BE') {
+                            sh './gradlew build -x test'  // JAR 빌드
+                            sh 'ls -la build/libs/'
+                        }
+                        echo "BE JAR build completed."
+                    }
+                }
 
-                    dir(buildDir) {
-                    sh './gradlew build -x test'
-                    sh 'ls -la build/libs/'
+                stage('Build FE') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-FE' }
                     }
-                    echo "JAR build completed for branch: ${env.BRANCH_NAME}"
+                    steps {
+                        echo "Building FE (React)..."
+                        dir('ifsavedog-FE') {
+                            sh 'npm install'  // npm 설치
+                            sh 'npm run build'  // React 프로젝트 빌드
+                            sh 'ls -la build/'  // 빌드 후 결과 확인
+                        }
+                        echo "FE build and deployment completed."
+                    }
+                }
+
+                stage('Build DATA') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-DATA' }
+                    }
+                    steps {
+                        echo "Building DATA..."
+                        // 데이터 관련 빌드 작업 추가 가능
+                        echo "Data build completed."
+                    }
                 }
             }
         }
@@ -132,7 +149,7 @@ pipeline {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
                         if (env.BRANCH_NAME == 'develop-BE') {
                             sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"  // 태그를 latest로 지정
+                            sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"
                             sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
                         } else if (env.BRANCH_NAME == 'develop-FE') {
                             sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
