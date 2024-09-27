@@ -70,9 +70,11 @@ pipeline {
                         echo "Building FE (React)..."
                         dir('ifsavedog-FE') {
                             sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ."
-                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
-                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
+                            withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
+                                sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
+                                sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
+                                sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
+                            }
                         }
                         echo "FE build and deployment completed."
                     }
