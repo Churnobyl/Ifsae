@@ -23,8 +23,6 @@ pipeline {
             when {
                 anyOf {
                     expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
                 }
             }
             steps {
@@ -173,6 +171,13 @@ pipeline {
                     """
                 }
                 echo "Deployment completed."
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo "Cleaning up old Docker images..."
+                sh 'docker image prune -f'
             }
         }
     }

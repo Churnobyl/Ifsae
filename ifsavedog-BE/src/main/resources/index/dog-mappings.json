@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "name": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    },
+    "breed": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    },
+    "imgUrl": {
+      "type": "keyword"
+    },
+    "shelter": {
+      "type": "nested",
+      "properties": {
+        "shelterId": {
+          "type": "keyword"
+        },
+        "shelterName": {
+          "type": "text",
+          "analyzer": "my_custom_analyzer"
+        }
+      }
+    }
+  }
+}
+
