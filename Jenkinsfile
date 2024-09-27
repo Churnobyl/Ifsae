@@ -23,8 +23,6 @@ pipeline {
             when {
                 anyOf {
                     expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
                 }
             }
             steps {
