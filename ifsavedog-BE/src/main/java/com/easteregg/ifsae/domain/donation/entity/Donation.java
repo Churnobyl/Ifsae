@@ -42,7 +42,7 @@ public class Donation {
     private Date startDate;
 
     @NotNull
-    private Date endDate;
+    private int price;
 
     @NotNull
     private boolean isActive;
