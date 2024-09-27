@@ -62,39 +62,39 @@ pipeline {
         stage('Build Docker Images') {
             steps{
                 echo "Build Docker Images stage"
-                parallel {
-                    stage('Build Backend') {
-                        when {
-                            expression { env.BRANCH_NAME == 'develop-BE' }
-                        }
-                        steps {
-                            dir('ifsavedog-BE') {
-                                sh './gradlew build -x test'
-                                sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
-                                sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
-                            }
+            }
+            parallel {
+                stage('Build Backend') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-BE' }
+                    }
+                    steps {
+                        dir('ifsavedog-BE') {
+                            sh './gradlew build -x test'
+                            sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
+                }
 
-                    stage('Build Frontend') {
-                        when {
-                            expression { env.BRANCH_NAME == 'develop-FE' }
-                        }
-                        steps {
-                            dir('ifsavedog-FE') {
-                                sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
-                            }
+                stage('Build Frontend') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-FE' }
+                    }
+                    steps {
+                        dir('ifsavedog-FE') {
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
                         }
                     }
+                }
 
-                    stage('Build Data') {
-                        when {
-                            expression { env.BRANCH_NAME == 'develop-DATA' }
-                        }
-                        steps {
-                            script {
-                                validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
-                            }
+                stage('Build Data') {
+                    when {
+                        expression { env.BRANCH_NAME == 'develop-DATA' }
+                    }
+                    steps {
+                        script {
+                            validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
                         }
                     }
                 }
