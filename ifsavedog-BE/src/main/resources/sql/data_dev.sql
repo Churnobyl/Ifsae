@@ -1,3 +1,0 @@
--- team
-INSERT INTO ()
-VALUES ()

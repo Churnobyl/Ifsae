@@ -3,13 +3,14 @@ spring:
     active: prod
 
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    driver-class-name: ${PROD_DATABASE_CLASS_NAME}
+    url: ${PROD_DATABASE_URL}
+    username: ${PROD_DATABASE_USERNAME}
+    password: ${PROD_DATABASE_PASSWORD}
     hikari:
       max-lifetime: 177000
 
+  #   sql 작성 이후 모드 변경
   #    sql:
   #    init:
   #      mode: always
@@ -38,7 +39,7 @@ spring:
           min-idle: 2
 
 server:
-  port: ${PROD_SERVER_PORT}
+  port: ${SERVER_PORT}
 
 frontend:
-  url: ${FRONTEND_URL}
+  url: ${PROD_FRONTEND_URL}
