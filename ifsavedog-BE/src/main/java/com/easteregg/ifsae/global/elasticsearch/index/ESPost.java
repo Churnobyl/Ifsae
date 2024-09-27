@@ -23,7 +23,7 @@ public class ESPost {
     @Field(type = FieldType.Text)
     private String content;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Keyword)
     private List<String> dogIds;
 
     @Field(type = FieldType.Text)
