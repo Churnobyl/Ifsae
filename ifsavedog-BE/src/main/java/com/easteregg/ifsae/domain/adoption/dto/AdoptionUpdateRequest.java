@@ -7,8 +7,6 @@ import lombok.Getter;
 @Builder
 public class AdoptionUpdateRequest {
 
-    private long userId;
-
     private String adoptionPurpose;
 
     private String absencePlan;

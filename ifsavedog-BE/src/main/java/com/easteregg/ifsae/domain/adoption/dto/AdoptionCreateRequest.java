@@ -6,9 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AdoptionCreateRequest {
-
-    private long userId;
-
     private long dogId;
 
     private long shelterId;

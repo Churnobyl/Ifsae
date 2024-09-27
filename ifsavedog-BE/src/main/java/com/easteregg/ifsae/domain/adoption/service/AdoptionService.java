@@ -6,9 +6,9 @@ import com.easteregg.ifsae.domain.user.entity.User;
 
 public interface AdoptionService {
 
-    void applyAdoption(AdoptionCreateRequest adoptionCreateRequest);
+    void createAdoption(User user, AdoptionCreateRequest adoptionCreateRequest);
 
     void checkAdoption(User user, long adoptionId);
 
-    void updateAdoption(long userId, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest);
+    void updateAdoption(User user, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest);
 }
