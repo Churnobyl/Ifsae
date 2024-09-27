@@ -52,8 +52,7 @@ pipeline {
                     steps {
                         echo "Building JAR file for BE..."
                         dir('ifsavedog-BE') {
-                            sh './gradlew build -x test'  // JAR 빌드
-                            sh 'ls -la build/libs/'
+                            sh './gradlew build -x test'
                         }
                         echo "BE JAR build completed."
                     }
@@ -66,9 +65,7 @@ pipeline {
                     steps {
                         echo "Building FE (React)..."
                         dir('ifsavedog-FE') {
-                            sh 'npm install'  // npm 설치
-                            sh 'npm run build'  // React 프로젝트 빌드
-                            sh 'ls -la build/'  // 빌드 후 결과 확인
+                            sh 'npm run build'
                         }
                         echo "FE build and deployment completed."
                     }
