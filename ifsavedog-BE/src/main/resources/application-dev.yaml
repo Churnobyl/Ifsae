@@ -1,7 +1,6 @@
 spring:
   config:
-    active:
-      on-profile: dev
+    active: dev
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -27,16 +26,18 @@ spring:
 
   sql:
     init:
-      mode: always
-      data-locations: classpath:sql/data.sql
+      mode: never
+#      mode: always
+#      data-locations: classpath:sql/data_dev.sql
 
   data:
     redis:
       host: localhost
       port: 6379
+      password: ${REDIS_PASSWORD}
 
 server:
   port: 8080
 
 frontend:
-  url: http://localhost:3000
+  url: http://localhost:5173
