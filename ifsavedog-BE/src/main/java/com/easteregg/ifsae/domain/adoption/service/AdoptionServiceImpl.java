@@ -123,7 +123,7 @@ public class AdoptionServiceImpl implements AdoptionService {
         for (ShelterUser shelterUser : shelterEmpList) {
             if (shelterUser.getUser().getId().equals(user.getId())) {
                 return adoptions.stream()
-                                .map(adoption -> AdoptionApplierListDto.fromUser(adoption.getUser()))
+                                .map(adoption -> AdoptionApplierListDto.fromUser(adoption.getId(), adoption.getUser()))
                                 .toList();
             }
         }

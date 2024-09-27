@@ -8,15 +8,15 @@ import lombok.Getter;
 @Builder
 public class AdoptionApplierListDto {
 
-    private Long id;
+    private Long adoptionId;
 
     private String userName;
 
     private String userImage;
 
-    public static AdoptionApplierListDto fromUser(User user) {
+    public static AdoptionApplierListDto fromUser(long adoptionId, User user) {
         return AdoptionApplierListDto.builder()
-                                     .id(user.getId())
+                                     .adoptionId(adoptionId)
                                      .userName(user.getNickname())
                                      .userImage(user.getProfileImgUrl())
                                      .build();
