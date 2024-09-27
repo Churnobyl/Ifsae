@@ -53,15 +53,22 @@ public class UserProfile {
     private String petExperience;
 
     public UserProfileDto toDto() {
-        return UserProfileDto.builder()
-                             .housingType(housingType.getName())
-                             .birth(birth)
-                             .address(address)
-                             .phoneNumber(phoneNumber)
-                             .familyCnt(familyCnt)
-                             .curPets(curPets)
-                             .petExperience(petExperience)
-                             .hasAllergy(hasAllergy)
-                             .build();
+        UserProfileDto dto = UserProfileDto.builder()
+                                           .birth(birth)
+                                           .address(address)
+                                           .phoneNumber(phoneNumber)
+                                           .familyCnt(familyCnt)
+                                           .curPets(curPets)
+                                           .petExperience(petExperience)
+                                           .hasAllergy(hasAllergy)
+                                           .build();
+
+        if (housingType != null) {
+            dto.setHousingType(this.housingType.getName());
+        } else {
+            dto.setHousingType(null);
+        }
+
+        return dto;
     }
 }
