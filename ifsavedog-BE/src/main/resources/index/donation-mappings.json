@@ -13,8 +13,9 @@
     "userProfileImgUrl": {
       "type": "keyword"
     },
-    "price": {
-      "type": "Integer"
+    "dogName" : {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
     }
   }
 }

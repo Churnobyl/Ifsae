@@ -37,6 +37,10 @@ spring:
       max-file-size: 15MB
       max-request-size: 15MB
 
+  elasticsearch:
+    connection-timeout: 10000
+    socket-timeout: 10000
+
 server:
   port: ${SERVER_PORT}
 
