@@ -46,8 +46,8 @@ pipeline {
         }
 
         stage('Copy Dockerfile') {
-            echo "Copy Dockerfile stage"
             steps {
+                echo "Copy Dockerfile stage"
                 script {
                     def remotePath = "/var/jenkins_home/workspace/IfSae_${env.BRANCH_NAME}/Dockerfile"
                     sshagent(['jenkins-ssh-key']) {
@@ -60,39 +60,41 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-            echo "Build Docker Images stage"
-            parallel {
-                stage('Build Backend') {
-                    when {
-                        expression { env.BRANCH_NAME == 'develop-BE' }
-                    }
-                    steps {
-                        dir('ifsavedog-BE') {
-                            sh './gradlew build -x test'
-                            sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
-                            sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
+            steps{
+                echo "Build Docker Images stage"
+                parallel {
+                    stage('Build Backend') {
+                        when {
+                            expression { env.BRANCH_NAME == 'develop-BE' }
+                        }
+                        steps {
+                            dir('ifsavedog-BE') {
+                                sh './gradlew build -x test'
+                                sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
+                                sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
+                            }
                         }
                     }
-                }
 
-                stage('Build Frontend') {
-                    when {
-                        expression { env.BRANCH_NAME == 'develop-FE' }
-                    }
-                    steps {
-                        dir('ifsavedog-FE') {
-                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
+                    stage('Build Frontend') {
+                        when {
+                            expression { env.BRANCH_NAME == 'develop-FE' }
+                        }
+                        steps {
+                            dir('ifsavedog-FE') {
+                                sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
+                            }
                         }
                     }
-                }
 
-                stage('Build Data') {
-                    when {
-                        expression { env.BRANCH_NAME == 'develop-DATA' }
-                    }
-                    steps {
-                        script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
+                    stage('Build Data') {
+                        when {
+                            expression { env.BRANCH_NAME == 'develop-DATA' }
+                        }
+                        steps {
+                            script {
+                                validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
+                            }
                         }
                     }
                 }
