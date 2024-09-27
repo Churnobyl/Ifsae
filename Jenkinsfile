@@ -125,7 +125,10 @@ pipeline {
                     steps {
                         echo "Building frontend Docker image..."
                         script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
+                            // validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
+                            echo "Building Docker image ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}..."
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ."
+                            echo "Docker image build completed."
                         }
                     }
                 }
