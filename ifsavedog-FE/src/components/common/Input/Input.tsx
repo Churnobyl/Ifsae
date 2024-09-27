@@ -1,10 +1,12 @@
 import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
+import { IconType } from 'react-icons';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   value: string;
   label?: string;
   placeholder?: string;
+  icon?: IconType;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -14,6 +16,7 @@ export const Input = ({
   value,
   placeholder,
   onChange,
+  icon: Icon,
 }: InputProps) => {
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
@@ -27,15 +30,22 @@ export const Input = ({
           {label}
         </label>
       )}
-      <input
-        className="w-full h-12 pl-2 bg-transparent rounded-md outline-none bg-gray text-lightGray focus:border-main lg:h-12 md:h-12 md:text-xs md:pr-15 sm:h-12 sm:text-xs sm:pr-10 xs:h-12 xs:text-sm xs:pr-10"
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={isInputFocused ? '' : placeholder}
-        onFocus={() => setIsInputFocused(true)}
-        onBlur={() => setIsInputFocused(false)}
-      />
+      <div className="relative flex items-center">
+        {Icon && (
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <Icon />
+          </div>
+        )}
+        <input
+          className="w-full h-12 pl-10 bg-transparent rounded-md outline-none bg-gray text-lightGray focus:border-main lg:h-12 md:h-12 md:text-xs sm:h-12 sm:text-xs xs:h-12 xs:text-sm"
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={isInputFocused ? '' : placeholder}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
+        />
+      </div>
     </div>
   );
 };

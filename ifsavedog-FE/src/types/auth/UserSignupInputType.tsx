@@ -3,4 +3,5 @@ export type UserSignupInputType = {
   password: string;
   nickname: string;
   role: number;
+  authNumber: string;
 };
