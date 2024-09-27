@@ -52,6 +52,10 @@ export default defineConfig({
         find: '@layouts',
         replacement: path.resolve(__dirname, 'src/layouts'),
       },
+      {
+        find: '@types',
+        replacement: path.resolve(__dirname, 'src/types'),
+      },
     ],
   },
 });

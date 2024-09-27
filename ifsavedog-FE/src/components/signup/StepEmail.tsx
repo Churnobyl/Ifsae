@@ -12,7 +12,7 @@ const StepEmail = ({
   handleInputChange,
   handleEmailAuth,
 }: StepEmailInterface) => {
-  const [isSended, setIsSended] = useState<boolean>(false);
+  const [isSended] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row items-center justify-between gap-3 w-full">

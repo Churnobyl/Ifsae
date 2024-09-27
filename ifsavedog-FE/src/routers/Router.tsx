@@ -1,7 +1,7 @@
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
-import SignupPage from '@/pages/SignupPage';
+// import SignupPage from '@/pages/SignupPage';
 import { PATH } from '@/routers/pathConstants';
 import {
   RouteObject,
@@ -27,11 +27,11 @@ const Router = () => {
       errorElement: <NotFoundPage />,
       element: <LoginPage />,
     },
-    {
-      path: PATH.SIGNUP,
-      errorElement: <NotFoundPage />,
-      element: <SignupPage />,
-    },
+    // {
+    //   path: PATH.SIGNUP,
+    //   errorElement: <NotFoundPage />,
+    //   element: <SignupPage />,
+    // },
   ];
 
   const router = createBrowserRouter([...routes]);
