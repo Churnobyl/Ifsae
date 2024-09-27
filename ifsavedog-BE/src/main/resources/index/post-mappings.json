@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "title": {
+      "type": "text"
+    },
+    "content": {
+      "type": "text"
+    },
+    "dogIds": {
+      "type": "text"
+    },
+    "shelter": {
+      "type": "object",
+      "properties": {
+        "shelterId": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text"
+        },
+        "location": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}

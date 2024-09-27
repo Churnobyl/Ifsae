@@ -87,7 +87,7 @@ video:
 
 # Elasticsearch Settings
 elasticsearch:
-  url: ${ELASTICSEARCH_URL}
-  username: ${ELASTICSEARCH_USERNAME}
-  password: ${ELASTICSEARCH_PASSWORD}
-  fingerprint: ${ELASTICSEARCH_FINGERPRINT}
+  url: ${ES_URL}
+  username: ${ES_USERNAME}
+  password: ${ES_PASSWORD}
+  fingerprint: ${ES_FINGERPRINT}
