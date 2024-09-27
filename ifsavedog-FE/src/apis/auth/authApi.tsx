@@ -1,7 +1,7 @@
 import { ENDPOINT } from '@/apis/ApiConstants';
 import { baseInstance } from '@/apis/axios';
-import { UserLoginInputType } from 'types/auth/UserInputType';
-import { UserSignupInputType } from 'types/auth/UserSignupInputType';
+import { UserLoginInputType } from '@/types/auth/UserLoginInputType';
+import { UserSignupInputType } from '@/types/auth/UserSignupInputType';
 
 export const loginApi = async (userInput: UserLoginInputType) => {
   return await baseInstance.post(ENDPOINT.LOGIN, userInput);
