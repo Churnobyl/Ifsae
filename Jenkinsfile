@@ -23,16 +23,16 @@ pipeline {
             when {
                 anyOf {
                     expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
                 }
             }
             steps {
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
-                    sh 'chmod +x ./gradlew'
-                    sh './gradlew clean'
-                    sh './gradlew sonar'
+                    dir('ifsavedog-BE') {
+                        sh 'chmod +x ./gradlew'
+                        sh './gradlew clean'
+                        sh './gradlew sonar'
+                    }
                 }
                 echo "SonarQube analysis completed."
             }

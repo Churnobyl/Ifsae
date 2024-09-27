@@ -31,10 +31,10 @@ public class SecurityConfig {
 
         // ! 모든 경로에 대한 권한 해제코드 : 테스트시 사용!!
         http.csrf(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // TODO : 인증 구현 끝나면 주석 해제 후 사용
 //        // token인증 없이 테스트하고 싶을때 아래 코드 주석처리

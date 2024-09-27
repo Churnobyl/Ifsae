@@ -10,54 +10,32 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
-  # Database Settings
-  datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
-    hikari:
-      max-lifetime: 177000  # 30분
+  profiles:
+    active: ${PROFILE}
 
-  # JPA Settings
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    database-platform: org.hibernate.dialect.MariaDBDialect
-
-  # Mail Settings
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
 
-  # Redis Settings
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
       lettuce:
         pool:
           max-active: 5
           max-idle: 5
           min-idle: 2
+
   security:
     user:
       name: admin
       password: admin
       roles: USER, ADMIN
 
-# Server Settings
 server:
   port: ${SERVER_PORT}
 
-# JWT Settings
 jwt:
   secret:
     key: ${JWT_KEY}
@@ -66,7 +44,6 @@ jwt:
   refresh:
     expiration: ${REFRESH_TOKEN_EXPIRATION_PERIOD}
 
-# S3 Settings
 cloud:
   aws:
     region:
@@ -79,7 +56,6 @@ cloud:
       accessKey: ${ACCESS_KEY}
       secretKey: ${SECRET_KEY}
 
-# Swagger Settings
 springdoc:
   swagger-ui:
     path: /
@@ -96,7 +72,7 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
 
 video:
-  chunk-size: 1048576 # 1024 * 1024 = 1MB
+  chunk-size: 1048576
   ffmpeg:
     video-codec: h264
     audio-codec: mp3
@@ -107,7 +83,3 @@ video:
     event-name: progress
   directory:
     s3: video/
-
-# 프론트엔드 관련
-frontend:
-  url: ${FRONTEND_URL}
