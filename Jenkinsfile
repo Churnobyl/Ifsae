@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS 20.15.0'
+    }
+
     environment {
         DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
         DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
