@@ -95,6 +95,7 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
 
+# Video Settings
 video:
   chunk-size: 1048576 # 1024 * 1024 = 1MB
   ffmpeg:
@@ -107,3 +108,10 @@ video:
     event-name: progress
   directory:
     s3: video/
+
+# Elasticsearch Settings
+elasticsearch:
+  url: ${ELASTICSEARCH_URL}
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH_PASSWORD}
+  fingerprint: ${ELASTICSEARCH_FINGERPRINT}
