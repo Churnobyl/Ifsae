@@ -60,9 +60,6 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-            steps{
-                echo "Build Docker Images stage"
-            }
             parallel {
                 stage('Build Backend') {
                     when {
