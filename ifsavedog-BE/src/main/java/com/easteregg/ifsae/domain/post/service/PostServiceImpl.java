@@ -84,8 +84,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(User user, Long postId) {
-        Post post = findPostById(postId);
-        checkUserInShelter(user, post.getShelter().getId());
+        checkUserInShelter(user, findPostById(postId).getShelter().getId());
         postRepository.deleteById(postId);
     }
 

@@ -24,16 +24,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(User user, Long postId, CommentDto.Request request) {
-        Optional<Post> postOptional = postRepository.findPostById(postId);
-        Post post = postOptional.orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
+        Post post = postRepository.findPostById(postId).orElseThrow(()
+                -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
         Comment comment = request.toEntity(user, post);
-        Comment savedComment = commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     public void delete(User user, Long commentId) {
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
-        Comment comment = commentOptional.orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!Objects.equals(comment.getUser().getId(), user.getId())) {
             throw new CommentException(ErrorCode.FORBIDDEN);
