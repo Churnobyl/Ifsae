@@ -171,8 +171,8 @@ def prepareEnvironment(branch) {
 }
 
 def prepareEnv(envFile, dockerImage) {
-    sh '''
-        cp "$ENV_FILE_BACKEND" "$WORKSPACE/.env"
-        chmod 775 "$WORKSPACE/.env"
-    '''
+    sh """
+        cp ${envFile} ${WORKSPACE}/.env
+        chmod 775 ${WORKSPACE}/.env
+    """
 }
