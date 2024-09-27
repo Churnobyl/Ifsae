@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "userId": {
+      "type": "keyword"
+    },
+    "userNickname": {
+      "type": "text"
+    },
+    "userProfileImgUrl": {
+      "type": "keyword"
+    },
+    "price": {
+      "type": "Integer"
+    }
+  }
+}
