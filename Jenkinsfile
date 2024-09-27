@@ -59,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build') {
             parallel {
                 stage('Build Backend') {
                     when {
@@ -68,8 +68,10 @@ pipeline {
                     steps {
                         dir('ifsavedog-BE') {
                             sh './gradlew build -x test'
-                            sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
-                            sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
+                            // JAR 파일 경로 확인
+                            sh 'ls -la build/libs/'
+                            // 파일이 정확한지 확인 후 복사
+                            sh "cp build/libs/*.jar ${WORKSPACE}/app.jar"
                         }
                     }
                 }
