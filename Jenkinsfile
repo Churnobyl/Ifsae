@@ -15,7 +15,9 @@ pipeline {
                 echo "Checking out the repository..."
                 deleteDir()
                 checkout scm
-                sh 'ls -la'
+                sh 'chmod +x ./ifsavedog-BE/gradlew'
+                sh 'chmod +x ./ifsavedog-FE/gradlew'
+                sh 'chmod +x ./ifsavedog-DATA/gradlew'
             }
         }
 
@@ -29,8 +31,6 @@ pipeline {
                 echo "Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
-                        sh 'chmod +x ./gradlew'
-                        sh './gradlew clean'
                         sh './gradlew sonar'
                     }
                 }
@@ -51,41 +51,37 @@ pipeline {
         stage('Build JAR') {
             steps {
                 echo "Building JAR file with Gradle (skipping tests)..."
-                dir('ifsavedog-BE') {
-                    sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
-                    sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
+                script {
+                    def buildDir = ""
+                    if (env.BRANCH_NAME == 'develop-BE') {
+                        buildDir = 'ifsavedog-BE'
+                    } else if (env.BRANCH_NAME == 'develop-FE') {
+                        buildDir = 'ifsavedog-FE'
+                    } else if (env.BRANCH_NAME == 'develop-DATA') {
+                        buildDir = 'ifsavedog-DATA'
+                    }
+
+                    dir(buildDir) {
+                    sh './gradlew build -x test'
+                    sh 'ls -la build/libs/'
+                    }
+                    echo "JAR build completed for branch: ${env.BRANCH_NAME}"
                 }
-                echo "JAR build completed."
             }
         }
 
         stage('Copy Dockerfile') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'develop-BE') {
-                        echo "Copying Dockerfile for Backend from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-BE/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-FE') {
-                        echo "Copying Dockerfile for Frontend from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-FE/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-DATA') {
-                        echo "Copying Dockerfile for Data from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-DATA/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
+                    def remotePath = "/var/jenkins_home/workspace/IfSae_${env.BRANCH_NAME}/Dockerfile"
+                    echo "Copying Dockerfile from EC2 for branch: ${env.BRANCH_NAME}..."
+
+                    sshagent(['jenkins-ssh-key']) {
+                        sh """
+                            scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:${remotePath} ${WORKSPACE}/Dockerfile
+                        """
                     }
                 }
-                sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile이 정상적으로 복사되었는지 확인
             }
         }
 
@@ -153,13 +149,6 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-            when {
-                anyOf {
-                    expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
-                }
-            }
             steps {
                 echo "Deploying to EC2..."
                 sshagent(['jenkins-ssh-key']) {
