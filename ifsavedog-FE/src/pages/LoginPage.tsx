@@ -7,11 +7,11 @@ import axios from 'axios';
 import MainLayout from '@/layouts/MainLayout';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { UserInputType } from 'types/auth/UserInputType';
+import { UserLoginInputType } from 'types/auth/UserLoginInputType';
 
 const LoginPage = () => {
   // State
-  const [userInput, setUserInput] = useState<UserInputType>({
+  const [userInput, setUserInput] = useState<UserLoginInputType>({
     email: '',
     password: '',
   });
@@ -38,15 +38,17 @@ const LoginPage = () => {
    */
   const handleLogin = useCallback(async () => {
     try {
-      const response = await loginApi(userInput);
+      const response = await loginApi(userInput); // api 호출
 
+      // 성공
       if (response.status === HTTP_STATUS.OK) {
         console.log(response);
         tokenStore.setAccessToken(response.data.accessToken);
         setErrMessage(''); // 에러메시지 삭제
-        navigate(PATH.MAIN);
+        navigate(PATH.MAIN); // MAIN페이지로 이동
       }
     } catch (error) {
+      // 에러 발생
       if (axios.isAxiosError(error)) {
         setErrMessage(error.response!.data.errorMessage);
       }
@@ -60,11 +62,11 @@ const LoginPage = () => {
   }, [navigate, tokenStore, userInput]);
 
   return (
-    <MainLayout showTopbar={true} showBottombar={true}>
-      <main className="flex flex-col items-center gap-3 justify-center h-full">
-        <div className="logo">로고</div>
+    <MainLayout showTopbar={false} showBottombar={false}>
+      <main className="flex flex-col items-center gap-3 justify-center h-full w-full">
+        <div className="logo"></div>
         <div className="login text-2xl">로그인</div>
-        <div className="login-form flex flex-col gap-1">
+        <div className="login-form flex flex-col gap-1 w-26">
           <div>
             <Input
               name={'email'}

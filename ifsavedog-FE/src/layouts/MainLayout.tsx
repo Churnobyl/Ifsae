@@ -15,12 +15,12 @@ const MainLayout = ({
   showBottombar,
 }: MainLayoutInterface) => {
   return (
-    <div className="relative">
+    <div className="relative flex flex-col w-screen h-screen">
       {showTopbar && <Topbar className="sticky top-0 left-0 w-full z-10" />}
       <div
-        className={classNames('h-full overflow-y-auto', {
-          'pt-16': showTopbar,
-          'pb-20': showBottombar,
+        className={classNames('flex-grow', {
+          'pt-0': showTopbar,
+          'pb-0': showBottombar,
         })}
       >
         {children}
