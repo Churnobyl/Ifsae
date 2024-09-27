@@ -67,16 +67,8 @@ pipeline {
                     }
                     steps {
                         dir('ifsavedog-BE') {
-                            // Gradle 빌드
                             sh './gradlew build -x test'
-
-                            // 빌드 후 JAR 파일 위치 확인
-                            sh 'ls -la build/libs/'
-
-                            // 빌드된 JAR 파일 복사
                             sh "cp build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
-
-                            // Docker 이미지 빌드
                             sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
@@ -179,8 +171,8 @@ def prepareEnvironment(branch) {
 }
 
 def prepareEnv(envFile, dockerImage) {
-    sh """
-        cp ${envFile} ${WORKSPACE}/.env
-        chmod 775 ${WORKSPACE}/.env
-    """
+    sh '''
+        cp "$ENV_FILE_BACKEND" "$WORKSPACE/.env"
+        chmod 775 "$WORKSPACE/.env"
+    '''
 }
