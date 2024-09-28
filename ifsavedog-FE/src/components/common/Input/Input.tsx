@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
 import { IconType } from 'react-icons';
 
@@ -19,11 +20,16 @@ export const Input = ({
   onChange,
   icon: Icon,
   type,
+  disabled,
 }: InputProps) => {
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col w-full my-2">
+    <div
+      className={classNames('flex', 'flex-col', 'w-full', 'my-2', {
+        'opacity-60': disabled,
+      })}
+    >
       {label && (
         <label
           htmlFor={name}
@@ -35,11 +41,11 @@ export const Input = ({
       <div className="relative flex items-center">
         {Icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-            <Icon />
+            <Icon size={24} color={'var(--color-black)'} />
           </div>
         )}
         <input
-          className="w-full h-12 pl-10 rounded-md outline-none bg-gray text-lightGray focus:border-main lg:h-12 md:h-12 md:text-xs sm:h-12 sm:text-xs xs:h-12 xs:text-sm"
+          className="w-full h-12 pl-10 rounded-2xl outline-none bg-gray text-lightGray focus:bg-lightBlue"
           name={name}
           value={value}
           onChange={onChange}
@@ -47,6 +53,7 @@ export const Input = ({
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
           type={type}
+          disabled={disabled}
         />
       </div>
     </div>

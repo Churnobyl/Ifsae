@@ -1,7 +1,6 @@
 import { Input } from '@/components/common/Input/Input';
-import { ChangeEvent, useState } from 'react';
-import { MdOutlinePermIdentity } from 'react-icons/md';
-import { RiLockPasswordFill } from 'react-icons/ri';
+import { ChangeEvent, MouseEvent, useState } from 'react';
+import { MdOutlinePermIdentity, MdOutlineVpnKey } from 'react-icons/md';
 
 interface StepRestProps {
   password: string;
@@ -9,6 +8,7 @@ interface StepRestProps {
   nickname: string;
   role: number;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSignup: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const StepRest = ({
@@ -17,8 +17,10 @@ const StepRest = ({
   nickname,
   role,
   handleInputChange,
+  handleSignup,
 }: StepRestProps) => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  console.log(passwordError);
 
   // Check if passwords match
   const checkPasswordsMatch = () => {
@@ -39,7 +41,7 @@ const StepRest = ({
           value={password}
           onChange={handleInputChange}
           onBlur={checkPasswordsMatch}
-          icon={RiLockPasswordFill}
+          icon={MdOutlineVpnKey}
         />
         <Input
           name="passwordRepeat"
@@ -48,7 +50,7 @@ const StepRest = ({
           value={passwordRepeat}
           onChange={handleInputChange}
           onBlur={checkPasswordsMatch}
-          icon={RiLockPasswordFill}
+          icon={MdOutlineVpnKey}
         />
         <Input
           name="nikcname"
@@ -57,10 +59,20 @@ const StepRest = ({
           onChange={handleInputChange}
           icon={MdOutlinePermIdentity}
         />
+        <div className="role-check flex flex-row items-center justify-between">
+          <div>{role}</div>
+          <div>{role}</div>
+        </div>
+        <button
+          className="text-white w-full h-10 bg-main rounded-md border-none"
+          onClick={() => ({
+            checkPasswordsMatch,
+            handleSignup,
+          })}
+        >
+          <span>회원가입</span>
+        </button>
       </div>
-      {passwordError && (
-        <p className="text-red-500 text-sm mt-2">{passwordError}</p>
-      )}
     </div>
   );
 };

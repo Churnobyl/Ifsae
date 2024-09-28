@@ -1471,7 +1471,7 @@ hasown@^2.0.0, hasown@^2.0.2:
     "@types/qs" "^6.9.16"
     axios "^1.7.7"
     classnames "^2.5.1"
-    ifsavedog-fe "file:../../../Users/SSAFY/AppData/Local/Yarn/Cache/v6/npm-ifsavedog-fe-0.0.0-52e7b947-1803-443d-b5b6-3cd3041533aa-1727332170425/node_modules/ifsavedog-fe"
+    ifsavedog-fe "file:../../../Users/tjdcj/AppData/Local/Yarn/Cache/v6/npm-ifsavedog-fe-0.0.0-5202a780-7723-44d2-9da4-68da4dd4df03-1727494863513/node_modules/ifsavedog-fe"
     qs "^6.13.0"
     react "^18.3.1"
     react-dom "^18.3.1"
@@ -1989,6 +1989,11 @@ react-router@6.26.1:
   integrity sha512-kIwJveZNwp7teQRI5QmwWo39A5bXRyqpH0COKKmPnyD2vBvDwgFXSqDUYtt1h+FEyfnE8eXr7oe0MxRzVwCcvQ==
   dependencies:
     "@remix-run/router" "1.19.1"
+
+react-spinners@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.14.1.tgz#de7d7d6b3e6d4f29d9620c65495b502c7dd90812"
+  integrity sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==
 
 react@^18.3.1:
   version "18.3.1"

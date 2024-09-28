@@ -1,5 +1,9 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
-import { signupApi } from '@/apis/auth/authApi';
+import {
+  emailAuthApi,
+  signupApi,
+  verifyEmailCodeApi,
+} from '@/apis/auth/authApi';
 import StepAuthNumber from '@/components/signup/StepAuthNumber';
 import StepEmail from '@/components/signup/StepEmail';
 import StepRest from '@/components/signup/StepRest';
@@ -9,6 +13,7 @@ import { useTokenStore } from '@/stores/auth/tokenStore';
 import axios from 'axios';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MoonLoader } from 'react-spinners';
 import { UserSignupInputType } from 'types/auth/UserSignupInputType';
 
 enum Step {
@@ -44,6 +49,7 @@ const SignupPage = () => {
    * 이메일 Step
    */
   const [isSended, setIsSended] = useState<boolean>(false);
+  const [isSendPending, setIsSendPending] = useState<boolean>(false);
 
   /**
    * 인증번호 Step
@@ -78,17 +84,21 @@ const SignupPage = () => {
    */
   const handleEmailAuth = useCallback(async () => {
     try {
-      // const response = await emailAuthApi(userInput.email);
+      setErrMessage('');
+      setIsSendPending(true);
+      const response = await emailAuthApi(userInput.email);
 
       setStep(Step.인증번호);
       setIsSended(true);
-      // if (response.status === HTTP_STATUS.OK) {
-      //   console.log(response);
-      // }
+      if (response.status === HTTP_STATUS.OK) {
+        console.log(response);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrMessage(error.response!.data.errorMessage);
       }
+    } finally {
+      setIsSendPending(false);
     }
   }, [userInput.email]);
 
@@ -97,15 +107,15 @@ const SignupPage = () => {
    */
   const handleAuthNumber = useCallback(async () => {
     try {
-      // const response = await verifyEmailCodeApi({
-      //   email: userInput.email,
-      //   code: userInput.authNumber,
-      // });
+      const response = await verifyEmailCodeApi({
+        email: userInput.email,
+        code: userInput.authNumber,
+      });
 
-      // if (response.status === HTTP_STATUS.OK) {
-      setIsAuthed(true);
-      setStep(Step.기타정보);
-      // }
+      if (response.status === HTTP_STATUS.OK) {
+        setIsAuthed(true);
+        setStep(Step.기타정보);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrMessage(error.response!.data.errorMessage);
@@ -143,17 +153,24 @@ const SignupPage = () => {
   }, [navigate, tokenStore, userInput]);
 
   return (
-    <MainLayout showTopbar={true} showBottombar={true}>
+    <MainLayout showTopbar={false} showBottombar={false}>
       <main className="flex flex-col items-center gap-3 h-screen w-full pt-16">
         <div className="signup text-2xl">회원가입</div>
         <div className="signup-form flex flex-col gap-1 w-26">
           {step >= 0 && (
             <StepEmail
+              isAuthed={isAuthed}
               isSended={isSended}
+              isPending={isSendPending}
               value={userInput.email}
               handleInputChange={handleInputChange}
               handleEmailAuth={handleEmailAuth}
             />
+          )}
+          {isSendPending && (
+            <div className="flex items-center justify-center">
+              <MoonLoader size={30} color={'var(--color-black)'} />
+            </div>
           )}
           {step >= 1 && (
             <StepAuthNumber
@@ -170,6 +187,7 @@ const SignupPage = () => {
               role={userInput.role}
               handleInputChange={handleInputChange}
               passwordRepeat={passwordRepeat}
+              handleSignup={handleSignup}
             />
           )}
         </div>

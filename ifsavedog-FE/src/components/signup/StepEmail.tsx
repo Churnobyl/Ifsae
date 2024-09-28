@@ -1,21 +1,26 @@
 import { Input } from '@/components/common/Input/Input';
 import classNames from 'classnames';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { MdEmail } from 'react-icons/md';
 
 interface StepEmailInterface {
   isSended: boolean;
+  isAuthed: boolean;
+  isPending: boolean;
   value: string;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleEmailAuth: () => void;
 }
 
 const StepEmail = ({
-  isSended,
+  isPending,
+  isAuthed,
   value,
   handleInputChange,
   handleEmailAuth,
 }: StepEmailInterface) => {
+  const [disable, setDisable] = useState<boolean>(false);
+
   return (
     <div className="flex flex-row items-center justify-between gap-3 w-full">
       <Input
@@ -24,19 +29,24 @@ const StepEmail = ({
         value={value}
         onChange={handleInputChange}
         icon={MdEmail}
+        disabled={isPending || isAuthed}
       />
       <button
         className={classNames(
           'text-white',
           'w-20',
           'h-10',
-          'bg-main',
           'rounded-md',
           'border-none',
+          { 'bg-main': !isAuthed, 'bg-lightGray': isAuthed },
         )}
-        onClick={handleEmailAuth}
+        onClick={() => {
+          setDisable(true);
+          handleEmailAuth();
+        }}
+        disabled={isPending}
       >
-        <span>{isSended ? '재전송' : '인증'}</span>
+        <span>{disable ? '재전송' : '인증'}</span>
       </button>
     </div>
   );
