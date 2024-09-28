@@ -90,8 +90,8 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-DATA' }
                     }
                     steps {
-                        script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
+                        dir('ifsavedog-DATA') {
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_DATA}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
                 }
