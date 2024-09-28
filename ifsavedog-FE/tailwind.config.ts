@@ -19,7 +19,9 @@ export default {
       red: '#FF3939',
       subBase: '#FCFAEB',
       main: '#DAEA94', // Main Color
-      gray: '#9C9C9C',
+      gray: '#EFEFEF',
+      lightGray: '#969696',
+      lightBlue: '#CCE5FF',
       pointGreen: '#26CB1D',
       pointBlue: '#3370EA',
       transparent: 'transparent',
@@ -34,6 +36,7 @@ export default {
         ':root': {
           '--color-main': theme('colors.main'),
           '--color-black': theme('colors.black'),
+          '--color-gray': theme('colors.gray'),
         },
       });
     },

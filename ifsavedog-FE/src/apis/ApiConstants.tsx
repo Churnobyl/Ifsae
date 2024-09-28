@@ -1,6 +1,9 @@
 export enum ENDPOINT {
   // AUTH
   LOGIN = 'api/auth/signin',
+  SIGNUP = 'api/auth/signup',
+  EMAIL_AUTH = 'api/auth/email-auth',
+  VERIFY_EMAIL_CODE = 'api/auth/verify-emailcode',
 }
 
 export enum HTTP_STATUS {
