@@ -23,6 +23,7 @@ const StepAuthNumber = ({
           placeholder="인증번호"
           value={value}
           onChange={handleInputChange}
+          disabled={isAuthed}
         />
         <button
           className={classNames(

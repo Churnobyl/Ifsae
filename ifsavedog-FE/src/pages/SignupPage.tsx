@@ -49,12 +49,13 @@ const SignupPage = () => {
    * 이메일 Step
    */
   const [isSended, setIsSended] = useState<boolean>(false);
-  const [isSendPending, setIsSendPending] = useState<boolean>(false);
+  const [isEmailSendPending, setIsEmailSendPending] = useState<boolean>(false);
 
   /**
    * 인증번호 Step
    */
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
+  const [isAuthSendPending, setIsAuthSendPending] = useState<boolean>(false);
 
   /**
    * 기타정보 Step
@@ -85,7 +86,7 @@ const SignupPage = () => {
   const handleEmailAuth = useCallback(async () => {
     try {
       setErrMessage('');
-      setIsSendPending(true);
+      setIsEmailSendPending(true);
       const response = await emailAuthApi(userInput.email);
 
       setStep(Step.인증번호);
@@ -98,7 +99,7 @@ const SignupPage = () => {
         setErrMessage(error.response!.data.errorMessage);
       }
     } finally {
-      setIsSendPending(false);
+      setIsEmailSendPending(false);
     }
   }, [userInput.email]);
 
@@ -107,6 +108,8 @@ const SignupPage = () => {
    */
   const handleAuthNumber = useCallback(async () => {
     try {
+      setErrMessage('');
+      setIsAuthSendPending(true);
       const response = await verifyEmailCodeApi({
         email: userInput.email,
         code: userInput.authNumber,
@@ -120,6 +123,8 @@ const SignupPage = () => {
       if (axios.isAxiosError(error)) {
         setErrMessage(error.response!.data.errorMessage);
       }
+    } finally {
+      setIsAuthSendPending(false);
     }
   }, [userInput.authNumber, userInput.email]);
 
@@ -161,13 +166,13 @@ const SignupPage = () => {
             <StepEmail
               isAuthed={isAuthed}
               isSended={isSended}
-              isPending={isSendPending}
+              isPending={isEmailSendPending}
               value={userInput.email}
               handleInputChange={handleInputChange}
               handleEmailAuth={handleEmailAuth}
             />
           )}
-          {isSendPending && (
+          {isEmailSendPending && (
             <div className="flex items-center justify-center">
               <MoonLoader size={30} color={'var(--color-black)'} />
             </div>
@@ -179,6 +184,11 @@ const SignupPage = () => {
               handleInputChange={handleInputChange}
               handleAuthNumber={handleAuthNumber}
             />
+          )}
+          {isAuthSendPending && (
+            <div className="flex items-center justify-center">
+              <MoonLoader size={30} color={'var(--color-black)'} />
+            </div>
           )}
           {step >= 2 && (
             <StepRest
