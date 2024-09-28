@@ -1,106 +1,75 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS 20.15.0'
+    }
+
     environment {
         DOCKER_IMAGE_BACKEND = "sdeogi/ifsae-be"
         DOCKER_IMAGE_FRONTEND = "sdeogi/ifsae-fe"
         DOCKER_IMAGE_DATA = "sdeogi/ifsae-data"
-        DOCKER_TAG = "${env.BUILD_NUMBER}"
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo "Checking out the repository..."
+                echo "Checkout stage"
                 deleteDir()
                 checkout scm
-                sh 'ls -la'
             }
         }
 
         stage('SonarQube Analysis') {
             when {
-                anyOf {
-                    expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
-                }
+                expression { env.BRANCH_NAME == 'develop-BE' }
             }
             steps {
-                echo "Running SonarQube analysis..."
+                echo "SonarQube analysis stage."
                 withSonarQubeEnv('SonarQube') {
                     dir('ifsavedog-BE') {
                         sh 'chmod +x ./gradlew'
-                        sh './gradlew clean'
                         sh './gradlew sonar'
                     }
                 }
-                echo "SonarQube analysis completed."
             }
         }
 
         stage('Prepare Environment') {
             steps {
-                echo "Preparing environment..."
+                echo "Preparing environment stage"
                 script {
                     prepareEnvironment(env.BRANCH_NAME)
                 }
-                echo "Environment preparation completed."
-            }
-        }
-
-        stage('Build JAR') {
-            steps {
-                echo "Building JAR file with Gradle (skipping tests)..."
-                dir('ifsavedog-BE') {
-                    sh './gradlew build -x test'  // 테스트를 건너뛰고 JAR 빌드
-                    sh 'ls -la build/libs/'  // 빌드 후 JAR 파일 위치 확인
-                }
-                echo "JAR build completed."
             }
         }
 
         stage('Copy Dockerfile') {
             steps {
+                echo "Copy Dockerfile stage"
                 script {
-                    if (env.BRANCH_NAME == 'develop-BE') {
-                        echo "Copying Dockerfile for Backend from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-BE/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-FE') {
-                        echo "Copying Dockerfile for Frontend from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-FE/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
-                    } else if (env.BRANCH_NAME == 'develop-DATA') {
-                        echo "Copying Dockerfile for Data from EC2..."
-                        sshagent(['jenkins-ssh-key']) {
-                            sh """
-                                scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:/var/jenkins_home/workspace/IfSae_develop-DATA/Dockerfile ${WORKSPACE}/Dockerfile
-                            """
-                        }
+                    def remotePath = "/var/jenkins_home/workspace/IfSae_${env.BRANCH_NAME}/Dockerfile"
+                    sshagent(['jenkins-ssh-key']) {
+                        sh """
+                            scp -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io:${remotePath} ${WORKSPACE}/Dockerfile
+                        """
                     }
                 }
-                sh 'ls -la ${WORKSPACE}/Dockerfile'  // Dockerfile이 정상적으로 복사되었는지 확인
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build') {
             parallel {
                 stage('Build Backend') {
                     when {
                         expression { env.BRANCH_NAME == 'develop-BE' }
                     }
                     steps {
-                        echo "Building backend Docker image..."
-                        script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_BACKEND, "${WORKSPACE}")
+                        dir('ifsavedog-BE') {
+                            sh './gradlew build -x test'
+                            sh "cp build/libs/ifsae-0.0.1-SNAPSHOT.jar ${WORKSPACE}/app.jar"
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_BACKEND}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
                 }
@@ -110,9 +79,8 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-FE' }
                     }
                     steps {
-                        echo "Building frontend Docker image..."
-                        script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_FRONTEND, "${WORKSPACE}")
+                        dir('ifsavedog-FE') {
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
                         }
                     }
                 }
@@ -122,9 +90,8 @@ pipeline {
                         expression { env.BRANCH_NAME == 'develop-DATA' }
                     }
                     steps {
-                        echo "Building data Docker image..."
-                        script {
-                            validateAndBuildDockerImage(DOCKER_IMAGE_DATA, "${WORKSPACE}")
+                        dir('ifsavedog-DATA') {
+                            sh "docker build --no-cache -t ${DOCKER_IMAGE_DATA}:latest -f ${WORKSPACE}/Dockerfile ${WORKSPACE}"
                         }
                     }
                 }
@@ -133,20 +100,14 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                echo "Pushing Docker images to registry..."
+                echo "Push Docker Images stage"
                 script {
                     withDockerRegistry([ credentialsId: 'docker-hub-credentials', url: '' ]) {
                         if (env.BRANCH_NAME == 'develop-BE') {
-                            sh "docker push ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_TAG} ${DOCKER_IMAGE_BACKEND}:latest"  // 태그를 latest로 지정
                             sh "docker push ${DOCKER_IMAGE_BACKEND}:latest"
                         } else if (env.BRANCH_NAME == 'develop-FE') {
-                            sh "docker push ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_TAG} ${DOCKER_IMAGE_FRONTEND}:latest"
                             sh "docker push ${DOCKER_IMAGE_FRONTEND}:latest"
                         } else if (env.BRANCH_NAME == 'develop-DATA') {
-                            sh "docker push ${DOCKER_IMAGE_DATA}:${DOCKER_TAG}"
-                            sh "docker tag ${DOCKER_IMAGE_DATA}:${DOCKER_TAG} ${DOCKER_IMAGE_DATA}:latest"
                             sh "docker push ${DOCKER_IMAGE_DATA}:latest"
                         }
                     }
@@ -155,15 +116,8 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-            when {
-                anyOf {
-                    expression { env.BRANCH_NAME == 'develop-BE' }
-                    expression { env.BRANCH_NAME == 'develop-FE' }
-                    expression { env.BRANCH_NAME == 'develop-DATA' }
-                }
-            }
             steps {
-                echo "Deploying to EC2..."
+                echo "Deploying to EC2 stage"
                 sshagent(['jenkins-ssh-key']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ubuntu@j11a508.p.ssafy.io '
@@ -172,7 +126,6 @@ pipeline {
                         '
                     """
                 }
-                echo "Deployment completed."
             }
         }
     }
@@ -195,42 +148,23 @@ pipeline {
             }
         }
         always {
-            echo "Cleaning workspace..."
+            echo "Cleaning workspace"
             cleanWs()
-            echo "Workspace cleaned."
         }
-    }
-}
-
-def validateAndBuildDockerImage(imageName, directory) {
-    dir(directory) {
-        // Gradle 빌드 후 JAR 파일을 Dockerfile 경로로 복사하는 단계
-        echo "Copying JAR file to Dockerfile context..."
-        sh 'ls -la ./ifsavedog-BE/build/libs/'  // JAR 파일 존재 확인
-        sh "cp ./ifsavedog-BE/build/libs/ifsae-0.0.1-SNAPSHOT.jar ${directory}/app.jar"
-        sh "ls -la ${directory}/app.jar"  // 복사된 JAR 파일 확인
-
-        // Docker 이미지 빌드
-        echo "Building Docker image ${imageName}:${DOCKER_TAG}..."
-        sh "docker build --no-cache -t ${imageName}:${DOCKER_TAG} -f ${directory}/Dockerfile ${directory}"
-        echo "Docker image build completed."
     }
 }
 
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
-            echo "Using backend environment file."
             prepareEnv(env.ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
         }
     } else if (branch == 'develop-FE') {
         withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
-            echo "Using frontend environment file."
             prepareEnv(env.ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
         }
     } else if (branch == 'develop-DATA') {
         withCredentials([file(credentialsId: 'IfSae-data-env-file', variable: 'ENV_FILE_DATA')]) {
-            echo "Using data environment file."
             prepareEnv(env.ENV_FILE_DATA, DOCKER_IMAGE_DATA)
         }
     }
@@ -238,10 +172,7 @@ def prepareEnvironment(branch) {
 
 def prepareEnv(envFile, dockerImage) {
     sh """
-        echo 'Preparing ENV_FILE: ${envFile}'
         cp ${envFile} ${WORKSPACE}/.env
-        echo DOCKER_TAG=${DOCKER_TAG} >> ${WORKSPACE}/.env
-        echo DOCKER_IMAGE=${dockerImage} >> ${WORKSPACE}/.env
         chmod 775 ${WORKSPACE}/.env
     """
 }
