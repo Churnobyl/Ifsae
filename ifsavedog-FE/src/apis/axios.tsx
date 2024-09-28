@@ -7,10 +7,10 @@ import qs from 'qs';
  * 일반 Axios 인스턴스
  */
 export const instance = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: import.meta.env.AXIOS_TIMEOUT * 1000,
   headers: {
-    'Access-Control-Allow-Origin': import.meta.env.BASE_FRONTEND_URL,
+    'Access-Control-Allow-Origin': import.meta.env.VITE_BASE_FRONTEND_URL,
     'Access-Control-Allow-Credentials': 'true',
   },
   paramsSerializer: (params) => {
@@ -26,7 +26,7 @@ export const baseInstance = axios.create({
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
     Accept: 'application/json',
-    'Access-Control-Allow-Origin': import.meta.env.BASE_FRONTEND_URL,
+    'Access-Control-Allow-Origin': import.meta.env.VITE_BASE_FRONTEND_URL,
     'Access-Control-Allow-Credentials': 'true',
   },
 });
