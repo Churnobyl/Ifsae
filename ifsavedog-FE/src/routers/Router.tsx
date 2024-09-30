@@ -19,13 +19,12 @@ const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
   const [cookies, setCookie] = useCookies();
 
-  console.log('Access Token:', accessToken);
-  console.log('Has Viewed Cookie:', cookies.hasViewed);
-
   useEffect(() => {
     if (cookies.hasViewed === undefined) {
-      console.log('Setting hasViewed cookie to false');
-      setCookie('hasViewed', 'false', { path: '/', maxAge: 7 * 24 * 60 * 60 });
+      setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, 'false', {
+        path: '/',
+        maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
+      });
     }
   }, [cookies, setCookie]);
 
@@ -35,13 +34,10 @@ const Router = () => {
       errorElement: <NotFoundPage />,
       element: (() => {
         if (accessToken) {
-          console.log('Navigating to MainPage');
           return <MainPage />;
-        } else if (cookies.hasViewed === 'true') {
-          console.log('Navigating to LoginPage');
+        } else if (cookies.hasViewed === true) {
           return <Navigate to={PATH.LOGIN} />;
         } else {
-          console.log('Navigating to LandingPage');
           return <Navigate to={PATH.LANDING} />;
         }
       })(),
