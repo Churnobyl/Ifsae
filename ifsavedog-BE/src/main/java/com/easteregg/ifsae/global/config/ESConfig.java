@@ -20,7 +20,7 @@ public class ESConfig {
     @Value("${elasticsearch.url}")
     private String host;
 
-    @Value("${elasticsearch.api_key}")
+    @Value(value = "${elasticsearch.api-key}")
     private String apiKey;
 
     @Value("${elasticsearch.fingerprint}")
