@@ -10,9 +10,9 @@ const LandingPage = () => {
   const [, setCookie] = useCookies();
 
   useEffect(() => {
-    setCookie('hasViewed', true, {
+    setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, true, {
       path: '/',
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
     });
   }, [setCookie]);
 
