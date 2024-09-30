@@ -1496,9 +1496,10 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
     "@types/qs" "^6.9.16"
     axios "^1.7.7"
     classnames "^2.5.1"
-    ifsavedog-fe "file:../../../Users/tjdcj/AppData/Local/Yarn/Cache/v6/npm-ifsavedog-fe-0.0.0-ba8d930f-9e12-4cd0-b264-fa731df5612a-1727605194927/node_modules/ifsavedog-fe"
+    ifsavedog-fe "file:../../../Users/SSAFY/AppData/Local/Yarn/Cache/v6/npm-ifsavedog-fe-0.0.0-043e6dc9-6ccb-4e89-8f4c-924cc5fa68e9-1727658767012/node_modules/ifsavedog-fe"
     qs "^6.13.0"
     react "^18.3.1"
+    react-cookie "^7.2.0"
     react-dom "^18.3.1"
     react-full-page "^0.1.12"
     react-hook-form "^7.53.0"
@@ -1511,6 +1512,11 @@ ignore@^5.2.0, ignore@^5.3.1:
   version "5.3.2"
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz"
   integrity sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==
+
+immer@^10.1.1:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-10.1.1.tgz#206f344ea372d8ea176891545ee53ccc062db7bc"
+  integrity sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==
 
 import-fresh@^3.2.1:
   version "3.3.0"
