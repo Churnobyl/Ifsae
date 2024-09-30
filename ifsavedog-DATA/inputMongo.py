@@ -16,7 +16,7 @@ url = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic'
 response = requests.get(url)
 tmp_qp = 'bgnde=20240801&endde=20240830&pageNo=82&numOfRows=100&serviceKey=GGmzij7bJ%2BoRdhZ%2FKesNAzCHh2rdF2wwQO9t4S1rLd%2BQBpbZ%2FariKynFa29NyqxqLNRWCiWMH4fjOP%2BZ47jMIg%3D%3D&_type=json'
 
-start_date = datetime.datetime(2021,9,24)
+# start_date = datetime.datetime(2021,9,24)
 
 today = datetime.datetime.now()
 
@@ -43,8 +43,7 @@ def transfer_param(params):
 numOfRows = 1000
 _type = 'json'
 
-try:
-    
+try:    
     res = requests.get(url, params=transfer_param(qp)).json()
     df = pd.DataFrame(res['response']['body']['items']['item'])
 
@@ -74,7 +73,7 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 
-start_date = end_date + datetime.timedelta(days=1)
+#  start_date = end_date + datetime.timedelta(days=1)
 
 # app = FastAPI()
 
