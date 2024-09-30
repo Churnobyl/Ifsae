@@ -9,35 +9,20 @@ import StepEmail from '@/components/signup/steps/StepEmail';
 import StepRest from '@/components/signup/steps/StepRest';
 import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
+import { useSignupStore } from '@/stores/auth/signupStore';
 import { useTokenStore } from '@/stores/auth/tokenStore';
+import { Step } from '@/types/auth/SignupStepEnum';
 import axios from 'axios';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MoonLoader } from 'react-spinners';
-import { UserSignupInputType } from 'types/auth/UserSignupInputType';
-
-enum Step {
-  이메일,
-  인증번호,
-  기타정보,
-}
 
 const SignupForm = () => {
   /**
    * State
    */
 
-  // 회원가입 step
-  const [step, setStep] = useState<Step>(Step.이메일);
-
-  // 유저 인풋
-  const [userInput, setUserInput] = useState<UserSignupInputType>({
-    email: '',
-    password: '',
-    nickname: '',
-    role: -1,
-    authNumber: '',
-  });
+  const signupStore = useSignupStore();
 
   // 에러 메세지
   const [errMessage, setErrMessage] = useState<string>('');
@@ -60,7 +45,6 @@ const SignupForm = () => {
   /**
    * 기타정보 Step
    */
-  const [passwordRepeat, setPasswordRepeat] = useState<string>('');
   const [isSignupSendPending, setIsSignupSendPending] =
     useState<boolean>(false);
 
@@ -68,18 +52,13 @@ const SignupForm = () => {
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
-      if (name === 'passwordRepeat') {
-        setPasswordRepeat(value);
-      } else {
-        setUserInput((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
+      signupStore.setUserInput({
+        [name]: value,
+      });
 
       setErrMessage('');
     },
-    [],
+    [signupStore],
   );
 
   /**
@@ -89,12 +68,11 @@ const SignupForm = () => {
     try {
       setErrMessage('');
       setIsEmailSendPending(true);
-      const response = await emailAuthApi(userInput.email);
+      const response = await emailAuthApi(signupStore.userInput.email);
 
-      setStep(Step.인증번호);
-      setIsSended(true);
       if (response.status === HTTP_STATUS.OK) {
-        console.log(response);
+        signupStore.setStep(Step.인증번호);
+        setIsSended(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -103,7 +81,7 @@ const SignupForm = () => {
     } finally {
       setIsEmailSendPending(false);
     }
-  }, [userInput.email]);
+  }, [signupStore]);
 
   /**
    * 인증번호 로직
@@ -113,13 +91,13 @@ const SignupForm = () => {
       setErrMessage('');
       setIsAuthSendPending(true);
       const response = await verifyEmailCodeApi({
-        email: userInput.email,
-        code: userInput.authNumber,
+        email: signupStore.userInput.email,
+        code: signupStore.userInput.authNumber,
       });
 
       if (response.status === HTTP_STATUS.OK) {
         setIsAuthed(true);
-        setStep(Step.기타정보);
+        signupStore.setStep(Step.기타정보);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -128,7 +106,7 @@ const SignupForm = () => {
     } finally {
       setIsAuthSendPending(false);
     }
-  }, [userInput.authNumber, userInput.email]);
+  }, [signupStore]);
 
   /**
    * 회원가입 로직
@@ -136,12 +114,11 @@ const SignupForm = () => {
   const handleSignup = useCallback(async () => {
     try {
       setIsSignupSendPending(true);
-      const response = await signupApi(userInput);
+      const response = await signupApi(signupStore.userInput);
 
       if (response.status === HTTP_STATUS.OK) {
-        console.log(response);
         tokenStore.setAccessToken(response.data.accessToken);
-        navigate(PATH.MAIN);
+        navigate(PATH.LOGIN);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -149,31 +126,21 @@ const SignupForm = () => {
       }
     } finally {
       setIsSignupSendPending(false);
-
-      // Input 초기화
-      setUserInput({
-        email: '',
-        password: '',
-        nickname: '',
-        role: -1,
-        authNumber: '',
-      });
-
       setErrMessage('');
     }
-  }, [navigate, tokenStore, userInput]);
+  }, [navigate, signupStore.userInput, tokenStore]);
 
   return (
     <MainLayout showTopbar={false} showBottombar={false}>
       <main className="flex flex-col items-center gap-3 h-screen w-full pt-16">
         <div className="signup text-2xl">회원가입</div>
         <div className="signup-form flex flex-col gap-1 w-26">
-          {step >= 0 && (
+          {signupStore.userInput.step >= 0 && (
             <StepEmail
               isAuthed={isAuthed}
               isSended={isSended}
               isPending={isEmailSendPending}
-              value={userInput.email}
+              value={signupStore.userInput.email}
               handleInputChange={handleInputChange}
               handleEmailAuth={handleEmailAuth}
             />
@@ -183,10 +150,10 @@ const SignupForm = () => {
               <MoonLoader size={30} color={'var(--color-black)'} />
             </div>
           )}
-          {step >= 1 && (
+          {signupStore.userInput.step >= 1 && (
             <StepAuthNumber
               isAuthed={isAuthed}
-              value={userInput.authNumber}
+              value={signupStore.userInput.authNumber}
               handleInputChange={handleInputChange}
               handleAuthNumber={handleAuthNumber}
             />
@@ -196,15 +163,19 @@ const SignupForm = () => {
               <MoonLoader size={30} color={'var(--color-black)'} />
             </div>
           )}
-          {step >= 2 && (
+          {signupStore.userInput.step >= 2 && (
             <StepRest
-              password={userInput.password}
-              nickname={userInput.nickname}
-              role={userInput.role}
+              password={signupStore.userInput.password}
+              nickname={signupStore.userInput.nickname}
+              role={signupStore.userInput.role}
               handleInputChange={handleInputChange}
-              passwordRepeat={passwordRepeat}
               handleSignup={handleSignup}
             />
+          )}
+          {isSignupSendPending && (
+            <div className="flex items-center justify-center">
+              <MoonLoader size={30} color={'var(--color-black)'} />
+            </div>
           )}
         </div>
         <div className="err-message-box h-4 text-red text-sm">{errMessage}</div>
