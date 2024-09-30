@@ -4,8 +4,8 @@ from pymongo import MongoClient
 import requests
 import pandas as pd
 
-# MongoDB 클라이언트 생성
-client = MongoClient('mongodb+srv://S11P21A508:10PbELNEKa@ssafy.ngivl.mongodb.net/S11P21A508?authSource=admin')
+# MongoDB 클라이언트 생성ong
+client = MongoClient('modb+srv://S11P21A508:10PbELNEKa@ssafy.ngivl.mongodb.net/S11P21A508?authSource=admin')
 
 # 데이터베이스와 컬렉션 선택
 db = client['S11P21A508']
