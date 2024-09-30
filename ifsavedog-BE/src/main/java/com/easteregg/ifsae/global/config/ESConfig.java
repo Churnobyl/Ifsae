@@ -26,9 +26,11 @@ public class ESConfig extends ElasticsearchConfiguration {
     public ClientConfiguration clientConfiguration() {
         SSLContext sslContext = TransportUtils.sslContextFromCaFingerprint(fingerprint);
         return ClientConfiguration.builder()
-                                  .connectedToLocalhost()
+                                  .connectedTo(host)
                                   .usingSsl(sslContext)
                                   .withBasicAuth(username, password)
+                                  .withConnectTimeout(500000)
+                                  .withSocketTimeout(600000)
                                   .build();
     }
 }
