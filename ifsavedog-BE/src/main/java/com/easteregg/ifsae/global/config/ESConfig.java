@@ -1,36 +1,49 @@
 package com.easteregg.ifsae.global.config;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.TransportUtils;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
 import javax.net.ssl.SSLContext;
+import org.apache.http.HttpHost;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.message.BasicHeader;
+import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 @Configuration
-public class ESConfig extends ElasticsearchConfiguration {
+public class ESConfig {
 
     @Value("${elasticsearch.url}")
     private String host;
 
-    @Value("${elasticsearch.username}")
-    private String username;
-
-    @Value("${elasticsearch.password}")
-    private String password;
+    @Value("${elasticsearch.api_key}")
+    private String apiKey;
 
     @Value("${elasticsearch.fingerprint}")
     private String fingerprint;
 
-    @Override
-    public ClientConfiguration clientConfiguration() {
+    @Bean
+    public ElasticsearchClient elasticsearchClient() {
         SSLContext sslContext = TransportUtils.sslContextFromCaFingerprint(fingerprint);
-        return ClientConfiguration.builder()
-                                  .connectedTo(host)
-                                  .usingSsl(sslContext)
-                                  .withBasicAuth(username, password)
-                                  .withConnectTimeout(500000)
-                                  .withSocketTimeout(600000)
-                                  .build();
+
+        RestClient restClient = RestClient.builder(HttpHost.create(host))
+                                          .setDefaultHeaders(new BasicHeader[]{
+                                                  new BasicHeader("Authorization", "ApiKey " + apiKey)
+                                          })
+                                          .setHttpClientConfigCallback(httpClientBuilder ->
+                                                                               httpClientBuilder.setSSLContext(sslContext)
+                                                                                                .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE))
+                                          .build();
+
+        // Create the transport with a Jackson mapper
+        ElasticsearchTransport transport = new RestClientTransport(
+                restClient, new JacksonJsonpMapper());
+
+        // Return the API client
+        return new ElasticsearchClient(transport);
     }
 }
