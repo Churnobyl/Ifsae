@@ -95,5 +95,4 @@ elasticsearch:
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
   fingerprint: ${ES_FINGERPRINT}
-  apikey: ${ES_APIKEY}
-  cert: classpath:certs/http_ca.crt
+  apikey: LW1OaVFwSUJCT0RkRHY4eXVuYU86aW8yU3k5S21TZXVZcEpOQWZabkxnQQ==
