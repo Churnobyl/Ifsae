@@ -42,6 +42,12 @@ const Router = () => {
         }
       })(),
     },
+
+    {
+      path: PATH.MAIN,
+      errorElement: <NotFoundPage />,
+      element: <MainPage />,
+    },
     {
       path: PATH.LANDING,
       errorElement: <NotFoundPage />,
