@@ -38,7 +38,10 @@ const StepEmail = ({
           'h-10',
           'rounded-md',
           'border-none',
-          { 'bg-main': !isAuthed, 'bg-lightGray': isAuthed },
+          {
+            'bg-main': !isAuthed && !isPending,
+            '!bg-lightGray': isPending || isAuthed,
+          },
         )}
         onClick={() => {
           setDisable(true);
