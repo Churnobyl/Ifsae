@@ -1,10 +1,12 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
 import { loginApi } from '@/apis/auth/authApi';
 import { Input } from '@/components/index';
+import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { UserReponseType } from '@/types/auth/UserResponseType';
 import axios from 'axios';
-import MainLayout from '@/layouts/MainLayout';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserLoginInputType } from 'types/auth/UserLoginInputType';
@@ -19,6 +21,7 @@ const LoginPage = () => {
   const [errMessage, setErrMessage] = useState<string>('');
 
   const tokenStore = useTokenStore(); // 토큰 스토어 호출
+  const userStateStore = useUserStateStore(); // 유저 상태 스토어 호출
   const navigate = useNavigate(); // 로그인 성공 후 이동할 Navigate 호출
 
   // Input 반영
@@ -39,11 +42,15 @@ const LoginPage = () => {
   const handleLogin = useCallback(async () => {
     try {
       const response = await loginApi(userInput); // api 호출
+      const data: UserReponseType = response.data;
 
       // 성공
       if (response.status === HTTP_STATUS.OK) {
-        console.log(response);
-        tokenStore.setAccessToken(response.data.accessToken);
+        // 액세스 토큰 저장
+        tokenStore.setAccessToken(data.accessToken);
+
+        // 유저 State 저장
+        userStateStore.setUserState(data);
         setErrMessage(''); // 에러메시지 삭제
         navigate(PATH.MAIN); // MAIN페이지로 이동
       }
@@ -59,7 +66,7 @@ const LoginPage = () => {
         password: '',
       });
     }
-  }, [navigate, tokenStore, userInput]);
+  }, [navigate, tokenStore, userInput, userStateStore]);
 
   return (
     <MainLayout showTopbar={false} showBottombar={false}>
