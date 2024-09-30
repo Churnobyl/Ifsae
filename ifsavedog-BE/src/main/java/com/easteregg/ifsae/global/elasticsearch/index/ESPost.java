@@ -1,6 +1,8 @@
 package com.easteregg.ifsae.global.elasticsearch.index;
 
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -8,6 +10,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
+@Getter
+@Builder
 @Document(indexName = "post")
 @Mapping(mappingPath = "/index/post-mappings.json")
 @Setting(settingPath = "/index/tokenizer-settings.json")

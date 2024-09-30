@@ -1,12 +1,16 @@
 package com.easteregg.ifsae.global.elasticsearch.index;
 
 import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
+@Getter
+@Builder
 @Document(indexName = "donation")
 @Mapping(mappingPath = "/index/donation-mappings.json")
 @Setting(settingPath = "/index/tokenizer-settings.json")
@@ -17,6 +21,9 @@ public class ESDonation {
     private String id;
 
     @Field(type = FieldType.Keyword)
+    private String shelterId;
+
+    @Field(type = FieldType.Keyword)
     private String userId;
 
     @Field(type = FieldType.Text)
@@ -25,6 +32,7 @@ public class ESDonation {
     @Field(type = FieldType.Keyword)
     private String userProfileImgUrl;
 
-    @Field(type = FieldType.Integer)
-    private int price;
+    @Field(type = FieldType.Text)
+    private String DogName;
+
 }
