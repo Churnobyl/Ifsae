@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    },
+    "content": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    },
+    "dogIds": {
+      "type": "keyword"
+    },
+    "shelter": {
+      "type": "object",
+      "properties": {
+        "shelterId": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text",
+          "analyzer": "my_custom_analyzer"
+        }
+      }
+    }
+  }
+}

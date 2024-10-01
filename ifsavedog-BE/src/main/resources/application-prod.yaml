@@ -1,0 +1,45 @@
+spring:
+  config:
+    active: prod
+
+  datasource:
+    driver-class-name: ${PROD_DATABASE_CLASS_NAME}
+    url: ${PROD_DATABASE_URL}
+    username: ${PROD_DATABASE_USERNAME}
+    password: ${PROD_DATABASE_PASSWORD}
+    hikari:
+      max-lifetime: 177000
+
+  #   sql 작성 이후 모드 변경
+  #    sql:
+  #    init:
+  #      mode: always
+  #      data-locations: classpath:sql/data_prod.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+  #    defer-datasource-initialization: true
+  #    open-in-view: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      lettuce:
+        pool:
+          max-active: 5
+          max-idle: 5
+          min-idle: 2
+
+server:
+  port: ${SERVER_PORT}
+
+frontend:
+  url: ${PROD_FRONTEND_URL}

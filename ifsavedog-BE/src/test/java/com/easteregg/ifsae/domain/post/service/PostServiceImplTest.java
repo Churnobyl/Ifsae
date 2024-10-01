@@ -6,6 +6,7 @@ import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.post.repository.PostRepository;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterRepository;
+import com.easteregg.ifsae.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +64,7 @@ class PostServiceImplTest {
                 inputFile // 파일 내용 (InputStream)
         );
 
-        Long id = postService.create(request, mockMultipartFile);
+        Long id = postService.create(new User(), request, mockMultipartFile);
 
         PostDto.Response dataFromDB = postService.read(id);
 
@@ -99,7 +100,7 @@ class PostServiceImplTest {
                 inputFile // 파일 내용 (InputStream)
         );
 
-        Long id = postService.create(request, mockMultipartFile);
+        Long id = postService.create(new User(), request, mockMultipartFile);
 
         PostDto.Response dataFromDB = postService.read(id);
 
@@ -113,7 +114,7 @@ class PostServiceImplTest {
                 .build();
 
         // update 쿼리 날림
-        postService.update(id, request2);
+        postService.update(new User(), id, request2);
 
         // DB로부터 다시 데이터 긁어오기
         PostDto.Response dataFromDB2 = postService.read(id);
