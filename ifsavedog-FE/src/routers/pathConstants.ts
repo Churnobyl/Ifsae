@@ -5,4 +5,5 @@ export const PATH = {
   LOGIN: '/login', // 로그인 페이지
   PASSWORD_RESET: '/password-reset', // 비밀번호 재설정 페이지
   SIGNUP: '/signup', // 회원가입 페이지
+  SIGNUP_RESULT: '/signup/result', // 회원가입 결과 페이지
 };

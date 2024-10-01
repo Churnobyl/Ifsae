@@ -1,5 +1,6 @@
+import BackButton from '@/components/navigationBar/items/BackButton';
 import classNames from 'classnames';
-import { FaBell, FaSignOutAlt } from 'react-icons/fa';
+import { FaBell } from 'react-icons/fa6';
 
 const Topbar = ({ className }: { className?: string }) => {
   return (
@@ -9,14 +10,12 @@ const Topbar = ({ className }: { className?: string }) => {
         className,
       )}
     >
+      <div>
+        <BackButton />
+      </div>
       <div className="logo logo-sm"></div>
-      <div className="flex flex-row gap-2">
-        <div>
-          <FaBell size={24} />
-        </div>
-        <div>
-          <FaSignOutAlt size={24} />
-        </div>
+      <div>
+        <FaBell size={24} />
       </div>
     </div>
   );

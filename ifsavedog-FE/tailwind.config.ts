@@ -8,6 +8,10 @@ export default {
     extract,
   },
   theme: {
+    backgroundImage: {
+      shelter: 'url("./assets/shelter.webp")',
+      individual: 'url("./assets/individual.webp")',
+    },
     screens: {
       phone: { max: '767px' },
       pc: { min: '768px', max: '1920px' },

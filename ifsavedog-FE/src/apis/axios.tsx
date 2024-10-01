@@ -8,7 +8,7 @@ import qs from 'qs';
  */
 export const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: import.meta.env.AXIOS_TIMEOUT * 1000,
+  timeout: import.meta.env.VITE_AXIOS_TIMEOUT * 1000,
   headers: {
     'Access-Control-Allow-Origin': import.meta.env.VITE_BASE_FRONTEND_URL,
     'Access-Control-Allow-Credentials': 'true',
