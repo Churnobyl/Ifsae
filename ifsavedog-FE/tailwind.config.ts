@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import fluid, { extract, fontSize } from 'fluid-tailwind';
+import scrollbarHide from 'tailwind-scrollbar-hide';
 
 export default {
   content: {
@@ -35,6 +36,7 @@ export default {
   },
   plugins: [
     fluid,
+    scrollbarHide, 
     function ({ addBase, theme }) {
       addBase({
         ':root': {
