@@ -4,7 +4,11 @@ import AdoptionPage from '@/pages/AdoptionPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
+import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
+import MungtsuPage from '@/pages/MungtsuPage';
+import MyPage from '@/pages/MyPage';
+import SearchPage from '@/pages/SearchPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
 import { useEffect } from 'react';
@@ -27,28 +31,9 @@ const Router = () => {
         maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
       });
     }
-  }, [cookies, setCookie]);
+  }, [cookies.hasViewed, setCookie]);
 
   const routes: RouteObject[] = [
-    {
-      path: PATH.HOME,
-      errorElement: <NotFoundPage />,
-      element: (() => {
-        if (accessToken) {
-          return <MainPage />;
-        } else if (cookies.hasViewed === true) {
-          return <Navigate to={PATH.LOGIN} />;
-        } else {
-          return <Navigate to={PATH.LANDING} />;
-        }
-      })(),
-    },
-
-    {
-      path: PATH.MAIN,
-      errorElement: <NotFoundPage />,
-      element: <MainPage />,
-    },
     {
       path: PATH.LANDING,
       errorElement: <NotFoundPage />,
@@ -64,20 +49,50 @@ const Router = () => {
       errorElement: <NotFoundPage />,
       children: [
         {
-          path: PATH.SIGNUP,
+          path: '',
           element: <SignupForm />,
         },
         {
-          path: PATH.SIGNUP_RESULT,
+          path: 'signup-result',
           element: <SignupResult />,
         },
       ],
     },
     {
-      path: PATH.ADOPTION,
-      errorElement: <NotFoundPage />, 
-      element: <AdoptionPage />
-    }
+      path: PATH.MAIN,
+      errorElement: <NotFoundPage />,
+      element: (() => {
+        if (accessToken) {
+          return <MainContainer />;
+        } else if (cookies.hasViewed === true) {
+          return <Navigate to={PATH.LOGIN} />;
+        } else {
+          return <Navigate to={PATH.LANDING} />;
+        }
+      })(),
+      children: [
+        {
+          path: '',
+          element: <MainPage />,
+        },
+        {
+          path: PATH.MUNGTSU.slice(1), // Remove the leading '/' for child paths
+          element: <MungtsuPage />,
+        },
+        {
+          path: PATH.ADOPTION.slice(1),
+          element: <AdoptionPage />,
+        },
+        {
+          path: PATH.SEARCH.slice(1),
+          element: <SearchPage />,
+        },
+        {
+          path: PATH.MYPAGE.slice(1),
+          element: <MyPage />,
+        },
+      ],
+    },
   ];
 
   const router = createBrowserRouter([...routes]);
