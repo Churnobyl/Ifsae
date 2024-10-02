@@ -171,8 +171,17 @@ def prepareEnvironment(branch) {
 }
 
 def prepareEnv(envFile) {
-    sh """
-        cp ${envFile} ${WORKSPACE}/.env
-        chmod 775 ${WORKSPACE}/.env
-    """
+    if (env.BRANCH_NAME == 'develop-DATA') {
+        sh """
+            cp ${envFile} ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
+            chmod 775 ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
+            cat ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
+        """
+    } else {
+        sh """
+            cp ${envFile} ${WORKSPACE}/.env
+            chmod 775 ${WORKSPACE}/.env
+            cat ${WORKSPACE}/.env
+        """
+    }
 }
