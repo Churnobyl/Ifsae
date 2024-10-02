@@ -1,11 +1,9 @@
-import React from 'react';
-
 type CardType = {
   name: string;
   age: number;
   duration: number;
   image: string;
-}
+};
 
 const Card = ({ name, age, duration, image }: CardType) => {
   return (
