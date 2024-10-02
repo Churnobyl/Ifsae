@@ -1,20 +1,33 @@
-type CardType = {
+import classNames from "classnames";
+
+interface CardType {
   name: string;
   age: number;
   duration: number;
   image: string;
-};
+  category: 'donation' | 'adoption';
+}
 
-const Card = ({ name, age, duration, image }: CardType) => {
+const Card = ({ name, age, duration, image, category }: CardType) => {
+  const bgColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
+  const borderColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
+  const textColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
+  const subTextColor =
+    category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
   return (
-    <div className="bg-yellow-400 rounded-lg p-8 h-48 shadow-md"> {/* 패딩과 높이 추가 */}
-      <div className="flex items-center">
-        <img src={image} alt="강아지 사진" className="w-24 h-24 rounded-full" /> {/* 이미지 크기 키움 */}
-        <div className="ml-4">
-          <h3 className="text-xl font-bold">후원 카드</h3> {/* 글자 크기 키움 */}
-          <p>이름: {name}</p>
-          <p>나이: {age}</p>
-          <p>함께한 기간: {duration}일</p>
+    <div
+      className={classNames('rounded-lg shadow-md p-6 h-48 flex items-center', bgColor, borderColor)}
+    >
+      <div className="flex items-center space-x-6">
+        <img
+          src={image}
+          alt={name}
+          className="w-20 h-20 rounded-full border-2 border-white shadow-md"
+        />
+        <div>
+          <h3 className={`text-lg font-bold ${textColor}`}>{name}</h3>
+          <p className={`text-sm ${subTextColor}`}>나이: {age}살</p>
+          <p className={`text-sm ${subTextColor}`}>함께한 기간: {duration}일</p>
         </div>
       </div>
     </div>

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '@/components/donation/Card';
 import DogPreview from '@/components/donation/DogPreview';
-import TestImage from '@/assets/logo.webp'
+import TestImage from '@/assets/logo.webp';
+import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
+import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
 
 interface Dog {
   name: string;
@@ -14,10 +16,19 @@ interface DonationInfo {
   age: number;
   duration: number;
   image: string;
+  category: 'adoption' | 'donation';
 }
 
-const AdoptionPage: React.FC = () => {
-  const cardList: DonationInfo[] = [{ name: '루루', age: 2, duration: 3, image: TestImage }];
+const AdoptionPage = () => {
+  const cardList: DonationInfo[] = [
+    {
+      name: '루루',
+      age: 2,
+      duration: 3,
+      image: TestImage,
+      category: 'adoption',
+    },
+  ];
 
   const recommenedList: Dog[] = [
     { name: '초코', age: 1, image: TestImage },
@@ -37,10 +48,21 @@ const AdoptionPage: React.FC = () => {
 
   const recommenedRef = useRef<HTMLDivElement | null>(null);
   const followRef = useRef<HTMLDivElement | null>(null);
-  const [isRecommenedScrollable, setIsRecommenedScrollable] = useState({ left: false, right: false });
-  const [isFollowScrollable, setIsFollowScrollable] = useState({ left: false, right: false });
+  const [isRecommenedScrollable, setIsRecommenedScrollable] = useState({
+    left: false,
+    right: false,
+  });
+  const [isFollowScrollable, setIsFollowScrollable] = useState({
+    left: false,
+    right: false,
+  });
 
-  const checkScrollable = (ref: React.RefObject<HTMLDivElement>, setScrollable: React.Dispatch<React.SetStateAction<{ left: boolean; right: boolean }>>) => {
+  const checkScrollable = (
+    ref: React.RefObject<HTMLDivElement>,
+    setScrollable: React.Dispatch<
+      React.SetStateAction<{ left: boolean; right: boolean }>
+    >,
+  ) => {
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
       setScrollable({
@@ -57,7 +79,10 @@ const AdoptionPage: React.FC = () => {
     };
 
     if (recommenedRef.current) {
-      recommenedRef.current.addEventListener('scroll', handleCheckScrollability);
+      recommenedRef.current.addEventListener(
+        'scroll',
+        handleCheckScrollability,
+      );
     }
     if (followRef.current) {
       followRef.current.addEventListener('scroll', handleCheckScrollability);
@@ -69,10 +94,16 @@ const AdoptionPage: React.FC = () => {
     return () => {
       window.removeEventListener('resize', handleCheckScrollability);
       if (recommenedRef.current) {
-        recommenedRef.current.removeEventListener('scroll', handleCheckScrollability);
+        recommenedRef.current.removeEventListener(
+          'scroll',
+          handleCheckScrollability,
+        );
       }
       if (followRef.current) {
-        followRef.current.removeEventListener('scroll', handleCheckScrollability);
+        followRef.current.removeEventListener(
+          'scroll',
+          handleCheckScrollability,
+        );
       }
     };
   }, []);
@@ -89,6 +120,7 @@ const AdoptionPage: React.FC = () => {
               age={donationInfo.age}
               duration={donationInfo.duration}
               image={donationInfo.image}
+              category={donationInfo.category}
             />
           ))}
         </div>
@@ -97,15 +129,18 @@ const AdoptionPage: React.FC = () => {
           <div className="list-title">😀 당신을 기다려요</div>
           {isRecommenedScrollable.left && (
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              ←
+              <img src={LeftArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
           {isRecommenedScrollable.right && (
             <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              →
+              <img src={RightArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
-          <div ref={recommenedRef} className="mt-4 overflow-x-auto scrollbar-hide">
+          <div
+            ref={recommenedRef}
+            className="mt-4 overflow-x-auto scrollbar-hide"
+          >
             <div className="flex space-x-4">
               {recommenedList.map((dog) => (
                 <div className="flex-none w-1/3" key={dog.name}>
@@ -117,15 +152,15 @@ const AdoptionPage: React.FC = () => {
         </div>
 
         <div className="relative">
-          <div className="list-title">내가 팔로우하는 강아지</div>
+          <div className="list-title">😀 내가 팔로우하는 강아지</div>
           {isFollowScrollable.left && (
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              ←
+              <img src={LeftArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
           {isFollowScrollable.right && (
             <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              →
+              <img src={RightArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
           <div ref={followRef} className="mt-4 overflow-x-auto scrollbar-hide">
