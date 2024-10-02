@@ -8,7 +8,7 @@ from app.models.dog import Dog
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db = await connect_to_mongo()
+    db = await connect_to_mongo()    
     await init_beanie(database=db, document_models=[Dog])
     try:
         yield

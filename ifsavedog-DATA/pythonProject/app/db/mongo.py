@@ -9,6 +9,7 @@ async def connect_to_mongo():
   mongo_client = AsyncIOMotorClient(settings.MONGO_URL)
   db = mongo_client[settings.MONGO_DBNAME]
   print("connect to mongo")
+  print(f"Connected to MongoDB: {db.name}") 
   return db
   
 async def close_mongo_connection():
