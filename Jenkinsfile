@@ -157,20 +157,20 @@ pipeline {
 def prepareEnvironment(branch) {
     if (branch == 'develop-BE') {
         withCredentials([file(credentialsId: 'IfSae-back-env-file', variable: 'ENV_FILE_BACKEND')]) {
-            prepareEnv(env.ENV_FILE_BACKEND, DOCKER_IMAGE_BACKEND)
+            prepareEnv(env.ENV_FILE_BACKEND)
         }
     } else if (branch == 'develop-FE') {
         withCredentials([file(credentialsId: 'IfSae-front-env-file', variable: 'ENV_FILE_FRONTEND')]) {
-            prepareEnv(env.ENV_FILE_FRONTEND, DOCKER_IMAGE_FRONTEND)
+            prepareEnv(env.ENV_FILE_FRONTEND)
         }
     } else if (branch == 'develop-DATA') {
         withCredentials([file(credentialsId: 'IfSae-data-env-file', variable: 'ENV_FILE_DATA')]) {
-            prepareEnv(env.ENV_FILE_DATA, DOCKER_IMAGE_DATA)
+            prepareEnv(env.ENV_FILE_DATA)
         }
     }
 }
 
-def prepareEnv(envFile, dockerImage) {
+def prepareEnv(envFile) {
     sh """
         cp ${envFile} ${WORKSPACE}/.env
         chmod 775 ${WORKSPACE}/.env
