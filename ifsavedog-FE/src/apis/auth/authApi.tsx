@@ -22,5 +22,5 @@ export const verifyEmailCodeApi = async ({
   email: string;
   code: string;
 }) => {
-  return await baseInstance.post(ENDPOINT.EMAIL_AUTH, { email, code });
+  return await baseInstance.post(ENDPOINT.VERIFY_EMAIL_CODE, { email, code });
 };
