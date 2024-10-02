@@ -171,8 +171,14 @@ def prepareEnvironment(branch) {
 }
 
 def prepareEnv(envFile) {
+    echo "Preparing environment with env file: ${envFile}"
+    echo "Current WORKSPACE: ${WORKSPACE}"
+
     sh """
         cp ${envFile} ${WORKSPACE}/.env
         chmod 775 ${WORKSPACE}/.env
+        echo "Copied .env file to ${WORKSPACE}/.env"
+        echo "Contents of .env file:"
+        cat ${WORKSPACE}/.env
     """
 }
