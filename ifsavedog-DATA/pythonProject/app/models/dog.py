@@ -48,26 +48,3 @@ class DogResponse(BaseModel):
     class Config:
         json_encoders = {ObjectId: str}
         from_attributes = True
-
-
-class User(Document):
-    user_id : str
-
-    class Settings:
-        collection = "user"  # MongoDB의 컬렉션 이름 설정
-
-# Pydantic을 사용한 스키마 정의
-# Create하는 코드
-# class DogCreate(BaseModel):
-#     name: str
-#     breed: str
-#     age: Optional[int]
-#     description: Optional[str]
-
-class UserResponse(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    user_id : str
-    
-    class Config:
-        json_encoders = {ObjectId: str}
-        from_attributes = True
