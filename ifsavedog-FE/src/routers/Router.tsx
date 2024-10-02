@@ -1,5 +1,6 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import AdoptionPage from '@/pages/AdoptionPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -72,6 +73,11 @@ const Router = () => {
         },
       ],
     },
+    {
+      path: PATH.ADOPTION,
+      errorElement: <NotFoundPage />, 
+      element: <AdoptionPage />
+    }
   ];
 
   const router = createBrowserRouter([...routes]);
