@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '@/components/donation/Card';
 import DogPreview from '@/components/donation/DogPreview';
-import TestImage from '@/assets/logo.webp';
+import TestImage from '@/assets/logo.webp'
 
 interface Dog {
   name: string;
@@ -40,13 +40,12 @@ const AdoptionPage: React.FC = () => {
   const [isRecommenedScrollable, setIsRecommenedScrollable] = useState({ left: false, right: false });
   const [isFollowScrollable, setIsFollowScrollable] = useState({ left: false, right: false });
 
-  // 스크롤 가능 여부 체크 함수
   const checkScrollable = (ref: React.RefObject<HTMLDivElement>, setScrollable: React.Dispatch<React.SetStateAction<{ left: boolean; right: boolean }>>) => {
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
       setScrollable({
-        left: scrollLeft > 0, // 스크롤 왼쪽이 0보다 크면 true
-        right: scrollLeft + clientWidth < scrollWidth, // 스크롤 오른쪽이 남아있으면 true
+        left: scrollLeft > 0,
+        right: scrollLeft + clientWidth < scrollWidth,
       });
     }
   };
@@ -94,7 +93,6 @@ const AdoptionPage: React.FC = () => {
           ))}
         </div>
 
-        {/* 추천 목록 */}
         <div className="relative">
           <div className="list-title">😀 당신을 기다려요</div>
           {isRecommenedScrollable.left && (

@@ -7,7 +7,7 @@ import { useTokenStore } from '@/stores/auth/tokenStore';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
 import { UserReponseType } from '@/types/auth/UserResponseType';
 import axios from 'axios';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserLoginInputType } from 'types/auth/UserLoginInputType';
 
@@ -68,6 +68,16 @@ const LoginPage = () => {
     }
   }, [navigate, tokenStore, userInput, userStateStore]);
 
+  // Enter 키 입력 시 로그인
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleLogin();
+      }
+    },
+    [handleLogin],
+  );
+
   return (
     <MainLayout showTopbar={false} showBottombar={false}>
       <main className="flex flex-col items-center gap-3 justify-center h-full w-full">
@@ -87,6 +97,7 @@ const LoginPage = () => {
               placeholder="비밀번호를 입력해주세요"
               value={userInput.password}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <button

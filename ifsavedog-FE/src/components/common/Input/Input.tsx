@@ -1,5 +1,10 @@
 import classNames from 'classnames';
-import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
+import {
+  ChangeEvent,
+  InputHTMLAttributes,
+  KeyboardEvent,
+  useState,
+} from 'react';
 import { IconType } from 'react-icons';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,6 +14,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   icon?: IconType;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
   type?: string;
 }
 
@@ -18,6 +24,7 @@ export const Input = ({
   value,
   placeholder,
   onChange,
+  onKeyDown,
   icon: Icon,
   type,
   disabled,
@@ -51,6 +58,7 @@ export const Input = ({
           onChange={onChange}
           placeholder={isInputFocused ? '' : placeholder}
           onFocus={() => setIsInputFocused(true)}
+          onKeyDown={onKeyDown}
           onBlur={() => setIsInputFocused(false)}
           type={type}
           disabled={disabled}
