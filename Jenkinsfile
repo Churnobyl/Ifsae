@@ -177,6 +177,12 @@ def prepareEnv(envFile) {
             chmod 775 ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
             cat ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
         """
+    } else if (env.BRANCH_NAME == 'develop-FE') {
+        sh """
+            cp ${envFile} ${WORKSPACE}/ifsavedog-FE/.env
+            chmod 775 ${WORKSPACE}/ifsavedog-FE/.env
+            cat ${WORKSPACE}/ifsavedog-FE/.env
+        """
     } else {
         sh """
             cp ${envFile} ${WORKSPACE}/.env
