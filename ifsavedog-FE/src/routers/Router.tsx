@@ -1,5 +1,6 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import LandingPage from '@/pages/LandingPage';
@@ -26,9 +27,9 @@ const Router = () => {
 
   useEffect(() => {
     if (cookies.hasViewed === undefined) {
-      setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, 'false', {
+      setCookie(config.cookieNameForLandingPage, 'false', {
         path: '/',
-        maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
+        maxAge: config.cookieMaxAge,
       });
     }
   }, [cookies.hasViewed, setCookie]);

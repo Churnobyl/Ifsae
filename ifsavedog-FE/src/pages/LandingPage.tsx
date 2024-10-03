@@ -2,6 +2,7 @@ import LandingFirst from '@/components/landing/LandingFirst';
 import LandingLast from '@/components/landing/LandingLast';
 import LandingSecond from '@/components/landing/LandingSecond';
 import LandingThird from '@/components/landing/LandingThird';
+import config from '@/constants/Environments';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { FullPage, Slide } from 'react-full-page';
@@ -10,9 +11,9 @@ const LandingPage = () => {
   const [, setCookie] = useCookies();
 
   useEffect(() => {
-    setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, true, {
+    setCookie(config.cookieNameForLandingPage, true, {
       path: '/',
-      maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
+      maxAge: config.cookieMaxAge,
     });
   }, [setCookie]);
 
