@@ -44,4 +44,7 @@ public class UserDogRating {
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
 
+    public void updateScore(int score) {
+        this.score = score;
+    }
 }
