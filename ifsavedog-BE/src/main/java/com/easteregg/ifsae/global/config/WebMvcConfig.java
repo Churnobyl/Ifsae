@@ -13,8 +13,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/api/**")
                 .allowedOrigins(frontendUrl)
+                .allowedOrigins("http://react:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
