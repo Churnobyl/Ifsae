@@ -80,6 +80,7 @@ pipeline {
                     }
                     steps {
                         dir('ifsavedog-FE') {
+                            sh "cat .env"
                             sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
                         }
                     }
