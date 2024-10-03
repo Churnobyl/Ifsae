@@ -24,12 +24,6 @@ const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
   const [cookies, setCookie] = useCookies();
 
-  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
-  console.log(
-    'VITE_COOKIE_NAME_FOR_LANDING_PAGE:',
-    import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE,
-  );
-
   useEffect(() => {
     if (cookies.hasViewed === undefined) {
       setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, 'false', {
