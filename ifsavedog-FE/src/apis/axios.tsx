@@ -8,6 +8,7 @@ import qs from 'qs';
  * 일반 Axios 인스턴스
  */
 console.log(config.forCheck);
+console.log('window._env_', window._env_);
 
 export const instance = axios.create({
   baseURL: config.baseUrl,
