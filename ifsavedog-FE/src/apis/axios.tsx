@@ -7,6 +7,8 @@ import qs from 'qs';
 /**
  * 일반 Axios 인스턴스
  */
+console.log(config.forCheck);
+
 export const instance = axios.create({
   baseURL: config.baseUrl,
   timeout: config.axiosTimeout * 1000,
