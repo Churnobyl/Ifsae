@@ -6,15 +6,12 @@ import pandas as pd
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 import os
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.triggers.cron import CronTrigger
 
 def input_data_to_mongo() : 
     # env 파일 로드
     load_dotenv()
     mongo_url = os.getenv('MONGO_URL')
-    db_name = os.getenv('MONGO_DBNAME')
-    collection_name = os.getenv('MONGO_COLLECTION')
+    db_name = os.getenv('MONGO_DBNAME')    
     serviceKey = os.getenv('SERVICE_KEY')
 
     # MongoDB 클라이언트 생성
@@ -22,7 +19,7 @@ def input_data_to_mongo() :
     client = MongoClient(mongo_url)
     # 데이터베이스와 컬렉션 선택
     db = client[db_name]
-    collection = db[collection_name]
+    collection = db['test']
 
     # API 호출
     url = 'http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic'
@@ -86,47 +83,3 @@ def input_data_to_mongo() :
 
     except Exception as e:
         print(f"An error occurred: {e}")
-    
-# scheduler = BlockingScheduler()
-# scheduler.add_job(input_data_to_mongo, CronTrigger(hour=1, minute=0))
-
-#  start_date = end_date + datetime.timedelta(days=1)
-
-# app = FastAPI()
-
-
-
-
-# class Item(BaseModel):
-#     desertionNo : str
-#     age: str
-#     weight : str
-
-# class Items():
-#     desertionNo : str
-#     age: str
-#     weight : str
-
-
-# @app.get("/")
-# def read_root():
-#     return {"Hello": "World"}
-
-
-# @app.get("/items/{item_id}")
-# def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id, "q": q}
-
-# @app.get("/items/test/{item_id}")
-# def create_item(item_id: int):  
-#     dog = df[item_id]
-#     print(dog['desertionNo'])
-#     item = Items()
-#     item.desertionNo = dog['desertionNo']
-#     item.age = dog['age']
-#     item.weight = dog['weight']
-#     return {"item_id" : item_id, "item" : item}
-
-# @app.post("/items")
-# def create_item(item: Item):
-#     return item
