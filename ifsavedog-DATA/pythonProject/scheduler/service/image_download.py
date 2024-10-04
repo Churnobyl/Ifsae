@@ -3,6 +3,7 @@ import requests
 from service.get_datas import *
 
 def download_image_dog_list(dog_list):
+    print(len(dog_list))
     for target in dog_list:
         imageRes = requests.get(target.image, stream=True)
         if imageRes.status_code == 200:
