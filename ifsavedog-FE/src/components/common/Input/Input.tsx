@@ -52,7 +52,7 @@ export const Input = ({
           </div>
         )}
         <input
-          className="w-full h-12 pl-10 rounded-2xl outline-none bg-gray text-lightGray focus:bg-lightBlue"
+          className="w-full h-12 pl-10 rounded-2xl outline-none bg-lightGray focus:bg-lightBlue"
           name={name}
           value={value}
           onChange={onChange}

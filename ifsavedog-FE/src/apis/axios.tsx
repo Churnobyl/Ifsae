@@ -48,6 +48,15 @@ instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
  */
 instance.interceptors.response.use(
   (response) => {
+    console.log(response);
+
+    const authorization = response.headers.getAuthorization;
+
+    if (authorization && typeof authorization === 'function') {
+      const authValue = authorization()?.toString();
+      useTokenStore.getState().setAccessToken(authValue);
+    }
+
     return response;
   },
   async (err) => {

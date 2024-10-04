@@ -70,8 +70,8 @@ const StepRest = ({
           icon={MdOutlinePermIdentity}
         />
         <div className="role-check flex flex-row items-center justify-between gap-20">
-          <RoleItem roleId={0} roleName={'단체'} image={'shelter'} />
-          <RoleItem roleId={1} roleName={'개인'} image={'individual'} />
+          <RoleItem roleId={0} roleName={'개인'} image={'individual'} />
+          <RoleItem roleId={1} roleName={'단체'} image={'shelter'} />
         </div>
         <button
           className="text-white w-full h-10 bg-main rounded-md border-none"
