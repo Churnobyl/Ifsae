@@ -13,6 +13,7 @@ class Dog(Base):
     gender = Column(Integer)
     species_id = Column(Integer, ForeignKey("species.id"))
     desertion_no = Column(String, unique=True)
+    happen_dt = Column(String)
     image = Column(String)
     dir = Column(String)
     info = Column(String)
