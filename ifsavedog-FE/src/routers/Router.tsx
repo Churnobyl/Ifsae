@@ -3,6 +3,7 @@ import SignupResult from '@/components/signup/SignupResult';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
@@ -93,6 +94,11 @@ const Router = () => {
           element: <MyPage />,
         },
       ],
+    },
+    {
+      path: PATH.FOLLOW,
+      errorElement: <NotFoundPage />,
+      element: <FollowPage />,
     },
   ];
 
