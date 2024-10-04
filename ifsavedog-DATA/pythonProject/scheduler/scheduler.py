@@ -1,4 +1,4 @@
-from apscheduler.schedulers.blocking import BackgroundScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime
 from scheduler.inputMongo import input_data_to_mongo
