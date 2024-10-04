@@ -7,7 +7,7 @@ model = AutoModelForImageClassification.from_pretrained("wesleyacheng/dog-breeds
 def infer_dog_image_vector(image_dir_list):
     result_dict = dict()
     for dir in image_dir_list:
-        image = PIL.Image.open(f'./data/images/DOG/{dir}').convert("RGB")
+        image = PIL.Image.open(f'./images/{dir}').convert("RGB")
         inputs = image_processor(images=image, return_tensors="pt")
 
         outputs = model(**inputs)
