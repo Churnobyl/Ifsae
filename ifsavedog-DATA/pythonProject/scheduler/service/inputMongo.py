@@ -1,10 +1,8 @@
 import datetime
-from pymongo import MongoClient
 import random
 
 import requests
 import pandas as pd
-from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from settings import config
 
