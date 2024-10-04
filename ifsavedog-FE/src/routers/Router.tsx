@@ -24,6 +24,11 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
+import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
+import UserRecommendPage from '@/pages/UserRecommendPage';
+import CreateCenterPage from '@/pages/CreateCenterPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -63,6 +68,14 @@ const Router = () => {
         },
       ],
     },
+    {
+      path: PATH.USER_RECOMMEND,
+      element: <UserRecommendPage />,
+    },
+    {
+      path: PATH.CREATE_CENTER,
+      element: <CreateCenterPage />,
+    },
 
     {
       path: PATH.USER_MYPAGE,
@@ -81,12 +94,33 @@ const Router = () => {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
       element: (() => {
+        // 액세스 토큰이 있으면
         if (accessToken) {
+          if (
+            // 근데 유저 상태가 PENDING이면
+            useUserStateStore.getState().userStatus ===
+            UserStatusEnum.PENDING.toString()
+          ) {
+            if (
+              // ROLE이 일반 유저면
+              useUserStateStore.getState().role ===
+              UserRoleEnum.ROLE_GENERAL_USER.toString()
+            ) {
+              return <Navigate to={PATH.USER_RECOMMEND} />;
+            } else if (
+              // ROLE이 센터면
+              useUserStateStore.getState().role ===
+              UserRoleEnum.ROLE_CENTER.toString()
+            ) {
+              return <Navigate to={PATH.CREATE_CENTER} />;
+            }
+          }
           return <MainContainer />;
         } else if (cookies.hasViewed === true) {
+          // 액세스 토큰은 없는데 랜딩페이지를 봤으면
           return <Navigate to={PATH.LOGIN} />;
         } else {
-          return <Navigate to={PATH.LANDING} />;
+          return <Navigate to={PATH.LANDING} />; // 액세스 토큰도 없고 랜딩페이지도 안 봤으면
         }
       })(),
       children: [
