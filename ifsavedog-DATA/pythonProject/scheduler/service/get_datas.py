@@ -20,6 +20,9 @@ def get_dog_image_vectors_list(dog_list):
 def get_dogs_by_date(date):
     return next(get_db()).query(Dog).filter(Dog.happen_dt == date).all()
 
+def get_dogs_boot(strform):
+    return next(get_db()).query(Dog).filter(Dog.happen_dt.contains(strform)).all()
+
 def get_user_prefer_image_vector(user_id):
     return get_mongo_db().user_image_vector.find_one({"user_id": user_id})
 
