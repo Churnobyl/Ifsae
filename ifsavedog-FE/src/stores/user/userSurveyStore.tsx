@@ -1,38 +1,32 @@
-import { Step } from '@/types/auth/SignupStepEnum';
-import { UserSignupInputType } from '@/types/auth/UserSignupInputType';
+import { UserSurveyType } from '@/types/user/UserSurveyType';
 import { produce } from 'immer';
 import { StateCreator, create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 const middlewares = (f: StateCreator<State & Setters>) =>
-  devtools(immer(f), { name: 'signupStore' });
+  devtools(immer(f), { name: 'userSurveyStore' });
 
 type State = {
-  userInput: UserSignupInputType;
+  userInput: UserSurveyType;
 };
 
 type Setters = {
-  setStep: (step: Step) => void;
-  setUserInput: (userInput: Partial<UserSignupInputType>) => void;
+  setUserInput: (userInput: Partial<UserSurveyType>) => void;
 };
 
 const useUserSurveyStore = create<State & Setters>()(
   middlewares((set) => ({
     userInput: {
-      step: Step.이메일,
-      email: '',
-      password: '',
-      nickname: '',
-      role: -1,
-      authNumber: '',
+      exerciseScore: -1,
+      barkingTolerance: -1,
+      groomingEffort: -1,
+      preferredSize: -1,
+      cohabitationWithOtherDogs: -1,
+      exerciseLevel: -1,
+      trainingExperience: -1,
+      childFriendliness: -1,
     },
-    setStep: (step) =>
-      set((state) =>
-        produce(state, (draft) => {
-          draft.userInput.step = step;
-        }),
-      ),
     setUserInput: (userInput) =>
       set((state) =>
         produce(state, (draft) => {
