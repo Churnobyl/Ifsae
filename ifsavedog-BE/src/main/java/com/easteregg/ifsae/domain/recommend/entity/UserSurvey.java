@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.recommend.entity;
 
+import com.easteregg.ifsae.domain.recommend.dto.UserSurveyRequest;
 import com.easteregg.ifsae.domain.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class UserSurvey {
     private User user;
 
     // 1. 운동 시간
-    private int exerciseScore; // 예: 1점 = 30분 이하, 5점 = 2시간 이상
+    private int exerciseTime; // 예: 1점 = 30분 이하, 5점 = 2시간 이상
 
     // 2. 짖는 정도
     private int barkingTolerance; // 예: 1점 = 조용해야함, 5점 = 상관없음
@@ -51,4 +52,28 @@ public class UserSurvey {
     // 8. 아이와의 친화력
     private int childFriendliness; // 예: 1점 = 아이와 상호작용 어려움, 5점 = 매우 친화적
 
+    public static UserSurvey from(User user, UserSurveyRequest userSurveyRequest) {
+        return new UserSurvey().builder()
+                               .user(user)
+                               .exerciseTime(userSurveyRequest.getExerciseTime())
+                               .barkingTolerance(userSurveyRequest.getBarkingTolerance())
+                               .groomingEffort(userSurveyRequest.getGroomingEffort())
+                               .preferredSize(userSurveyRequest.getPreferredSize())
+                               .cohabitationWithOtherDogs(userSurveyRequest.getCohabitationWithOtherDogs())
+                               .exerciseLevel(userSurveyRequest.getExerciseLevel())
+                               .trainingExperience(userSurveyRequest.getTrainingExperience())
+                               .childFriendliness(userSurveyRequest.getChildFriendliness())
+                               .build();
+    }
+
+    public void update(UserSurveyRequest userSurveyRequest) {
+        this.exerciseTime = userSurveyRequest.getExerciseTime();
+        this.barkingTolerance = userSurveyRequest.getBarkingTolerance();
+        this.groomingEffort = userSurveyRequest.getGroomingEffort();
+        this.preferredSize = userSurveyRequest.getPreferredSize();
+        this.cohabitationWithOtherDogs = userSurveyRequest.getCohabitationWithOtherDogs();
+        this.exerciseLevel = userSurveyRequest.getExerciseLevel();
+        this.trainingExperience = userSurveyRequest.getTrainingExperience();
+        this.childFriendliness = userSurveyRequest.getChildFriendliness();
+    }
 }
