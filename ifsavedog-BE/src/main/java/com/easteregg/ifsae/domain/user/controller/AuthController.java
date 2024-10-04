@@ -3,6 +3,7 @@ package com.easteregg.ifsae.domain.user.controller;
 import com.easteregg.ifsae.domain.user.dto.EmailAuthRequest;
 import com.easteregg.ifsae.domain.user.dto.FindPasswordRequest;
 import com.easteregg.ifsae.domain.user.dto.SigninDto;
+import com.easteregg.ifsae.domain.user.dto.SigninDto.Response;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.VerifyEmailCodeRequest;
 import com.easteregg.ifsae.domain.user.service.AuthService;
@@ -10,6 +11,7 @@ import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +29,12 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<SigninDto.Response> signin(@RequestBody SigninDto.Request request) {
         log.info("signin");
-        return ResponseEntity.ok(authService.signin(request.getEmail(), request.getPassword()));
+        Response signinResponse = authService.signin(request.getEmail(), request.getPassword());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + signinResponse.getAccessToken());
+
+        return ResponseEntity.ok().headers(headers).body(signinResponse);
     }
 
     @PostMapping("/signup")

@@ -19,4 +19,8 @@ export const PATH = {
   SIGNUP: '/signup',
   /** 회원가입 결과 페이지 */
   SIGNUP_RESULT: '/signup-result',
+
+  /** 유저 마이페이지 */
+  USER_MYPAGE: '/mypage/user',
+  CENTER_MYPAGE: '/mypage/center',
 };

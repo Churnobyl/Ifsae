@@ -23,9 +23,10 @@ export default {
       base: '#E8AA8C',
       red: '#FF3939',
       subBase: '#FCFAEB',
-      main: '#DAEA94', // Main Color
-      gray: '#EFEFEF',
-      lightGray: '#969696',
+      main: '#DAEA94',
+      lightGray: '#EFEFEF',
+      whiteGray: '#F5F5F5',
+      gray: '#969696',
       lightBlue: '#CCE5FF',
       pointGreen: '#26CB1D',
       pointBlue: '#3370EA',
@@ -36,7 +37,7 @@ export default {
   },
   plugins: [
     fluid,
-    scrollbarHide, 
+    scrollbarHide,
     function ({ addBase, theme }) {
       addBase({
         ':root': {
