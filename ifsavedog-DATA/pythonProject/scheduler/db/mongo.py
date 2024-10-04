@@ -1,10 +1,9 @@
 import os
 from pymongo import MongoClient
+from settings import config
 
-mongo_url = os.getenv('MONGO_URL')
-db_name = os.getenv('MONGO_DBNAME')    
-serviceKey = os.getenv('SERVICE_KEY')
-
+mongo_url = config.MONGO_URL
+db_name = config.MONGO_DBNAME
 # MongoDB 클라이언트 생성
 
 client = MongoClient(mongo_url)
