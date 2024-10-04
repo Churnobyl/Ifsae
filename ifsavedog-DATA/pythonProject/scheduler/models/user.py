@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,3 +10,21 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     nickname = Column(String, index=True)
     email = Column(String, unique=True, index=True)
+
+    user_survey = relationship("UserSurvey", back_populates="user")
+
+class UserSurvey(Base):
+        __tablename__ = "user_survey"
+
+        id = Column(Integer, primary_key=True, index=True)
+        barking_tolerance = Column(Integer)
+        child_friendliness = Column(Integer)
+        cohabitation_with_other_dogs = Column(Integer)
+        exercise_level = Column(Integer)
+        exercise_score = Column(Integer)
+        grooming_effort = Column(Integer)
+        preferred_size = Column(Integer)
+        training_experience = Column(Integer)
+        user_id = Column(Integer, ForeignKey("user.id"))
+        
+        user = relationship("User", back_populates="user_survey")
