@@ -25,8 +25,8 @@ def get_data() :
     qp = {
         # "bgnde": today.strftime('%Y%m%d'),
         # "endde": today.strftime('%Y%m%d'),            
-        "bgnde": "20241001",
-        "endde": "20241002",
+        "bgnde": "20240516",
+        "endde": "20240531",
         "pageNo": 1,
         "state" : "protect",
         "numOfRows": "1000",    
@@ -54,12 +54,12 @@ def preprocess_data(df) :
     # api에서 가져올 때 중복 데이터 제거
     df = df.drop_duplicates(subset='desertionNo', keep='last')
     # nan 값을 none으로 변경(데이터베이스에 넣기 위해)
-    df = df.where(pd.notnull(df), None)
+    # df = df.where(pd.notnull(df), None)
     
     # 'species'가 '개'인 데이터만 추출
     df['species'] = df['kindCd'].str.extract(r'\[(.*?)\]')
     df = df[df['species'] == '개']
-    
+    print(df)
     # 데이터 전처리        
     df_dog = pd.DataFrame()
     df_dog['age'] = datetime.datetime.now().year-df['age'].str.extract(r'(\d{4})').astype(int)+1
@@ -71,6 +71,7 @@ def preprocess_data(df) :
     df_dog['species_name'] = df['kindCd'].str.extract(r'\](.*)')
     df_dog['species_name'] = df_dog['species_name'].str.strip()
     df_dog['desertion_no'] = df['desertionNo']
+    df_dog['happenDt'] = df['happenDt']
     df_dog['image'] = df['popfile']
     df_dog['dir'] = "./image/" + df['happenDt'] + "_" + df['desertionNo'] + ".jpg"
     df_dog['info'] = df['specialMark']
@@ -86,6 +87,8 @@ def preprocess_data(df) :
             '라라', '로로', '미리', '예삐', '감자', '공주', '까미', '나나', '이슬', '자두',
             '햇님', '슈미', '샛별', '로미'})
     df_dog['name'] = [random.choice(name) for i in range(len(df))]
+    df_dog = df_dog.dropna()
+    print(df_dog)
     return df_dog
 ## 데이터 전처리 함수 끝 ##
 
@@ -100,6 +103,7 @@ def is_exist_data(db, df) :
     for _, row in df.iterrows():
         dog = db.query(Dog).filter(Dog.desertion_no == row['desertion_no']).first()
         if dog:
+            print("exist data"+dog.desertion_no)
             return True
     return False
 ## 데이터 중복 확인 끝 ##
@@ -107,17 +111,23 @@ def is_exist_data(db, df) :
 ## 데이터 삽입 시작 ##
 def insert_data_to_sql(db, df) :     
     for _, row in df.iterrows():
+        dog = db.query(Dog).filter(Dog.desertion_no == row['desertion_no']).first()
+        if dog:
+            # print("exist data"+dog.desertion_no)
+            continue
         dog = Dog(
             age=row['age'],
             dog_status=row['dog_status'],
             gender=row['gender'],
             species_name=row['species_name'],
             desertion_no=row['desertion_no'],
+            happen_dt=row['happenDt'],
             image=row['image'],
             dir=row['dir'],
             info=row['info'],
             name=row['name']
             )
+        print("new data"+dog.desertion_no)
         db.add(dog)
     db.commit()
 ## 데이터 삽입 끝 ##
