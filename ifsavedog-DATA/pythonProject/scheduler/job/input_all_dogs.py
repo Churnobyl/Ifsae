@@ -1,4 +1,4 @@
-from service.inputMongo import *
+from service.insert_dog_datas import *
 from db.maria import *
 import pandas as pd
 
