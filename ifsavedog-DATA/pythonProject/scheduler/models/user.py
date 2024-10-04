@@ -21,7 +21,7 @@ class UserSurvey(Base):
         child_friendliness = Column(Integer)
         cohabitation_with_other_dogs = Column(Integer)
         exercise_level = Column(Integer)
-        exercise_score = Column(Integer)
+        exercise_time = Column(Integer)
         grooming_effort = Column(Integer)
         preferred_size = Column(Integer)
         training_experience = Column(Integer)

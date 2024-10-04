@@ -53,7 +53,7 @@ def calculate_weighted_euclidean_distance(row, df_user, weight):
         (weight["털 관리 정도"] * (row["털 관리 정도"] - df_user["grooming_effort"])) ** 2 +
         (weight["크기"] * (row["크기"] - df_user["preferred_size"])) ** 2 +
         (weight["공동생활"] * (row["공동생활"] - df_user["cohabitation_with_other_dogs"])) ** 2+
-        (weight["운동 요구량"] * (row["운동 요구량"] - df_user["exercise_score"])) ** 2+
+        (weight["운동 요구량"] * (row["운동 요구량"] - df_user["exercise_time"])) ** 2+
         (weight["훈련 용이성"] * (row["훈련 용이성"] - df_user["training_experience"])) ** 2+
         (weight["아이와의 친화력"] * (row["아이와의 친화력"] - df_user["child_friendliness"])) ** 2
     )
