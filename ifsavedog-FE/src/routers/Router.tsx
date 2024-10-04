@@ -12,6 +12,8 @@ import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
 import MyPage from '@/pages/MyPage';
 import SearchPage from '@/pages/SearchPage';
+import UserMyPage from '@/pages/UserMyPage';
+import CenterMyPage from '@/pages/CenterMyPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
 import { useEffect } from 'react';
@@ -61,6 +63,20 @@ const Router = () => {
         },
       ],
     },
+
+    {
+      path: PATH.USER_MYPAGE,
+      element: <UserMyPage />,
+    },
+    {
+      path: PATH.CENTER_MYPAGE,
+      element: <CenterMyPage />,
+    },
+    {
+      path: PATH.MYPAGE.slice(1),
+      element: <MyPage />,
+    },
+
     {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
@@ -89,10 +105,6 @@ const Router = () => {
         {
           path: PATH.SEARCH.slice(1),
           element: <SearchPage />,
-        },
-        {
-          path: PATH.MYPAGE.slice(1),
-          element: <MyPage />,
         },
       ],
     },

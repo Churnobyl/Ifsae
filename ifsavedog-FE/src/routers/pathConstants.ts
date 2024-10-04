@@ -23,4 +23,7 @@ export const PATH = {
   FOLLOW: '/follow', 
   /** 훠원 목록 페이지 */
   DONATION: '/donation',
+  /** 유저 마이페이지 */
+  USER_MYPAGE: '/mypage/user',
+  CENTER_MYPAGE: '/mypage/center',
 };

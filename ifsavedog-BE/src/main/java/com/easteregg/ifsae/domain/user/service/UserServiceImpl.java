@@ -1,6 +1,10 @@
 package com.easteregg.ifsae.domain.user.service;
 
 import com.amazonaws.AmazonServiceException;
+import com.easteregg.ifsae.domain.shelter.dto.ShelterDetailDto;
+import com.easteregg.ifsae.domain.shelter.entity.Shelter;
+import com.easteregg.ifsae.domain.shelter.entity.ShelterUser;
+import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
@@ -32,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ShelterUserRepository shelterUserRepository;
     private final HousingTypeRepository housingTypeRepository;
     private final UserProfileRepository userProfileRepository;
     private final S3ImageUploader s3ImageUploader;
@@ -87,9 +92,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                             .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+                            .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
-
 
     @Override
     public void updateUserBasicInfo(UpdateUserBasicInfoDto updateUserBasicInfoDto, User user) {
@@ -126,7 +130,7 @@ public class UserServiceImpl implements UserService {
                 user.setProfileImgUrl(newImgUrl);
                 userRepository.save(user);
             }
-        } catch (AmazonServiceException e){
+        } catch (AmazonServiceException e) {
             throw new UserException(ErrorCode.FAILED_TO_UPLOAD_PROFILE_IMG);
         }
     }
@@ -134,6 +138,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public ShelterDetailDto getMyShelter(long userId) {
+        ShelterUser shelterUser = shelterUserRepository.findByUserId(userId)
+                                                       .orElseThrow(
+                                                               () -> new UserException(ErrorCode.SHELTER_NOT_FOUND));
+
+        Shelter shelter = shelterUser.getShelter();
+
+        return ShelterDetailDto.builder()
+                               .id(shelter.getId())
+                               .name(shelter.getName())
+                               .address(shelter.getAddress())
+                               .phone(shelter.getPhone())
+                               .content(shelter.getContent())
+                               .canBeDonated(shelter.isCanBeDonated())
+                               .build();
     }
 
     private void deleteOldProfileImg(String profileImgUrl) {
