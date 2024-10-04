@@ -15,7 +15,7 @@ const UserRecommendPage = () => {
   return (
     <div>
       {questionList.map((question) => (
-        <Question />
+        <Question question={question} />
       ))}
     </div>
   );

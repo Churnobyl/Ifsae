@@ -5,7 +5,7 @@ import PawIcon from '@/assets/icon/paw-print.svg';
 import { FaHandHoldingHeart } from 'react-icons/fa';
 
 const CenterMyPage = () => {
-  const centerId = 12345678;
+  // const centerId = 12345678;
   const centerName = '임시 보호소 이름';
   const address = '서울특별시 강남구 언주로99길 33';
   const phoneNum = '010-0000-0000';

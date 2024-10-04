@@ -93,14 +93,14 @@ const AdoptionPage = () => {
     window.addEventListener('resize', handleCheckScrollability);
     return () => {
       window.removeEventListener('resize', handleCheckScrollability);
-      if (recommenedRef.current) {
-        recommenedRef.current.removeEventListener(
+      if (recommenedRef!.current) {
+        recommenedRef!.current.removeEventListener(
           'scroll',
           handleCheckScrollability,
         );
       }
-      if (followRef.current) {
-        followRef.current.removeEventListener(
+      if (followRef!.current) {
+        followRef!.current.removeEventListener(
           'scroll',
           handleCheckScrollability,
         );
