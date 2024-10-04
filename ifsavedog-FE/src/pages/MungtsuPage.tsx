@@ -1,5 +1,11 @@
+import MungtsuBox from '@/components/mungtsu/MungtsuBox';
+
 const MungtsuPage = () => {
-  return <div>MungtsuPage</div>;
+  return (
+    <div>
+      <MungtsuBox />
+    </div>
+  );
 };
 
 export default MungtsuPage;
