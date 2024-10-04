@@ -1,13 +1,15 @@
 import FollowList from '@/components/follow/FollowItemList';
+import testImage from '@/assets/logo.webp';
 
 const exampleDogList = [
   {
     id: 1,
     name: '루루',
     location: '다리 밑에서 발견',
-    gender: '여',
+    gender: '중성화',
     breed: '믹스',
-    age: '중성화',
+    age: '1살',
+    image: testImage
   },
   {
     id: 2,
@@ -16,6 +18,7 @@ const exampleDogList = [
     gender: '남',
     breed: '푸들',
     age: '1살',
+    image: testImage
   },
   {
     id: 3,
@@ -24,6 +27,7 @@ const exampleDogList = [
     gender: '여',
     breed: '믹스',
     age: '2살',
+    image: testImage
   },
 ];
 

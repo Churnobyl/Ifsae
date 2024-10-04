@@ -20,5 +20,7 @@ export const PATH = {
   /** 회원가입 결과 페이지 */
   SIGNUP_RESULT: '/signup-result',
   /** 팔로우 목록 페이지 */
-  FOLLOW: '/follow'
+  FOLLOW: '/follow', 
+  /** 훠원 목록 페이지 */
+  DONATION: '/donation',
 };

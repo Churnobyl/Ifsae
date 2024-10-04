@@ -1,11 +1,10 @@
-import TestImage from '@/assets/logo.webp';
-
 interface Dog {
   name: string;
   location: string;
   gender: string;
   breed: string;
   age: string;
+  image: string;
 }
 
 interface FollowItem {
@@ -16,7 +15,7 @@ const FollowItem = ({ dog }: FollowItem) => {
   return (
     <div className="relative p-4 rounded-lg shadow-md flex items-center space-x-4 bg-base">
       <img
-        src={TestImage}
+        src={dog.image}
         alt={dog.name}
         className="w-12 h-12 rounded-full object-cover"
       />

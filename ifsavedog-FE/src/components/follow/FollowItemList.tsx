@@ -7,6 +7,7 @@ interface Dog {
   gender: string;
   breed: string;
   age: string;
+  image: string;
 }
 
 interface FollowList {
