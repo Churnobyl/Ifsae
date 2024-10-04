@@ -1,5 +1,6 @@
 package com.easteregg.ifsae.domain.user.service;
 
+import com.easteregg.ifsae.domain.shelter.dto.ShelterDetailDto;
 import com.easteregg.ifsae.domain.user.dto.SignupDto;
 import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.dto.UserInfo;
@@ -29,5 +30,7 @@ public interface UserService {
     void updateUserProfileImg(User user, MultipartFile profileImg) throws IOException;
 
     void saveUser(User user);
+
+    ShelterDetailDto getMyShelter(long userId);
 }
 

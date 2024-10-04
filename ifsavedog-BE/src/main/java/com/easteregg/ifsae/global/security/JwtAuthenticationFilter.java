@@ -32,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("[doFilterInternal] : accessToken이 유효합니다.");
             // 1. SecurityContextHolder에 인증정보 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            response.setHeader("Authorization", "Bearer " + token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (token != null && !jwtTokenProvider.validateTokenExpiration(token)) {
             log.info("[doFilterInternal] : accessToken이 만료되었습니다.");
