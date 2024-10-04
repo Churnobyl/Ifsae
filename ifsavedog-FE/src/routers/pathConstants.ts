@@ -19,7 +19,10 @@ export const PATH = {
   SIGNUP: '/signup',
   /** 회원가입 결과 페이지 */
   SIGNUP_RESULT: '/signup-result',
-
+  /** 팔로우 목록 페이지 */
+  FOLLOW: '/follow', 
+  /** 훠원 목록 페이지 */
+  DONATION: '/donation',
   /** 유저 마이페이지 */
   USER_MYPAGE: '/mypage/user',
   CENTER_MYPAGE: '/mypage/center',

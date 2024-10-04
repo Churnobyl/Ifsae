@@ -2,7 +2,9 @@ import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
+import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
@@ -105,6 +107,16 @@ const Router = () => {
           element: <SearchPage />,
         },
       ],
+    },
+    {
+      path: PATH.FOLLOW,
+      errorElement: <NotFoundPage />,
+      element: <FollowPage />,
+    },
+    {
+      path: PATH.DONATION,
+      errorElement: <NotFoundPage />,
+      element: <DonationPage />,
     },
   ];
 
