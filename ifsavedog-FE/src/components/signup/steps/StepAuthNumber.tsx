@@ -34,8 +34,8 @@ const StepAuthNumber = ({
             'rounded-md',
             'border-none',
             {
-              disabled: isAuthed,
-              'bg-lightGray': isAuthed,
+              '!disabled': isAuthed,
+              '!bg-lightGray': isAuthed,
               'bg-main': !isAuthed,
             },
           )}
