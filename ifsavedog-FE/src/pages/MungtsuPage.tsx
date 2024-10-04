@@ -2,7 +2,7 @@ import MungtsuBox from '@/components/mungtsu/MungtsuBox';
 
 const MungtsuPage = () => {
   return (
-    <div>
+    <div className={'flex w-full h-full'}>
       <MungtsuBox />
     </div>
   );

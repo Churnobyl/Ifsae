@@ -1,11 +1,11 @@
 const MungtsuBox = () => {
   return (
-    <div>
-      <div className={'z-0 w-full flex justify-center items-center'}>
+    <div className={'w-full h-full'}>
+      <div className={'z-0 w-full h-full flex justify-center items-center'}>
         비디오
       </div>
-      <div className={'z-10 flex items-center justify-center'}>
-        <div>
+      <div className={'z-10 w-full h-full flex items-end justify-center'}>
+        <div className="flex items-center">
           <div>
             <div>요양소 아이콘</div>
             <div>요양소 이름</div>
