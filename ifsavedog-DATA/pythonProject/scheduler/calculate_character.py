@@ -21,13 +21,12 @@ def calculate_character_score():
   db = client[db_name]
   collection = db['test']
 
+def calculate_character_score():
   result = collection.find({"happenDt" : "20240930", "species" : "개"},{"_id" : 0, "popfile":1, "desertionNo":1})
 
   final_df = pd.DataFrame()
   for i in result:
-    image_path = i['popfile']
-    print(image_path)
-    
+    image_path = i['popfile']    
     response = requests.get(image_path)
     try:
       image = Image.open(BytesIO(response.content))
