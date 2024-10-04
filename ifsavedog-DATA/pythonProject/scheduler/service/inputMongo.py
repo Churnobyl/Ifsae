@@ -25,7 +25,7 @@ def get_data() :
     qp = {
         # "bgnde": today.strftime('%Y%m%d'),
         # "endde": today.strftime('%Y%m%d'),            
-        "bgnde": "20241002",
+        "bgnde": "20241001",
         "endde": "20241002",
         "pageNo": 1,
         "state" : "protect",
@@ -69,9 +69,10 @@ def preprocess_data(df) :
     df_dog.loc[df['sexCd'] == 'M', 'gender'] = 0
     df_dog.loc[~df['sexCd'].isin(['F', 'M']), 'gender'] = None
     df_dog['species_name'] = df['kindCd'].str.extract(r'\](.*)')
+    df_dog['species_name'] = df_dog['species_name'].str.strip()
     df_dog['desertion_no'] = df['desertionNo']
     df_dog['image'] = df['popfile']
-    df_dog['dir'] = "image/dog/20251225_49.jpg"
+    df_dog['dir'] = "./image/" + df['happenDt'] + "_" + df['desertionNo'] + ".jpg"
     df_dog['info'] = df['specialMark']
     name = list({'해피', '초코', '송이', '코코', '마루', '밀키', '토리', '구름', '단추', 
             '루키', '모카', '제로', '담이', '레오', '토피', '보노', '카이', '미르', '샌디',
