@@ -4,7 +4,6 @@ import com.easteregg.ifsae.domain.dog.entity.Dog;
 import com.easteregg.ifsae.domain.recommend.entity.UserDogRating;
 import com.easteregg.ifsae.domain.recommend.repository.UserDogRatingRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,23 +14,8 @@ public class UserDogRatingServiceImpl implements UserDogRatingService {
 
     private final UserDogRatingRepository userDogRatingRepository;
 
-    @Override
-    public void createRating(User user, Dog dog) {
-        Optional<UserDogRating> userDogRating = userDogRatingRepository.findUserDogRatingsByUserIdAndDogId(user.getId(),
-                                                                                                           dog.getId());
-        if (userDogRating.isPresent()) {
-            return;
-        }
-
-        UserDogRating dogRating = UserDogRating.builder()
-                                               .user(user)
-                                               .dog(dog)
-                                               .build();
-        userDogRatingRepository.save(dogRating);
-    }
-
-    /*  changeRating
-     *  유저의 강아지 선호도를 변경하는 메소드
+    /*  createRating
+     *  유저의 강아지 선호도를 추가하는 메소드
      *
      *  @param userId 유저 ID(PK)
      *  @param dogId 강아지 ID(PK)
@@ -39,14 +23,20 @@ public class UserDogRatingServiceImpl implements UserDogRatingService {
      *               DEFAULT : 0   팔로우 : 5   영상 좋아요 : 2
      */
     @Override
-    public void changeRating(Long userId, Long dogId, int score) {
-        UserDogRating userDogRating = userDogRatingRepository.findUserDogRatingsByUserIdAndDogId(userId, dogId)
-                                                             .orElseThrow(
-                                                                     NoSuchElementException::new);
+    public void createRating(User user, Dog dog, int score) {
+        Optional<UserDogRating> currUserDogRating = userDogRatingRepository.findUserDogRatingsByUserIdAndDogId(
+                user.getId(), dog.getId());
 
-        userDogRating.updateScore(score);
+        if (currUserDogRating.isPresent()) {
+            UserDogRating userDogRating = currUserDogRating.get();
+            userDogRating.updateScore(score);
+            userDogRatingRepository.save(userDogRating);
+        } else {
+            UserDogRating userDogRating = new UserDogRating(user, dog, score);
+            userDogRatingRepository.save(userDogRating);
 
-        userDogRatingRepository.save(userDogRating);
+        }
+
     }
 
 }

@@ -5,8 +5,6 @@ import com.easteregg.ifsae.domain.user.entity.User;
 
 public interface UserDogRatingService {
 
-    void createRating(User user, Dog dog);
-
-    void changeRating(Long userId, Long dogId, int score);
+    void createRating(User user, Dog dog, int score);
 
 }
