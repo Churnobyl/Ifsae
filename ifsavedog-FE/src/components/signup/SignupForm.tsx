@@ -87,6 +87,8 @@ const SignupForm = () => {
    * 인증번호 로직
    */
   const handleAuthNumber = useCallback(async () => {
+    if (isAuthed) return; // 이미 인증됐다면 패스
+
     try {
       setErrMessage('');
       setIsAuthSendPending(true);
@@ -106,7 +108,7 @@ const SignupForm = () => {
     } finally {
       setIsAuthSendPending(false);
     }
-  }, [signupStore]);
+  }, [isAuthed, signupStore]);
 
   /**
    * 회원가입 로직
