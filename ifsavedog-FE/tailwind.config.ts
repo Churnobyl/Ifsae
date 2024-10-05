@@ -20,6 +20,7 @@ export default {
     colors: {
       white: '#fff',
       black: '#4D4637',
+      veryBlack: '#000000',
       base: '#F9F6E3',
       darkbase: '#98764F',
       red: '#FF3939',
