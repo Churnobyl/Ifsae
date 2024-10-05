@@ -44,4 +44,5 @@ export const PATH = {
   DOG_DETAIL: '/dog',
   
   USER_PROFILE_EDIT: '/mypage/edit-profile',
+  CENTER_PROFILE_EDIT: '/mypage/center/edit-profile',
 };
