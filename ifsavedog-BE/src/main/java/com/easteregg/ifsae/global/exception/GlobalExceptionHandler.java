@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(AdoptionException.class)
+    protected ResponseEntity<ErrorResponse> handleAdoptionExceptionException(AdoptionException e) {
+        log.error("[CustomSecurityException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
 
     @ExceptionHandler(CustomSecurityException.class)
     protected ResponseEntity<ErrorResponse> handleCustomSecurityException(CustomSecurityException e) {
@@ -43,6 +48,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShelterUserException.class)
     protected ResponseEntity<ErrorResponse> handleShelterUserException(ShelterUserException e) {
+        log.error("[ShelterUserException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(DonationException.class)
+    protected ResponseEntity<ErrorResponse> handleDonationException(DonationException e) {
         log.error("[ShelterUserException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
