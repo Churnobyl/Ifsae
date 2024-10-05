@@ -39,5 +39,6 @@ export const PATH = {
   /** 비디오 미리보기 카드 */
   VIDEO_LIST: '/video',
   USER_LIKE_VIDEO: '/mypage/like-video',
-  USER_PROFILE_EDIT: '/mypage/edit-profile',
+  USER_PROFILE_EDIT: '/mypage/user/edit-profile',
+  CENTER_PROFILE_EDIT: '/mypage/center/edit-profile',
 };
