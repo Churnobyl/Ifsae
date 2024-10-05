@@ -57,14 +57,13 @@ public class AdoptionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //TODO : 입양 신청 수락 로직
-//    @PutMapping("/accept/{adoptionId}")
-//    public ResponseEntity<CommonSuccessResponse> acceptAdoption(@AuthenticationPrincipal User user,
-//                                                                @PathVariable Long adoptionId) {
-//        adoptionService.rejectAdoption(user, adoptionId);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PutMapping("/accept/{adoptionId}")
+    public ResponseEntity<CommonSuccessResponse> acceptAdoption(@AuthenticationPrincipal User user,
+                                                                @PathVariable Long adoptionId) {
+        adoptionService.acceptAdoption(user, adoptionId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PutMapping("/reject/{adoptionId}")
     public ResponseEntity<CommonSuccessResponse> rejectAdoption(@AuthenticationPrincipal User user,
