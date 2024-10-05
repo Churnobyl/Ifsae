@@ -29,8 +29,8 @@ export const PATH = {
   CREATE_CENTER: '/center/create-center',
 
   /** 센터 강아지 리스트 페이지 */
-  CENTER_DOG_LIST: '/MyDogList', 
-  CENTER_DONATION_LIST: '/CenterDonationList', 
+  CENTER_DOG_LIST: '/MyDogList',
+  CENTER_DONATION_LIST: '/CenterDonationList',
 
   /** 유저 마이페이지 */
   USER_MYPAGE: '/mypage/user',
@@ -42,4 +42,6 @@ export const PATH = {
   
   /** 강아지 상세 페이지 */
   DOG_DETAIL: '/dog',
+  
+  USER_PROFILE_EDIT: '/mypage/edit-profile',
 };

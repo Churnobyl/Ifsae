@@ -20,6 +20,7 @@ export default {
     colors: {
       white: '#fff',
       black: '#4D4637',
+      veryBlack: '#000000',
       base: '#F9F6E3',
       darkbase: '#98764F',
       red: '#FF3939',
@@ -31,6 +32,7 @@ export default {
       lightBlue: '#CCE5FF',
       pointGreen: '#26CB1D',
       pointBlue: '#3370EA',
+      hoverGreen: '#B6D96E',
       transparent: 'transparent',
     },
     fontSize,

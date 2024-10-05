@@ -18,4 +18,6 @@ public interface PostService {
 
     void update(User user, Long postId, PostDto.UpdateRequest request);
     void delete(User user, Long postId);
+
+    Slice<PostDto.Response> getMungtsuNext(User user, Pageable pageable);
 }

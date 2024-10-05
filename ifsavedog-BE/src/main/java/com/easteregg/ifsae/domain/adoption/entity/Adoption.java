@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.adoption.entity;
 
 import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.type.AdoptionStatus;
 import com.easteregg.ifsae.domain.dog.entity.Dog;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.domain.user.entity.User;
@@ -45,15 +46,14 @@ public class Adoption {
     @NotNull
     private String absencePlan;
 
-    private boolean isChecked;
+    private AdoptionStatus adoptionStatus;
 
-    public void check() {
-        this.isChecked = true;
+    public void updateAdoptionStatus(AdoptionStatus adoptionStatus) {
+        this.adoptionStatus = adoptionStatus;
     }
 
     public void updateAdoption(AdoptionUpdateRequest adoptionUpdateRequest) {
         this.adoptionPurpose = adoptionUpdateRequest.getAdoptionPurpose();
         this.absencePlan = adoptionUpdateRequest.getAbsencePlan();
     }
-
 }

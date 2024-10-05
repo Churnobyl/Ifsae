@@ -4,6 +4,7 @@ import DogPreview from '@/components/common/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
+<<<<<<< HEAD
 
 interface Dog {
   id: number;
@@ -11,6 +12,9 @@ interface Dog {
   age: number;
   image: string;
 }
+=======
+import { DogType } from '@/types/dog/DogType';
+>>>>>>> ead8e1968aa7094bc36a3dc47406c9e3fbc3a897
 
 interface DonationInfo {
   name: string;
@@ -31,7 +35,11 @@ const AdoptionPage = () => {
     },
   ];
 
+<<<<<<< HEAD
   const recommenedList: Dog[] = [
+=======
+  const recommenedList: DogType[] = [
+>>>>>>> ead8e1968aa7094bc36a3dc47406c9e3fbc3a897
     { id: 1, name: '초코', age: 1, image: TestImage },
     { id: 2, name: '코코', age: 2, image: TestImage },
     { id: 3, name: '보리', age: 3, image: TestImage },
@@ -39,7 +47,11 @@ const AdoptionPage = () => {
     { id: 5, name: '말티', age: 5, image: TestImage },
   ];
 
+<<<<<<< HEAD
   const followList: Dog[] = [
+=======
+  const followList: DogType[] = [
+>>>>>>> ead8e1968aa7094bc36a3dc47406c9e3fbc3a897
     { id: 1, name: '초코', age: 1, image: TestImage },
     { id: 2, name: '코코', age: 2, image: TestImage },
     { id: 3, name: '보리', age: 3, image: TestImage },

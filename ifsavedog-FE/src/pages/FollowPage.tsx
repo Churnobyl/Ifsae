@@ -1,5 +1,6 @@
 import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import testImage from '@/assets/logo.webp';
+import { DogDetailType } from '@/types/dog/DogDetailType';
 
 const exampleDogList = [
   {
@@ -8,7 +9,7 @@ const exampleDogList = [
     location: '다리 밑에서 발견',
     gender: '중성화',
     breed: '믹스',
-    age: '1살',
+    age: 1,
     image: testImage,
   },
   {
@@ -17,7 +18,7 @@ const exampleDogList = [
     location: '공원에서 발견',
     gender: '남',
     breed: '푸들',
-    age: '1살',
+    age: 1,
     image: testImage,
   },
   {
@@ -26,10 +27,10 @@ const exampleDogList = [
     location: '강가에서 발견',
     gender: '여',
     breed: '믹스',
-    age: '2살',
+    age: 2,
     image: testImage,
   },
-];
+] as DogDetailType[];
 
 const FollowPage = () => {
   return (
