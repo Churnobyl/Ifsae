@@ -1,7 +1,12 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
+import CenterMyPage from '@/pages/CenterMyPage';
+import CreateShelterPage from '@/pages/CreateShelterPage';
+import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
@@ -9,8 +14,13 @@ import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
 import MyPage from '@/pages/MyPage';
 import SearchPage from '@/pages/SearchPage';
+import UserMyPage from '@/pages/UserMyPage';
+import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
+import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import {
@@ -19,6 +29,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import VideoList from '@/components/video/VideoList';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -26,9 +37,9 @@ const Router = () => {
 
   useEffect(() => {
     if (cookies.hasViewed === undefined) {
-      setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, 'false', {
+      setCookie(config.cookieNameForLandingPage, 'false', {
         path: '/',
-        maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
+        maxAge: config.cookieMaxAge,
       });
     }
   }, [cookies.hasViewed, setCookie]);
@@ -59,15 +70,62 @@ const Router = () => {
       ],
     },
     {
+      path: PATH.USER_RECOMMEND,
+      element: <UserRecommendPage />,
+    },
+    {
+      path: PATH.CREATE_CENTER,
+      element: <CreateShelterPage />,
+    },
+
+    {
+      path: PATH.USER_MYPAGE,
+      element: <UserMyPage />,
+    },
+    {
+      path: PATH.CENTER_MYPAGE,
+      element: <CenterMyPage />,
+    },
+    {
+      path: PATH.MYPAGE,
+      element: <MyPage />,
+    },
+    {
+      path: PATH.VIDEO_LIST,
+      element: <VideoList />,
+    },
+
+    {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
       element: (() => {
+        // 액세스 토큰이 있으면
         if (accessToken) {
+          if (
+            // 근데 유저 상태가 PENDING이면
+            useUserStateStore.getState().userStatus ===
+            UserStatusEnum.PENDING.toString()
+          ) {
+            if (
+              // ROLE이 일반 유저면
+              useUserStateStore.getState().role ===
+              UserRoleEnum.ROLE_GENERAL_USER.toString()
+            ) {
+              // return <Navigate to={PATH.USER_RECOMMEND} />;
+            } else if (
+              // ROLE이 센터면
+              useUserStateStore.getState().role ===
+              UserRoleEnum.ROLE_CENTER.toString()
+            ) {
+              return <Navigate to={PATH.CREATE_CENTER} />;
+            }
+          }
           return <MainContainer />;
         } else if (cookies.hasViewed === true) {
+          // 액세스 토큰은 없는데 랜딩페이지를 봤으면
           return <Navigate to={PATH.LOGIN} />;
         } else {
-          return <Navigate to={PATH.LANDING} />;
+          return <Navigate to={PATH.LANDING} />; // 액세스 토큰도 없고 랜딩페이지도 안 봤으면
         }
       })(),
       children: [
@@ -87,11 +145,17 @@ const Router = () => {
           path: PATH.SEARCH.slice(1),
           element: <SearchPage />,
         },
-        {
-          path: PATH.MYPAGE.slice(1),
-          element: <MyPage />,
-        },
       ],
+    },
+    {
+      path: PATH.FOLLOW,
+      errorElement: <NotFoundPage />,
+      element: <FollowPage />,
+    },
+    {
+      path: PATH.DONATION,
+      errorElement: <NotFoundPage />,
+      element: <DonationPage />,
     },
   ];
 
