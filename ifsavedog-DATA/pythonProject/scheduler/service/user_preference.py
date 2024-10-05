@@ -27,7 +27,7 @@ def set_user_prefer_image_vector(user_id):
 
     pass
 
-def calc_cos_similarity(user_id, dog_vector_list=None):
+def rank_cos_similarity(user_id, dog_vector_list=None):
     # mongo db 접근.
     # 코사인 유사도 계산
     # 
@@ -44,6 +44,6 @@ def calc_cos_similarity(user_id, dog_vector_list=None):
         similarlityDict[dog['id']] = (dog['desertion_no'], cos_sim(np.array(user_prefer_vect), np.array(dog['image_vector'])))
     
     
-    ranking = sorted([(k, *similarlityDict[k]) for k in similarlityDict], key=lambda x : x[2], reverse=True)
+    ranking = sorted([(k, *similarlityDict[k]) for k in similarlityDict], key=lambda x : x[2], reverse=True)[2000]
     return ranking
     

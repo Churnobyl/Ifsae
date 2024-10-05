@@ -8,5 +8,5 @@ def set_preference_image_vector():
         pass
 
 def rank_image_vector(id): #이름 바꿔야함, 파라미터 없애기
-    rank_list = calc_cos_similarity(id)
+    rank_list = rank_cos_similarity(id)
     insert_image_vector_rank(29, rank_list)
