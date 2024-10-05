@@ -106,13 +106,13 @@ const Router = () => {
               useUserStateStore.getState().role ===
               UserRoleEnum.ROLE_GENERAL_USER.toString()
             ) {
-              return <Navigate to={PATH.USER_RECOMMEND} />;
+              // return <Navigate to={PATH.USER_RECOMMEND} />;
             } else if (
               // ROLE이 센터면
               useUserStateStore.getState().role ===
               UserRoleEnum.ROLE_CENTER.toString()
             ) {
-              return <Navigate to={PATH.CREATE_CENTER} />;
+              // return <Navigate to={PATH.CREATE_CENTER} />;
             }
           }
           return <MainContainer />;
