@@ -1,4 +1,4 @@
-import { DogDetailType } from '@/types/dog/DogDetailTye';
+import { DogDetailType } from '@/types/dog/DogDetailType';
 
 interface DogProps {
   dog: DogDetailType;
