@@ -4,13 +4,7 @@ import DogPreview from '@/components/common/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
-
-interface Dog {
-  id: number;
-  name: string;
-  age: number;
-  image: string;
-}
+import { DogType } from '@/types/dog/DogType';
 
 interface DonationInfo {
   name: string;
@@ -31,7 +25,7 @@ const AdoptionPage = () => {
     },
   ];
 
-  const recommenedList: Dog[] = [
+  const recommenedList: DogType[] = [
     { id: 1, name: '초코', age: 1, image: TestImage },
     { id: 2, name: '코코', age: 2, image: TestImage },
     { id: 3, name: '보리', age: 3, image: TestImage },
@@ -39,7 +33,7 @@ const AdoptionPage = () => {
     { id: 5, name: '말티', age: 5, image: TestImage },
   ];
 
-  const followList: Dog[] = [
+  const followList: DogType[] = [
     { id: 1, name: '초코', age: 1, image: TestImage },
     { id: 2, name: '코코', age: 2, image: TestImage },
     { id: 3, name: '보리', age: 3, image: TestImage },

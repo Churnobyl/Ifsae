@@ -1,15 +1,7 @@
-interface Dog {
-  id: number;
-  name: string;
-  location: string;
-  gender: string;
-  breed: string;
-  age: number;
-  image: string;
-}
+import { DogDetailType } from '@/types/dog/DogDetailTye';
 
 interface DogProps {
-  dog: Dog;
+  dog: DogDetailType;
 }
 
 const DogPreviewCard = ({ dog }: DogProps) => {
