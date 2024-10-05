@@ -1,8 +1,8 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import VideoList from '@/components/video/VideoList';
+import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
-import CenterDonationListPage from '@/pages/CenterDonationListPage';
-import CenterMyPage from '@/pages/CenterMyPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import FollowPage from '@/pages/FollowPage';
@@ -14,7 +14,6 @@ import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
 import MyPage from '@/pages/MyPage';
 import SearchPage from '@/pages/SearchPage';
-import UserMyPage from '@/pages/UserMyPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
@@ -29,7 +28,6 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import VideoList from '@/components/video/VideoList';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -76,19 +74,6 @@ const Router = () => {
     {
       path: PATH.CREATE_CENTER,
       element: <CreateShelterPage />,
-    },
-
-    {
-      path: PATH.USER_MYPAGE,
-      element: <UserMyPage />,
-    },
-    {
-      path: PATH.CENTER_MYPAGE,
-      element: <CenterMyPage />,
-    },
-    {
-      path: PATH.MYPAGE,
-      element: <MyPage />,
     },
     {
       path: PATH.VIDEO_LIST,
@@ -145,7 +130,12 @@ const Router = () => {
         },
         {
           path: PATH.MYPAGE.slice(1),
-          element: <MyPage />,
+          children: [
+            {
+              path: '',
+              element: <MyPage />,
+            },
+          ],
         },
       ],
     },
