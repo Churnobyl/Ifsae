@@ -3,4 +3,4 @@ from job.dog_image import *
 from service.get_datas import *
 
 # print(get_all_users())
-dog_image_vector_by_date('20231001')
+download_dog_image_boot('2024070')
