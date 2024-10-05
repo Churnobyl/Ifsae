@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum DogStatus {
-    NOT_ADOPTED(0), ADOPTED(1);
+    NOT_ADOPTED(0), ADOPTED(1), DEAD(2);
 
     private final int value;
 

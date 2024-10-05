@@ -47,6 +47,12 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
+    @ExceptionHandler(DonationException.class)
+    protected ResponseEntity<ErrorResponse> handleDonationException(DonationException e) {
+        log.error("[ShelterUserException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
     // 추가적인 예외 처리 예시 (예: NullPointerException)
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
