@@ -15,7 +15,7 @@ def get_user_rating(user_id):
     return next(get_db()).query(Rating).filter(Rating.user_id == user_id).all()
 
 def get_dog_image_vectors_list(dog_list):
-    return get_mongo_db().dog_image_vector.find([dog_list]).to_list()
+    return get_mongo_db().dog_image_vector.find(dog_list).to_list()
 
 def get_dogs_by_date(date):
     return next(get_db()).query(Dog).filter(Dog.happen_dt == date).all()

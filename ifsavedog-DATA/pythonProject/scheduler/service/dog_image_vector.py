@@ -17,8 +17,8 @@ def infer_dog_image_vector(dog_list):
         logits = outputs.logits
 
         result_dict[dog.id] = {
-            "desertion_no": dog.desertionNo,
-            "image_vector": logits.detach().numpy()[0]
+            "desertion_no": dog.desertion_no,
+            "image_vector": logits.detach().numpy()[0].tolist()
         }
     
     return result_dict
@@ -32,7 +32,9 @@ def infer_dog_image_vector_by_date(date):
 
 def infer_dog_image_vector_boot(strform):
     dog_list = get_dogs_boot(strform)
+    print(len(dog_list))
     result = infer_dog_image_vector(dog_list)
     
     insert_list = [{"id": v, **result[v]} for v in result]
+    print(len(insert_list))
     insert_dog_image_vector(insert_list)
