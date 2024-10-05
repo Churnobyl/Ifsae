@@ -30,6 +30,7 @@ import {
 } from 'react-router-dom';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import DogDetailPage from '@/pages/DogDetailPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 
@@ -172,6 +173,11 @@ const Router = () => {
       path: PATH.CENTER_DONATION_LIST,
       errorElement: <NotFoundPage />,
       element: <CenterDonationListPage />,
+    },
+    {
+      path: PATH.DOG_DETAIL + '/:id',
+      errorElement: <NotFoundPage />,
+      element: <DogDetailPage />,
     },
   ];
 
