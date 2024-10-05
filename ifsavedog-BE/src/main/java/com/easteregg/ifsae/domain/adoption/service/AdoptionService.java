@@ -11,9 +11,9 @@ import java.util.List;
 public interface AdoptionService {
     void createAdoption(User user, AdoptionCreateRequest adoptionCreateRequest);
 
-    void rejectAdoption(User user, Long adoptionId);
-
     void acceptAdoption(User user, Long adoptionId);
+
+    void rejectAdoption(User user, Long adoptionId);
 
     void updateAdoption(User user, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest);
 
