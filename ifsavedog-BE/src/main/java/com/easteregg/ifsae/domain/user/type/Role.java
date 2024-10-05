@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    ADMIN(0), GENERAL_USER(1);
+    ROLE_GENERAL_USER(0), ROLE_CENTER(1), ROLE_ADMIN(2);
 
     private final int value;
 
@@ -18,4 +18,5 @@ public enum Role {
         }
         throw new IllegalArgumentException("잘못된 값입니다. : " + value);
     }
+
 }

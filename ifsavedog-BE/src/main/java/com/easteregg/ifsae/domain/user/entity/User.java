@@ -1,8 +1,11 @@
 package com.easteregg.ifsae.domain.user.entity;
 
+import com.easteregg.ifsae.domain.follow.entity.Follow;
+import com.easteregg.ifsae.domain.user.dto.UpdateUserBasicInfoDto;
 import com.easteregg.ifsae.domain.user.type.Grade;
 import com.easteregg.ifsae.domain.user.type.Role;
 import com.easteregg.ifsae.domain.user.type.UserStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,13 +14,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Getter
@@ -25,7 +34,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +44,7 @@ public class User {
     private String email;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull
@@ -54,4 +64,42 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Follow> follows;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        collection.add((GrantedAuthority) () -> this.role.toString());
+        collection.add((GrantedAuthority) () -> this.grade.toString());
+        return collection;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    public List<String> getUserRoles() {
+        List<String> roles = new ArrayList<>();
+        roles.add(this.role.toString());
+        roles.add(this.grade.toString());
+        return roles;
+    }
+
+    public void updateUserBasicInfo(UpdateUserBasicInfoDto updateUserBasicInfoDto) {
+        this.nickname = updateUserBasicInfoDto.getNickname();
+        this.role = Role.valueOf(updateUserBasicInfoDto.getRole());
+        this.grade = Grade.valueOf(updateUserBasicInfoDto.getGrade());
+        this.userStatus = UserStatus.valueOf(updateUserBasicInfoDto.getUserStatus());
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void changeUserStatus() {
+        this.userStatus = UserStatus.ACTIVE;
+    }
 }
