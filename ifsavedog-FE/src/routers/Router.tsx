@@ -1,7 +1,9 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
 import AdoptionPage from '@/pages/AdoptionPage';
+import CenterDonationListPage from '@/pages/CenterDonationListPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
@@ -95,9 +97,19 @@ const Router = () => {
       ],
     },
     {
+      path: PATH.FOLLOW,
+      errorElement: <NotFoundPage />,
+      element: <FollowPage />,
+    },
+    {
       path: PATH.CENTER_DOG_LIST,
       errorElement: <NotFoundPage />,
       element: <MyDogListPage />,
+    },
+    {
+      path: PATH.CENTER_DONATION_LIST,
+      errorElement: <NotFoundPage />,
+      element: <CenterDonationListPage />,
     },
   ];
 

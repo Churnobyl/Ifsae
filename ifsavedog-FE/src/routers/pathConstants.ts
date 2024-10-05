@@ -30,6 +30,7 @@ export const PATH = {
 
   /** 센터 강아지 리스트 페이지 */
   CENTER_DOG_LIST: '/MyDogList', 
+  CENTER_DONATION_LIST: '/CenterDonationList', 
 
   /** 유저 마이페이지 */
   USER_MYPAGE: '/mypage/user',
