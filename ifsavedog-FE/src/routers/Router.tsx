@@ -12,7 +12,7 @@ import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
-import MyPage from '@/pages/MyPage';
+import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
@@ -28,6 +28,8 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import CenterDonationListPage from '@/pages/CenterDonationListPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -35,9 +37,9 @@ const Router = () => {
 
   useEffect(() => {
     if (cookies.hasViewed === undefined) {
-      setCookie(import.meta.env.VITE_COOKIE_NAME_FOR_LANDING_PAGE, 'false', {
+      setCookie(config.cookieNameForLandingPage, 'false', {
         path: '/',
-        maxAge: import.meta.env.VITE_COOKIE_MAX_AGE,
+        maxAge: config.cookieMaxAge,
       });
     }
   }, [cookies.hasViewed, setCookie]);
@@ -79,7 +81,10 @@ const Router = () => {
       path: PATH.VIDEO_LIST,
       element: <VideoList />,
     },
-
+    {
+      path: PATH.USER_LIKE_VIDEO,
+      element: <UserLikeVideo />,
+    },
     {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
@@ -106,9 +111,10 @@ const Router = () => {
           }
           return <MainContainer />;
         } else if (cookies.hasViewed === true) {
+          // 액세스 토큰은 없는데 랜딩페이지를 봤으면
           return <Navigate to={PATH.LOGIN} />;
         } else {
-          return <Navigate to={PATH.LANDING} />;
+          return <Navigate to={PATH.LANDING} />; // 액세스 토큰도 없고 랜딩페이지도 안 봤으면
         }
       })(),
       children: [

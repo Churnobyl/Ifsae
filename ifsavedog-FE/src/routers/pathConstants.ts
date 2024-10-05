@@ -38,4 +38,5 @@ export const PATH = {
 
   /** 비디오 미리보기 카드 */
   VIDEO_LIST: '/video',
+  USER_LIKE_VIDEO: '/mypage/like-video',
 };

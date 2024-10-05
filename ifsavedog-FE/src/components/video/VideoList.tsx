@@ -6,6 +6,7 @@ const VideoList = () => {
     videoId: 1234,
     thumbnailUrl: DefaultThumbnail,
     title: '산책하는 강아지',
+    isOner: true,
   });
 
   return (
@@ -15,6 +16,7 @@ const VideoList = () => {
           videoId={video.id}
           thumbnailUrl={video.thumbnailUrl}
           title={video.title}
+          isOner={video.isOner}
         />
       ))}
     </div>

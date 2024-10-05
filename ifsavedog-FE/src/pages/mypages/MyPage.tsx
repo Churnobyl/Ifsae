@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import UserMyPage from './UserMyPage';
 import { instance } from '@/apis/axios';
 import { ENDPOINT } from '@/apis/ApiConstants';
-import CenterMyPage from '@/pages/CenterMyPage';
 import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
+import CenterMyPage from './CenterMyPage';
 
 const MyPage = () => {
   const role = useUserStateStore((state) => state.role);
