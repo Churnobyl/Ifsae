@@ -98,4 +98,8 @@ public class User implements UserDetails {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void changeUserStatus() {
+        this.userStatus = UserStatus.ACTIVE;
+    }
 }
