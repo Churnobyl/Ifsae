@@ -48,6 +48,14 @@ export default defineConfig({
         find: '@routers',
         replacement: path.resolve(__dirname, 'src/routers'),
       },
+      {
+        find: '@layouts',
+        replacement: path.resolve(__dirname, 'src/layouts'),
+      },
+      {
+        find: '@types',
+        replacement: path.resolve(__dirname, 'src/types'),
+      },
     ],
   },
 });

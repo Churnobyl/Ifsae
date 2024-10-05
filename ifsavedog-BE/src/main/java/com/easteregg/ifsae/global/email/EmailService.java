@@ -6,4 +6,5 @@ public interface EmailService {
     String sendEmail(String email, EmailSubject subject) throws MessagingException;
     String generateRandomCode();
     void saveAuthCode(String email, String code);
+    boolean isCorrectEmailAuthCode(String email, String code);
 }

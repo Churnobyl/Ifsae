@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum UserStatus {
-    INACTIVE(0), ACTIVE(1), PENDING(2);
+    PENDING(0), ACTIVE(1), INACTIVE(2);
 
     private final int value;
 }
