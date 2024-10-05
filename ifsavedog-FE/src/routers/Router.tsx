@@ -12,7 +12,6 @@ import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
-import MyPage from '@/pages/MyPage';
 import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
@@ -30,6 +29,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import CenterDonationListPage from '@/pages/CenterDonationListPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
