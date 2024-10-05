@@ -1,13 +1,4 @@
-<<<<<<< HEAD
-interface Dog {
-  id: number;
-  name: string;
-  age: number;
-  image: string;
-}
-=======
 import { DogType } from '@/types/dog/DogType';
->>>>>>> ead8e1968aa7094bc36a3dc47406c9e3fbc3a897
 
 const DogPreviewBox = ({ name, age, image }: DogType) => {
   return (
