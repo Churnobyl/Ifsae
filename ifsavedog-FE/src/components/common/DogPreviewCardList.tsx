@@ -1,4 +1,4 @@
-import FollowItem from './FollowItem';
+import DogPreviewCard from '@/components/common/DogPreviewCard';
 
 interface Dog {
   id: number;
@@ -10,18 +10,18 @@ interface Dog {
   image: string;
 }
 
-interface FollowList {
+interface DogList {
   dogList: Dog[];
 }
 
-const FollowList = ({ dogList }: FollowList) => {
+const DogPreviewCardList = ({ dogList }: DogList) => {
   return (
     <div className="space-y-4">
       {dogList.map((dog) => (
-        <FollowItem key={dog.id} dog={dog} />
+        <DogPreviewCard key={dog.id} dog={dog} />
       ))}
     </div>
   );
 };
 
-export default FollowList;
+export default DogPreviewCardList;

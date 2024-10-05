@@ -1,4 +1,5 @@
 interface Dog {
+  id: number;
   name: string;
   location: string;
   gender: string;
@@ -7,11 +8,11 @@ interface Dog {
   image: string;
 }
 
-interface FollowItem {
+interface DogProps {
   dog: Dog;
 }
 
-const FollowItem = ({ dog }: FollowItem) => {
+const DogPreviewCard = ({ dog }: DogProps) => {
   return (
     <div className="relative p-4 rounded-lg shadow-md flex items-center space-x-4 bg-base">
       <img
@@ -37,4 +38,4 @@ const FollowItem = ({ dog }: FollowItem) => {
   );
 };
 
-export default FollowItem;
+export default DogPreviewCard;

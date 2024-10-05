@@ -1,15 +1,16 @@
-type DogPreviewType = {
+interface Dog {
+  id: number;
   name: string;
-  age: number;
+  age: string;
   image: string;
-};
+}
 
-const DogPreview = ({ name, age, image }: DogPreviewType) => {
+const DogPreviewBox = ({ name, age, image }: Dog) => {
   return (
     <div className="bg-white rounded-lg p-2 shadow-md">
       <img
         src={image}
-        alt="강아지 사진"
+        alt={name}
         className="w-full h-32 object-cover rounded-lg"
       />
       <div className="mt-2 text-center">
@@ -20,4 +21,4 @@ const DogPreview = ({ name, age, image }: DogPreviewType) => {
   );
 };
 
-export default DogPreview;
+export default DogPreviewBox;

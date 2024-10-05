@@ -16,7 +16,7 @@ const Card = ({ name, age, duration, image, category }: CardType) => {
     category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
   return (
     <div
-      className={classNames('rounded-lg shadow-md p-6 h-48 flex items-center', bgColor, borderColor)}
+      className={classNames('rounded-lg shadow-md p-6 h-32 flex items-center', bgColor, borderColor)}
     >
       <div className="flex items-center space-x-6">
         <img
