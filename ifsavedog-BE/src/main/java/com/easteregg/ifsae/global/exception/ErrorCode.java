@@ -43,7 +43,11 @@ public enum ErrorCode {
 
     // 댓글 관련 에러
     UNAUTHORIZED_USER("댓글을 수정할 수 없는 사용자입니다.", HttpStatus.UNAUTHORIZED),
-    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", HttpStatus.NO_CONTENT)
+    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", HttpStatus.NO_CONTENT),
+
+    // 기부 관련 에러
+    DONATION_NOT_ALLOWED("기부할 수 없는 대상입니다.", HttpStatus.BAD_REQUEST),
+    DONATION_NOT_FOUND("기부 내역이 없습니다.", HttpStatus.NOT_FOUND),
     ;
 
     private final String message;
