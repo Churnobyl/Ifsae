@@ -6,7 +6,7 @@ interface Dog {
   location: string;
   gender: string;
   breed: string;
-  age: string;
+  age: number;
   image: string;
 }
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import AdoptionCard from '@/components/Adoption/AdoptionCard';
+import AdoptionCard from '@/components/adoption/AdoptionCard';
 import DogPreview from '@/components/common/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
 
 interface Dog {
+  id: number;
   name: string;
   age: number;
   image: string;
@@ -31,19 +32,19 @@ const AdoptionPage = () => {
   ];
 
   const recommenedList: Dog[] = [
-    { name: '초코', age: 1, image: TestImage },
-    { name: '코코', age: 2, image: TestImage },
-    { name: '보리', age: 3, image: TestImage },
-    { name: '바니', age: 4, image: TestImage },
-    { name: '말티', age: 5, image: TestImage },
+    { id: 1, name: '초코', age: 1, image: TestImage },
+    { id: 2, name: '코코', age: 2, image: TestImage },
+    { id: 3, name: '보리', age: 3, image: TestImage },
+    { id: 4, name: '바니', age: 4, image: TestImage },
+    { id: 5, name: '말티', age: 5, image: TestImage },
   ];
 
   const followList: Dog[] = [
-    { name: '초코', age: 1, image: TestImage },
-    { name: '코코', age: 2, image: TestImage },
-    { name: '보리', age: 3, image: TestImage },
-    { name: '바니', age: 4, image: TestImage },
-    { name: '말티', age: 5, image: TestImage },
+    { id: 1, name: '초코', age: 1, image: TestImage },
+    { id: 2, name: '코코', age: 2, image: TestImage },
+    { id: 3, name: '보리', age: 3, image: TestImage },
+    { id: 4, name: '바니', age: 4, image: TestImage },
+    { id: 5, name: '말티', age: 5, image: TestImage },
   ];
 
   const recommenedRef = useRef<HTMLDivElement | null>(null);
@@ -144,7 +145,12 @@ const AdoptionPage = () => {
             <div className="flex space-x-4">
               {recommenedList.map((dog) => (
                 <div className="flex-none w-1/3" key={dog.name}>
-                  <DogPreview name={dog.name} age={dog.age} image={dog.image} />
+                  <DogPreview
+                    id={dog.id}
+                    name={dog.name}
+                    age={dog.age}
+                    image={dog.image}
+                  />
                 </div>
               ))}
             </div>
@@ -167,7 +173,12 @@ const AdoptionPage = () => {
             <div className="flex space-x-4">
               {followList.map((dog) => (
                 <div className="flex-none w-1/3" key={dog.name}>
-                  <DogPreview name={dog.name} age={dog.age} image={dog.image} />
+                  <DogPreview
+                    id={dog.id}
+                    name={dog.name}
+                    age={dog.age}
+                    image={dog.image}
+                  />
                 </div>
               ))}
             </div>

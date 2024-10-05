@@ -30,6 +30,7 @@ import {
 } from 'react-router-dom';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import DogDetailPage from '@/pages/DogDetailPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -159,6 +160,11 @@ const Router = () => {
       path: PATH.CENTER_DONATION_LIST,
       errorElement: <NotFoundPage />,
       element: <CenterDonationListPage />,
+    },
+    {
+      path: PATH.DOG_DETAIL + '/:id',
+      errorElement: <NotFoundPage />,
+      element: <DogDetailPage />,
     },
   ];
 
