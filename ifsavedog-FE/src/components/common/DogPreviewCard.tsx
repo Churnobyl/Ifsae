@@ -4,7 +4,7 @@ interface Dog {
   location: string;
   gender: string;
   breed: string;
-  age: string;
+  age: number;
   image: string;
 }
 
@@ -25,7 +25,7 @@ const DogPreviewCard = ({ dog }: DogProps) => {
         <h2 className="px-0.2 font-bold text-black">{dog.name}</h2>
         <p className="text-sm text-darkGray">{dog.location}</p>
         <p className="text-sm text-darkGray">
-          {dog.age} / {dog.breed} / {dog.gender}
+          {dog.age}살 / {dog.breed} / {dog.gender}
         </p>
       </div>
 

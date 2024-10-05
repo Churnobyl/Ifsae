@@ -7,6 +7,7 @@ import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
+import MyDogListPage from '@/pages/MyDogListPage';
 import MyPage from '@/pages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import { PATH } from '@/routers/pathConstants';
@@ -92,6 +93,11 @@ const Router = () => {
           element: <MyPage />,
         },
       ],
+    },
+    {
+      path: PATH.CENTER_DOG_LIST,
+      errorElement: <NotFoundPage />,
+      element: <MyDogListPage />,
     },
   ];
 
