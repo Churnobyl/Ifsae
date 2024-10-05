@@ -1,57 +1,48 @@
-import { ChangeEvent, useState } from 'react';
+import {
+  userSurveyMapper,
+  useUserSurveyStore,
+} from '@/stores/user/userSurveyStore';
+import { UserSurveyType } from '@/types/user/UserSurveyType';
+import { ChangeEvent } from 'react';
 
-const CircleRadioButtons = () => {
-  const [selectedValue, setSelectedValue] = useState<string>('');
+type CircleRadioButtonsProps = {
+  questionName: keyof UserSurveyType;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+};
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
-  };
+const CircleRadioButtons = ({
+  questionName,
+  onChange,
+}: CircleRadioButtonsProps) => {
+  const userSurveyStore = useUserSurveyStore();
+  const questionValue = userSurveyStore.userInput[questionName];
+
+  // 해당 questionName에 대한 질문 및 성향 정보 가져오기
+  const [questionText, leftTrait, rightTrait] = userSurveyMapper[questionName];
 
   return (
-    <div className="flex gap-4">
-      <label className="flex items-center cursor-pointer">
-        <input
-          type="radio"
-          name="circleRadio"
-          value="option1"
-          checked={selectedValue === 'option1'}
-          onChange={handleChange}
-          className="hidden"
-        />
-        <span
-          className={`w-6 h-6 rounded-full border-2 border-gray-500 flex items-center justify-center ${
-            selectedValue === 'option1' ? 'bg-green-500' : ''
-          }`}
-        >
-          {selectedValue === 'option1' && (
-            <span className="w-3 h-3 bg-white rounded-full"></span>
-          )}
-        </span>
-        <span className="ml-2">매우 그렇다</span>
-      </label>
-
-      <label className="flex items-center cursor-pointer">
-        <input
-          type="radio"
-          name="circleRadio"
-          value="option2"
-          checked={selectedValue === 'option2'}
-          onChange={handleChange}
-          className="hidden"
-        />
-        <span
-          className={`w-6 h-6 rounded-full border-2 border-gray-500 flex items-center justify-center ${
-            selectedValue === 'option2' ? 'bg-green-500' : ''
-          }`}
-        >
-          {selectedValue === 'option2' && (
-            <span className="w-3 h-3 bg-white rounded-full"></span>
-          )}
-        </span>
-        <span className="ml-2">다소 그렇다</span>
-      </label>
-
-      {/* Add more radio buttons as needed */}
+    <div className="mb-4">
+      <div className={'text-lg'}>{questionText}</div>
+      <div className="flex justify-between items-center mt-2">
+        <div className="flex gap-8">
+          {[1, 2, 3, 4, 5].map((value) => (
+            <label key={value} className="items-center cursor-pointer text-lg">
+              <input
+                className={'text-lg'}
+                type="radio"
+                name={questionName}
+                value={value}
+                checked={questionValue === value}
+                onChange={onChange}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+      <div className={'flex justify-between'}>
+        <div className={'text-xs'}>{leftTrait}</div>
+        <div className={'text-xs'}>{rightTrait}</div>
+      </div>
     </div>
   );
 };

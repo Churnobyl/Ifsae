@@ -1,23 +1,44 @@
+import { useUserSurveyStore } from '@/stores/user/userSurveyStore';
+import { ChangeEvent, useCallback } from 'react';
 import Question from '@/components/recommend/userRecommend/Question';
+import { UserSurveyType } from '@/types/user/UserSurveyType';
+import MainLayout from '@/layouts/MainLayout';
 
 const UserRecommendPage = () => {
-  const questionList = [
-    '운동 시간',
-    '짖는 정도',
-    '털 관리',
-    '선호하는 크기',
-    '다른 강아지들과의 공동생활 여부',
-    '운동 정도',
-    '훈련 경험',
-    '아이와의 친화력',
-  ];
+  const userSurveyStore = useUserSurveyStore();
+
+  const userInputList = userSurveyStore.userInput;
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      userSurveyStore.setUserInput({ [name]: parseInt(value, 10) });
+    },
+    [userSurveyStore],
+  );
+
+  // 모든 질문에 답변이 주어졌는지 확인
+  const isAllAnswered = Object.values(userInputList).every(
+    (value) => value >= 1 && value <= 5,
+  );
 
   return (
-    <div>
-      {questionList.map((question) => (
-        <Question question={question} />
-      ))}
-    </div>
+    <MainLayout showTopbar={false} showBottombar={false}>
+      <div>
+        <div>여러분의 선호도를 입력해주세요!</div>
+        <div className={'flex flex-col items-center'}>
+          {(Object.keys(userInputList) as Array<keyof UserSurveyType>).map(
+            (questionName) => (
+              <Question
+                key={questionName}
+                questionName={questionName}
+                onChange={handleInputChange}
+              />
+            ),
+          )}
+          <button disabled={!isAllAnswered}>제출</button>
+        </div>
+      </div>
+    </MainLayout>
   );
 };
 
