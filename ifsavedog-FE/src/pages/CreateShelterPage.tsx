@@ -1,7 +1,6 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
 import { createShelterApi } from '@/apis/shelter/shelterApi';
 import { Input } from '@/components/index';
-import RoleItem from '@/components/signup/RoleItem';
 import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
