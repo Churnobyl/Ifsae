@@ -1,5 +1,6 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import VideoList from '@/components/video/VideoList';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterMyPage from '@/pages/mypages/CenterMyPage';
@@ -78,19 +79,6 @@ const Router = () => {
       path: PATH.CREATE_CENTER,
       element: <CreateShelterPage />,
     },
-
-    {
-      path: PATH.USER_MYPAGE,
-      element: <UserMyPage />,
-    },
-    {
-      path: PATH.CENTER_MYPAGE,
-      element: <CenterMyPage />,
-    },
-    {
-      path: PATH.MYPAGE,
-      element: <MyPage />,
-    },
     {
       path: PATH.VIDEO_LIST,
       element: <VideoList />,
@@ -148,6 +136,15 @@ const Router = () => {
         {
           path: PATH.SEARCH.slice(1),
           element: <SearchPage />,
+        },
+        {
+          path: PATH.MYPAGE.slice(1),
+          children: [
+            {
+              path: '',
+              element: <MyPage />,
+            },
+          ],
         },
       ],
     },

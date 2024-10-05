@@ -38,7 +38,7 @@ const CreateShelterPage = () => {
       setIsSubmitPending(true);
       const response = await createShelterApi(shelterCreateStore.userInput);
 
-      if (response.status === HTTP_STATUS.OK) {
+      if (response.status === HTTP_STATUS.CREATED) {
         userStateStore.setUserStatus('ACTIVE');
         navigate(PATH.MAIN);
       }

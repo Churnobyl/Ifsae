@@ -3,18 +3,15 @@ import EditProfileICon from '@/assets/icon/edit-profile.svg';
 import ManageVideoIcon from '@/assets/icon/video-camera.svg';
 import PawIcon from '@/assets/icon/paw-print.svg';
 import { FaHandHoldingHeart } from 'react-icons/fa';
+import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
 
-const CenterMyPage = () => {
-  // const centerId = 12345678;
-  const centerName = '임시 보호소 이름';
-  const address = '서울특별시 강남구 언주로99길 33';
-  const phoneNum = '010-0000-0000';
-  const content =
-    '귀여운 아이들을 5명의 전문 관리사가 케어하는 203m^2 보호소입니다.';
+const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
+  const { name, address, phone, content } = shelterData;
+
   return (
     <>
-      <div className="w-[320px] text-black">
-        <div className="flex flex-col items-center bg-whiteGray m-2 p-4 rounded-lg mb-6">
+      <div className="flex flex-col items-center justify-center text-black">
+        <div className="w-4/5 bg-whiteGray m-2 p-4 rounded-lg mb-6">
           <div className="flex flex-row mb-4">
             <img
               src={CenterProfileImg}
@@ -22,9 +19,9 @@ const CenterMyPage = () => {
               className="w-20 h-20 rounded-full mr-4"
             />
             <div className="space-y-[1px]">
-              <p className="text-lg font-semibold">{centerName}</p>
+              <p className="text-lg font-semibold">{name}</p>
               <p className="text-sm">{address}</p>
-              <p className="text-sm text-lightGray">{phoneNum}</p>
+              <p className="text-sm text-lightGray">{phone}</p>
             </div>
           </div>
           <div>

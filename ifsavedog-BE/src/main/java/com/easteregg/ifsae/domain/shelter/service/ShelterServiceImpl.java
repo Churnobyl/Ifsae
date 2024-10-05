@@ -7,6 +7,7 @@ import com.easteregg.ifsae.domain.shelter.entity.ShelterUser;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterRepository;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ public class ShelterServiceImpl implements ShelterService {
 
     private final ShelterUserRepository shelterUserRepository;
 
+    private final UserRepository userRepository;
+
     @Override
     public void createShelter(User user, ShelterCreateRequest shelterCreateRequest) {
         Shelter shelter = Shelter.builder()
@@ -32,6 +35,10 @@ public class ShelterServiceImpl implements ShelterService {
                                  .content(shelterCreateRequest.getContent())
                                  .canBeDonated(shelterCreateRequest.isCanBeDonated())
                                  .build();
+
+        user.changeUserStatus();
+
+        userRepository.save(user);
 
         shelterRepository.save(shelter);
 

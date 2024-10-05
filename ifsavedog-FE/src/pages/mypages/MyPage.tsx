@@ -1,24 +1,33 @@
 import { useUserStateStore } from '@/stores/auth/userStateStore';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import UserMyPage from './UserMyPage';
+import { instance } from '@/apis/axios';
+import { ENDPOINT } from '@/apis/ApiConstants';
+import CenterMyPage from '@/pages/CenterMyPage';
+import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
 
 const MyPage = () => {
   const role = useUserStateStore((state) => state.role);
 
   const [isGeneralSelected, setIsGeneralSelected] = useState(true);
-  const [shelterData, setShelterData] = useState(null);
-  console.log(shelterData);
+  const [shelterData, setShelterData] = useState<ShelterDetailType>({
+    id: 0,
+    name: '',
+    address: '',
+    phone: '',
+    content: '',
+    canBeDonated: true,
+  });
 
   useEffect(() => {
     if (!isGeneralSelected && role === 'ROLE_CENTER') {
       const getShelterData = async () => {
-        const response = await axios.get('/api/user/my-shelter');
+        const response = await instance.get(ENDPOINT.GET_MY_SHELTER);
         setShelterData(response.data);
       };
       getShelterData();
     }
-  }, [isGeneralSelected, role]);
+  }, [isGeneralSelected, role, shelterData.id]);
 
   return (
     <>
@@ -46,8 +55,7 @@ const MyPage = () => {
       ) : isGeneralSelected ? (
         <UserMyPage />
       ) : (
-        // <CenterMyPage shelterData={shelterData} />
-        <></>
+        <CenterMyPage shelterData={shelterData} />
       )}
     </>
   );
