@@ -80,6 +80,7 @@ pipeline {
                     }
                     steps {
                         dir('ifsavedog-FE') {
+                            sh "cat .env"
                             sh "docker build --no-cache -t ${DOCKER_IMAGE_FRONTEND}:latest ."
                         }
                     }
@@ -176,6 +177,12 @@ def prepareEnv(envFile) {
             cp ${envFile} ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
             chmod 775 ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
             cat ${WORKSPACE}/ifsavedog-DATA/pythonProject/.env
+        """
+    } else if (env.BRANCH_NAME == 'develop-FE') {
+        sh """
+            cp ${envFile} ${WORKSPACE}/ifsavedog-FE/.env
+            chmod 775 ${WORKSPACE}/ifsavedog-FE/.env
+            cat ${WORKSPACE}/ifsavedog-FE/.env
         """
     } else {
         sh """
