@@ -3,12 +3,10 @@ import random
 
 import requests
 import pandas as pd
-from dotenv import load_dotenv
 from settings import config
 
 from models.dog import Dog
 from db.mongo import get_mongo_db
-from db.maria import get_db, engine
 
 ## API 호출 함수
 def get_data() :         
@@ -25,8 +23,8 @@ def get_data() :
     qp = {
         # "bgnde": today.strftime('%Y%m%d'),
         # "endde": today.strftime('%Y%m%d'),            
-        "bgnde": "20240516",
-        "endde": "20240531",
+        "bgnde": "20241001",
+        "endde": "20241004",
         "pageNo": 1,
         "state" : "protect",
         "numOfRows": "1000",    
@@ -103,7 +101,6 @@ def is_exist_data(db, df) :
     for _, row in df.iterrows():
         dog = db.query(Dog).filter(Dog.desertion_no == row['desertion_no']).first()
         if dog:
-            print("exist data"+dog.desertion_no)
             return True
     return False
 ## 데이터 중복 확인 끝 ##
@@ -113,7 +110,6 @@ def insert_data_to_sql(db, df) :
     for _, row in df.iterrows():
         dog = db.query(Dog).filter(Dog.desertion_no == row['desertion_no']).first()
         if dog:
-            # print("exist data"+dog.desertion_no)
             continue
         dog = Dog(
             age=row['age'],
@@ -127,7 +123,6 @@ def insert_data_to_sql(db, df) :
             info=row['info'],
             name=row['name']
             )
-        print("new data"+dog.desertion_no)
         db.add(dog)
     db.commit()
 ## 데이터 삽입 끝 ##
