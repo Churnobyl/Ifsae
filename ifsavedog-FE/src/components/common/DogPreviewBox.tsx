@@ -1,11 +1,6 @@
-interface Dog {
-  id: number;
-  name: string;
-  age: number;
-  image: string;
-}
+import { DogType } from '@/types/dog/DogType';
 
-const DogPreviewBox = ({ name, age, image }: Dog) => {
+const DogPreviewBox = ({ name, age, image }: DogType) => {
   return (
     <div className="bg-white rounded-lg p-2 shadow-md">
       <img
