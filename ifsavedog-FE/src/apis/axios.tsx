@@ -48,9 +48,7 @@ instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
  */
 instance.interceptors.response.use(
   (response) => {
-    console.log(response);
-
-    const authorization = response.headers.getAuthorization;
+    const authorization = response.headers['authorization'];
 
     if (authorization && typeof authorization === 'function') {
       const authValue = authorization()?.toString();

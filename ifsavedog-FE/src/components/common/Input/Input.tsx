@@ -48,7 +48,7 @@ export const Input = ({
       <div className="relative flex items-center">
         {Icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-            <Icon size={24} color={'var(--color-black)'} />
+            <Icon size={20} color={'var(--color-black)'} />
           </div>
         )}
         <input

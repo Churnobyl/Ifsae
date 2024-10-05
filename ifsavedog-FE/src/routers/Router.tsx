@@ -1,10 +1,9 @@
 import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
+import VideoList from '@/components/video/VideoList';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
-import CenterMyPage from '@/pages/CenterMyPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
-import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
@@ -12,9 +11,9 @@ import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
-import MyPage from '@/pages/MyPage';
+import MyDogListPage from '@/pages/MyDogListPage';
+import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
-import UserMyPage from '@/pages/UserMyPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
@@ -29,7 +28,9 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import VideoList from '@/components/video/VideoList';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -77,29 +78,25 @@ const Router = () => {
       path: PATH.CREATE_CENTER,
       element: <CreateShelterPage />,
     },
-
-    {
-      path: PATH.USER_MYPAGE,
-      element: <UserMyPage />,
-    },
-    {
-      path: PATH.CENTER_MYPAGE,
-      element: <CenterMyPage />,
-    },
-    {
-      path: PATH.MYPAGE,
-      element: <MyPage />,
-    },
     {
       path: PATH.VIDEO_LIST,
       element: <VideoList />,
+    },
+
+    /** 세경이의 테스트용 url */
+    {
+      path: PATH.USER_LIKE_VIDEO,
+      element: <UserLikeVideo />,
+    },
+    {
+      path: PATH.USER_PROFILE_EDIT,
+      element: <UserProfileEdit />,
     },
 
     {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
       element: (() => {
-        // 액세스 토큰이 있으면
         if (accessToken) {
           if (
             // 근데 유저 상태가 PENDING이면
@@ -145,6 +142,15 @@ const Router = () => {
           path: PATH.SEARCH.slice(1),
           element: <SearchPage />,
         },
+        {
+          path: PATH.MYPAGE.slice(1),
+          children: [
+            {
+              path: '',
+              element: <MyPage />,
+            },
+          ],
+        },
       ],
     },
     {
@@ -153,9 +159,14 @@ const Router = () => {
       element: <FollowPage />,
     },
     {
-      path: PATH.DONATION,
+      path: PATH.CENTER_DOG_LIST,
       errorElement: <NotFoundPage />,
-      element: <DonationPage />,
+      element: <MyDogListPage />,
+    },
+    {
+      path: PATH.CENTER_DONATION_LIST,
+      errorElement: <NotFoundPage />,
+      element: <CenterDonationListPage />,
     },
   ];
 

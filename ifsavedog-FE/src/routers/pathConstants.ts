@@ -28,10 +28,16 @@ export const PATH = {
   /** 센터 생성 페이지 */
   CREATE_CENTER: '/center/create-center',
 
+  /** 센터 강아지 리스트 페이지 */
+  CENTER_DOG_LIST: '/MyDogList',
+  CENTER_DONATION_LIST: '/CenterDonationList',
+
   /** 유저 마이페이지 */
   USER_MYPAGE: '/mypage/user',
   CENTER_MYPAGE: '/mypage/center',
 
   /** 비디오 미리보기 카드 */
   VIDEO_LIST: '/video',
+  USER_LIKE_VIDEO: '/mypage/like-video',
+  USER_PROFILE_EDIT: '/mypage/edit-profile',
 };
