@@ -25,7 +25,7 @@ const UserProfileEdit = () => {
   return (
     <MainLayout showTopbar={true} showBottombar={true}>
       <div className="w-full break-all flex flex-col items-center">
-        <div className="w-10/12 overflow-hidden">
+        <div className="w-10/12 overflow-auto">
           <div className="py-4 text-black font-semibold text-2xl">
             프로필 수정
           </div>

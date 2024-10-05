@@ -31,6 +31,7 @@ import {
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
+import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -91,6 +92,10 @@ const Router = () => {
     {
       path: PATH.USER_PROFILE_EDIT,
       element: <UserProfileEdit />,
+    },
+    {
+      path: PATH.CENTER_PROFILE_EDIT,
+      element: <CenterProfileEdit />,
     },
 
     {
