@@ -7,11 +7,11 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaHandHoldingHeart } from 'react-icons/fa';
 
 const UserMyPage = () => {
-  const id = 1234;
+  // const id = 1234;
   const email = 'test1234@naver.com';
   const nickname = '테스트1234';
   const grade = 'GOLD';
-  const role = 'ROLE_CENTER';
+  // const role = 'ROLE_CENTER';
 
   return (
     <>

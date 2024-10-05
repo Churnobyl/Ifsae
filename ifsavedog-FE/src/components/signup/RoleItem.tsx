@@ -18,7 +18,7 @@ const RoleItem = ({ roleId, roleName, image }: RoleItemType) => {
     } else {
       setIsSelected(false);
     }
-  }, [roleId, useSignupStore.getState().userInput.role]);
+  }, [roleId, signupStore]);
 
   return (
     <div className="flex flex-col items-center justify-center">

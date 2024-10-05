@@ -4,24 +4,13 @@ import ManageVideoIcon from '@/assets/icon/video-camera.svg';
 import PawIcon from '@/assets/icon/paw-print.svg';
 import { FaHandHoldingHeart } from 'react-icons/fa';
 
-interface ShelterData {
-  id: number;
-  name: string;
-  address: string;
-  phone: string;
-  content: string;
-  canBeDonated: boolean;
-}
-
-interface CenterMyPageProps {
-  shelterData?: ShelterData | null;
-}
-
-const CenterMyPage: React.FC<CenterMyPageProps> = ({ shelterData }) => {
-  if (!shelterData) {
-    return <p>데이터를 불러오는 중...</p>;
-  }
-
+const CenterMyPage = () => {
+  // const centerId = 12345678;
+  const centerName = '임시 보호소 이름';
+  const address = '서울특별시 강남구 언주로99길 33';
+  const phoneNum = '010-0000-0000';
+  const content =
+    '귀여운 아이들을 5명의 전문 관리사가 케어하는 203m^2 보호소입니다.';
   return (
     <>
       <div className="w-[320px] text-black">
@@ -33,13 +22,13 @@ const CenterMyPage: React.FC<CenterMyPageProps> = ({ shelterData }) => {
               className="w-20 h-20 rounded-full mr-4"
             />
             <div className="space-y-[1px]">
-              <p className="text-lg font-semibold">{shelterData.name}</p>
-              <p className="text-sm">{shelterData.address}</p>
-              <p className="text-sm text-lightGray">{shelterData.phone}</p>
+              <p className="text-lg font-semibold">{centerName}</p>
+              <p className="text-sm">{address}</p>
+              <p className="text-sm text-lightGray">{phoneNum}</p>
             </div>
           </div>
           <div>
-            <p className="text-sm">{shelterData.content}</p>
+            <p className="text-sm">{content}</p>
           </div>
         </div>
 

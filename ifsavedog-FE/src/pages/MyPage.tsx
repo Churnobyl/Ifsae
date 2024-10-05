@@ -1,14 +1,14 @@
-import UserMyPage from './UserMyPage';
-import CenterMyPage from './CenterMyPage';
-import { useEffect, useState } from 'react';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import UserMyPage from './UserMyPage';
 
 const MyPage = () => {
   const role = useUserStateStore((state) => state.role);
 
   const [isGeneralSelected, setIsGeneralSelected] = useState(true);
   const [shelterData, setShelterData] = useState(null);
+  console.log(shelterData);
 
   useEffect(() => {
     if (!isGeneralSelected && role === 'ROLE_CENTER') {
@@ -46,7 +46,8 @@ const MyPage = () => {
       ) : isGeneralSelected ? (
         <UserMyPage />
       ) : (
-        <CenterMyPage shelterData={shelterData} />
+        // <CenterMyPage shelterData={shelterData} />
+        <></>
       )}
     </>
   );

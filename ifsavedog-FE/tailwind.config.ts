@@ -20,7 +20,8 @@ export default {
     colors: {
       white: '#fff',
       black: '#4D4637',
-      base: '#E8AA8C',
+      base: '#F9F6E3',
+      darkbase: '#98764F',
       red: '#FF3939',
       subBase: '#FCFAEB',
       main: '#DAEA94',
