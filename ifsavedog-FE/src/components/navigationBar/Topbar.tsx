@@ -6,7 +6,7 @@ const Topbar = ({ className }: { className?: string }) => {
   return (
     <div
       className={classNames(
-        'h-12 flex flex-row items-center justify-between w-full p-5',
+        'h-12 flex flex-row items-center justify-between w-full p-5 z-999 bg-white',
         className,
       )}
     >
