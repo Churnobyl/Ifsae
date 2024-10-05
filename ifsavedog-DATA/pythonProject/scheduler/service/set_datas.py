@@ -17,7 +17,6 @@ def update_user_prefer_vector(user_id, prefer_rank_list):
     except:
         print('error')
 
-
 def update_user_recommendation_rank(user_id, rank_list):
     for ranking in rank_list:
         pass
