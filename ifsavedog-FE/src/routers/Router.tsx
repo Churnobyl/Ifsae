@@ -29,6 +29,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import VideoList from '@/components/video/VideoList';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -86,8 +87,12 @@ const Router = () => {
       element: <CenterMyPage />,
     },
     {
-      path: PATH.MYPAGE.slice(1),
+      path: PATH.MYPAGE,
       element: <MyPage />,
+    },
+    {
+      path: PATH.VIDEO_LIST,
+      element: <VideoList />,
     },
 
     {

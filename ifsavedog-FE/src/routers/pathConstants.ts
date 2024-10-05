@@ -31,4 +31,7 @@ export const PATH = {
   /** 유저 마이페이지 */
   USER_MYPAGE: '/mypage/user',
   CENTER_MYPAGE: '/mypage/center',
+
+  /** 비디오 미리보기 카드 */
+  VIDEO_LIST: '/video',
 };
