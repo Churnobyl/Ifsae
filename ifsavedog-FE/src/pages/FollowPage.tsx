@@ -1,6 +1,6 @@
 import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import testImage from '@/assets/logo.webp';
-import { DogDetailType } from '@/types/dog/DogDetailTye';
+import { DogDetailType } from '@/types/dog/DogDetailType';
 
 const exampleDogList = [
   {
