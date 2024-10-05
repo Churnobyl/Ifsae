@@ -14,3 +14,6 @@ def download_image_dog_list(dog_list):
 
 def get_dog_list_by_date(date):
     return get_dogs_by_date(date)
+
+def get_dog_list_boot(strform):
+    return get_dogs_boot(strform=strform)
