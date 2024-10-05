@@ -11,6 +11,7 @@ type RoleItemType = {
 const RoleItem = ({ roleId, roleName, image }: RoleItemType) => {
   const signupStore = useSignupStore();
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const userInput = useSignupStore.getState().userInput;
 
   useEffect(() => {
     if (useSignupStore.getState().userInput.role === roleId) {
@@ -18,7 +19,7 @@ const RoleItem = ({ roleId, roleName, image }: RoleItemType) => {
     } else {
       setIsSelected(false);
     }
-  }, [roleId, signupStore]);
+  }, [roleId, userInput]);
 
   return (
     <div className="flex flex-col items-center justify-center">
