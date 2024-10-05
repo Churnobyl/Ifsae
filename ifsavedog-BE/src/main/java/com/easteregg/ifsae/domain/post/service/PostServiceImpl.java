@@ -88,6 +88,11 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(postId);
     }
 
+    @Override
+    public Slice<PostDto.Response> getMungtsuNext(User user, Pageable pageable) {
+        return postRepository.findMungtsuByRecommended(user, pageable);
+    }
+
     /**
      * Post를 ID로 조회하는 헬퍼 메서드
      */
