@@ -8,10 +8,9 @@ import com.easteregg.ifsae.domain.user.entity.User;
 import java.util.List;
 
 public interface AdoptionService {
-
     void createAdoption(User user, AdoptionCreateRequest adoptionCreateRequest);
 
-    void checkAdoption(User user, long adoptionId);
+    void rejectAdoption(User user, Long adoptionId);
 
     void updateAdoption(User user, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest);
 
