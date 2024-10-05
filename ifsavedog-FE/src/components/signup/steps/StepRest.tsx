@@ -40,47 +40,45 @@ const StepRest = ({
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-between gap-3 w-full">
-        <Input
-          name="password"
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={handleInputChange}
-          icon={MdOutlineVpnKey}
-        />
-        <Input
-          name="passwordRepeat"
-          type="password"
-          placeholder="비밀번호 확인"
-          value={passwordRepeat}
-          onChange={handlePasswordRepeatChange}
-          icon={MdOutlineVpnKey}
-        />
-        {passwordError && <p className="text-red">{passwordError}</p>}
-        {passwordMatch && (
-          <p className="text-pointGreen">비밀번호가 일치합니다.</p>
-        )}
-        <Input
-          name="nickname"
-          placeholder="닉네임"
-          value={nickname}
-          onChange={handleInputChange}
-          icon={MdOutlinePermIdentity}
-        />
-        <div className="role-check flex flex-row items-center justify-between gap-20">
-          <RoleItem roleId={0} roleName={'단체'} image={'shelter'} />
-          <RoleItem roleId={1} roleName={'개인'} image={'individual'} />
-        </div>
-        <button
-          className="text-white w-full h-10 bg-main rounded-md border-none"
-          onClick={handleSignup}
-          disabled={!passwordMatch} // 비밀번호 일치하지 않을 경우 버튼 비활성화
-        >
-          <span>회원가입</span>
-        </button>
+    <div className="flex flex-col items-center justify-between gap-3 w-full">
+      <Input
+        name="password"
+        type="password"
+        placeholder="비밀번호"
+        value={password}
+        onChange={handleInputChange}
+        icon={MdOutlineVpnKey}
+      />
+      <Input
+        name="passwordRepeat"
+        type="password"
+        placeholder="비밀번호 확인"
+        value={passwordRepeat}
+        onChange={handlePasswordRepeatChange}
+        icon={MdOutlineVpnKey}
+      />
+      {passwordError && <p className="text-red">{passwordError}</p>}
+      {passwordMatch && (
+        <p className="text-pointGreen">비밀번호가 일치합니다.</p>
+      )}
+      <Input
+        name="nickname"
+        placeholder="닉네임"
+        value={nickname}
+        onChange={handleInputChange}
+        icon={MdOutlinePermIdentity}
+      />
+      <div className="role-check flex flex-row items-center justify-between gap-20">
+        <RoleItem roleId={0} roleName={'개인'} image={'individual'} />
+        <RoleItem roleId={1} roleName={'단체'} image={'shelter'} />
       </div>
+      <button
+        className="text-white w-full h-10 bg-main rounded-md border-none"
+        onClick={handleSignup}
+        disabled={!passwordMatch} // 비밀번호 일치하지 않을 경우 버튼 비활성화
+      >
+        <span>회원가입</span>
+      </button>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Card from '@/components/donation/Card';
-import DogPreview from '@/components/donation/DogPreview';
+import Card from '@/components/Adoption/Card';
+import DogPreview from '@/components/Adoption/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
@@ -93,14 +93,14 @@ const AdoptionPage = () => {
     window.addEventListener('resize', handleCheckScrollability);
     return () => {
       window.removeEventListener('resize', handleCheckScrollability);
-      if (recommenedRef.current) {
-        recommenedRef.current.removeEventListener(
+      if (recommenedRef!.current) {
+        recommenedRef!.current.removeEventListener(
           'scroll',
           handleCheckScrollability,
         );
       }
-      if (followRef.current) {
-        followRef.current.removeEventListener(
+      if (followRef!.current) {
+        followRef!.current.removeEventListener(
           'scroll',
           handleCheckScrollability,
         );
