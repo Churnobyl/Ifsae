@@ -31,6 +31,7 @@ export default {
       lightBlue: '#CCE5FF',
       pointGreen: '#26CB1D',
       pointBlue: '#3370EA',
+      hoverGreen: '#B6D96E',
       transparent: 'transparent',
     },
     fontSize,

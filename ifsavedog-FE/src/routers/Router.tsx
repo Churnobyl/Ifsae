@@ -30,6 +30,7 @@ import {
 } from 'react-router-dom';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -81,10 +82,17 @@ const Router = () => {
       path: PATH.VIDEO_LIST,
       element: <VideoList />,
     },
+
+    /** 세경이의 테스트용 url */
     {
       path: PATH.USER_LIKE_VIDEO,
       element: <UserLikeVideo />,
     },
+    {
+      path: PATH.USER_PROFILE_EDIT,
+      element: <UserProfileEdit />,
+    },
+
     {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
