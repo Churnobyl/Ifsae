@@ -2,7 +2,7 @@ import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
-import CenterMyPage from '@/pages/CenterMyPage';
+import CenterMyPage from '@/pages/mypages/CenterMyPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
@@ -12,9 +12,9 @@ import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
-import MyPage from '@/pages/MyPage';
+import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
-import UserMyPage from '@/pages/UserMyPage';
+import UserMyPage from '@/pages/mypages/UserMyPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
@@ -30,6 +30,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import VideoList from '@/components/video/VideoList';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -94,7 +95,10 @@ const Router = () => {
       path: PATH.VIDEO_LIST,
       element: <VideoList />,
     },
-
+    {
+      path: PATH.USER_LIKE_VIDEO,
+      element: <UserLikeVideo />,
+    },
     {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
