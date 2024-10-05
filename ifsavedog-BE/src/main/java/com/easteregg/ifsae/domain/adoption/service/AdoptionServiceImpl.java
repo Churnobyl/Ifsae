@@ -27,8 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.easteregg.ifsae.domain.adoption.type.AdoptionStatus.REJECTED;
-import static com.easteregg.ifsae.domain.adoption.type.AdoptionStatus.WAITING;
+import static com.easteregg.ifsae.domain.adoption.type.AdoptionStatus.*;
 import static com.easteregg.ifsae.global.exception.ErrorCode.*;
 
 @Service
@@ -86,6 +85,24 @@ public class AdoptionServiceImpl implements AdoptionService {
                 .orElseThrow(() -> new AdoptionException(ADOPTION_NOT_FOUND));
 
         adoption.updateAdoptionStatus(REJECTED);
+
+        adoptionRepository.save(adoption);
+    }
+
+    @Override
+    public void acceptAdoption(User user, Long adoptionId) {
+        Adoption adoption = adoptionRepository.findById(adoptionId)
+                .map(foundAdoption -> {
+                    // 입양 상태가 WAITING이 아닐 경우 에러
+                    if (foundAdoption.getAdoptionStatus() != AdoptionStatus.WAITING) {
+                        throw new AdoptionException(ADOPTION_NOT_WAITING);
+                    }
+                    return foundAdoption;
+                })
+                // 입양 정보가 조회되지 않을 경우 에러
+                .orElseThrow(() -> new AdoptionException(ADOPTION_NOT_FOUND));
+
+        adoption.updateAdoptionStatus(ACCEPTED);
 
         adoptionRepository.save(adoption);
     }
