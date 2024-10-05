@@ -4,6 +4,9 @@ export enum ENDPOINT {
   SIGNUP = 'api/auth/signup',
   EMAIL_AUTH = 'api/auth/email-auth',
   VERIFY_EMAIL_CODE = 'api/auth/verify-emailcode',
+
+  // Shelter
+  CREATE_SHELTER = 'api/shelter',
 }
 
 export enum HTTP_STATUS {

@@ -2,6 +2,8 @@ import SignupForm from '@/components/signup/SignupForm';
 import SignupResult from '@/components/signup/SignupResult';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
+import CenterMyPage from '@/pages/CenterMyPage';
+import CreateShelterPage from '@/pages/CreateShelterPage';
 import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import FollowPage from '@/pages/FollowPage';
@@ -13,9 +15,12 @@ import MungtsuPage from '@/pages/MungtsuPage';
 import MyPage from '@/pages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import UserMyPage from '@/pages/UserMyPage';
-import CenterMyPage from '@/pages/CenterMyPage';
+import UserRecommendPage from '@/pages/UserRecommendPage';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
+import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import {
@@ -24,11 +29,6 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import { useUserStateStore } from '@/stores/auth/userStateStore';
-import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
-import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
-import UserRecommendPage from '@/pages/UserRecommendPage';
-import CreateCenterPage from '@/pages/CreateCenterPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -74,7 +74,7 @@ const Router = () => {
     },
     {
       path: PATH.CREATE_CENTER,
-      element: <CreateCenterPage />,
+      element: <CreateShelterPage />,
     },
 
     {
@@ -112,7 +112,7 @@ const Router = () => {
               useUserStateStore.getState().role ===
               UserRoleEnum.ROLE_CENTER.toString()
             ) {
-              // return <Navigate to={PATH.CREATE_CENTER} />;
+              return <Navigate to={PATH.CREATE_CENTER} />;
             }
           }
           return <MainContainer />;
