@@ -7,6 +7,9 @@ export enum ENDPOINT {
 
   // Shelter
   CREATE_SHELTER = 'api/shelter',
+
+  // MyPage
+  GET_MY_SHELTER = 'api/user/my-shelter',
 }
 
 export enum HTTP_STATUS {
