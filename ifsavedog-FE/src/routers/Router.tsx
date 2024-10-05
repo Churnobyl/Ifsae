@@ -4,7 +4,6 @@ import VideoList from '@/components/video/VideoList';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
-import DonationPage from '@/pages/DonationPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
@@ -12,6 +11,8 @@ import LoginPage from '@/pages/LoginPage';
 import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
+import MyDogListPage from '@/pages/MyDogListPage';
+import MyPage from '@/pages/MyPage';
 import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
@@ -88,7 +89,6 @@ const Router = () => {
       path: PATH.MAIN,
       errorElement: <NotFoundPage />,
       element: (() => {
-        // 액세스 토큰이 있으면
         if (accessToken) {
           if (
             // 근데 유저 상태가 PENDING이면
@@ -151,9 +151,14 @@ const Router = () => {
       element: <FollowPage />,
     },
     {
-      path: PATH.DONATION,
+      path: PATH.CENTER_DOG_LIST,
       errorElement: <NotFoundPage />,
-      element: <DonationPage />,
+      element: <MyDogListPage />,
+    },
+    {
+      path: PATH.CENTER_DONATION_LIST,
+      errorElement: <NotFoundPage />,
+      element: <CenterDonationListPage />,
     },
   ];
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Card from '@/components/Adoption/Card';
-import DogPreview from '@/components/Adoption/DogPreviewBox';
+import AdoptionCard from '@/components/Adoption/AdoptionCard';
+import DogPreview from '@/components/common/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
@@ -114,7 +114,7 @@ const AdoptionPage = () => {
       <div className="p-4">
         <div>
           {cardList.map((donationInfo) => (
-            <Card
+            <AdoptionCard
               key={donationInfo.name}
               name={donationInfo.name}
               age={donationInfo.age}
