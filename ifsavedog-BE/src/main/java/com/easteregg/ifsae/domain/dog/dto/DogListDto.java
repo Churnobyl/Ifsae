@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class DogListDto {
-
     private long id;
 
     private String name;
@@ -16,5 +15,4 @@ public class DogListDto {
     private long shelterId;
 
     private String shelterName;
-
 }
