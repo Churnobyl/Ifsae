@@ -3,7 +3,7 @@ export type DogDetailType = {
   name: string;
   age: number;
   gender: 'MALE' | 'FEMALE' | 'NEUTRAL';
-  dogStatus: 'NOT_ADOPTED' | 'ADOPTED';
+  dogStatus: 'NOT_ADOPTED' | 'ADOPTED' | 'DEAD';
   species: string;
   info: string;
   image: string;

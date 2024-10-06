@@ -158,33 +158,34 @@ const Router = () => {
             },
           ],
         },
+        {
+          path: PATH.FOLLOW,
+          errorElement: <NotFoundPage />,
+          element: <FollowPage />,
+        },
+        {
+          path: PATH.CENTER_DOG_LIST,
+          errorElement: <NotFoundPage />,
+          element: <MyDogListPage />,
+        },
+        {
+          path: PATH.CENTER_DONATION_LIST,
+          errorElement: <NotFoundPage />,
+          element: <CenterDonationListPage />,
+        },
+        {
+          path: PATH.DOG_DETAIL + '/:id',
+          errorElement: <NotFoundPage />,
+          element: <DogDetailPage />,
+        },
+        {
+          path: PATH.DONATION,
+          errorElement: <NotFoundPage />,
+          element: <DonationPage />,
+        },
       ],
     },
-    {
-      path: PATH.FOLLOW,
-      errorElement: <NotFoundPage />,
-      element: <FollowPage />,
-    },
-    {
-      path: PATH.CENTER_DOG_LIST,
-      errorElement: <NotFoundPage />,
-      element: <MyDogListPage />,
-    },
-    {
-      path: PATH.CENTER_DONATION_LIST,
-      errorElement: <NotFoundPage />,
-      element: <CenterDonationListPage />,
-    },
-    {
-      path: PATH.DOG_DETAIL + '/:id',
-      errorElement: <NotFoundPage />,
-      element: <DogDetailPage />,
-    },
-    {
-      path: PATH.DONATION,
-      errorElement: <NotFoundPage />,
-      element: <DonationPage />,
-    },
+
   ];
 
   const router = createBrowserRouter([...routes]);
