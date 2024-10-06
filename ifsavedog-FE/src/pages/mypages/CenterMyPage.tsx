@@ -11,8 +11,8 @@ const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center text-black">
-        <div className="w-4/5 bg-whiteGray m-2 p-4 rounded-lg mb-6">
-          <div className="flex flex-row mb-4">
+        <div className="w-11/12 bg-whiteGray m-2 p-4 rounded-lg mb-6">
+          <div className="flex flex-row mb-4 justify-around">
             <img
               src={CenterProfileImg}
               alt="Center Profile Image"
@@ -21,23 +21,20 @@ const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
             <div className="space-y-[1px]">
               <p className="text-lg font-semibold">{name}</p>
               <p className="text-sm">{address}</p>
-              <p className="text-sm text-lightGray">{phone}</p>
+              <p className="text-sm text-gray">{phone}</p>
             </div>
           </div>
-          <div>
-            <p className="text-sm">{content}</p>
+
+          <div className="flex justify-center">
+            <p className="w-5/6 text-sm">{content}</p>
           </div>
         </div>
 
-        <div className="border-t border-b border-lightGray py-6 px-2 mb-6">
+        <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-6 px-2 mb-6">
           <div className="flex justify-around items-center">
             <div className="flex flex-col items-center">
-              <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-                <img
-                  src={ManageVideoIcon}
-                  alt="like"
-                  className="w-[35px] h-[35px]"
-                />
+              <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+                <img src={ManageVideoIcon} alt="like" className="w-8 h-8" />
                 <p className="text-sm font-medium text-gray-600">
                   센터 영상 관리
                 </p>
@@ -45,26 +42,22 @@ const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
             </div>
             <div className="w-[1px] h-[24px] bg-black rounded-full mx-2"></div>
             <div className="flex flex-col items-center">
-              <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-                <img
-                  src={EditProfileICon}
-                  alt="like"
-                  className="w-[35px] h-[35px]"
-                />
+              <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+                <img src={EditProfileICon} alt="like" className="w-8 h-8" />
                 <p className="text-sm font-medium text-gray-600">프로필 수정</p>
               </div>
             </div>
             <div className="w-[1px] h-[24px] bg-black rounded-full mx-2"></div>
             <div className="flex flex-col items-center">
-              <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-                <img src={PawIcon} alt="like" className="w-[35px] h-[35px]" />
+              <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+                <img src={PawIcon} alt="like" className="w-8 h-8" />
                 <p className="text-sm font-medium text-gray-600">강아지 관리</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="px-2">
+        <div className="px-2 w-11/12">
           <div className="flex items-center mb-4">
             <FaHandHoldingHeart size={24} className="mr-2" />
             <p className="text-lg font-semibold">후원자 관리</p>
