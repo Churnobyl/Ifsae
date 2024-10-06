@@ -25,7 +25,7 @@ const Bottombar = () => {
   }, []);
 
   return (
-    <div className="sticky bottom-0 left-0 w-full z-999 flex flex-row bg-subBase">
+    <div className="bottom-bar sticky bottom-0 left-0 w-full z-999 flex flex-row bg-subBase">
       {menus.map(({ name, path }) => (
         <BottomItem
           key={name}

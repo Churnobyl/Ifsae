@@ -1,15 +1,24 @@
+const dogFaces = [
+  '/src/assets/dogFace/1.jfif',
+  '/src/assets/dogFace/2.jfif',
+  '/src/assets/dogFace/3.jfif',
+  '/src/assets/dogFace/4.jfif',
+];
+
 const DogFaces = () => {
   return (
-    <div className="flex w-40 overflow-hidden">
-      {' '}
-      {/* Set the width and hide overflow */}
-      {[...Array(10)].map((_, index) => (
+    <div className="flex w-18">
+      {dogFaces.map((dogface, index) => (
         <div
           key={index}
           className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center z-10 -ml-4"
-          style={{ zIndex: 10 - index }} /* Adjust z-index for stacking */
+          style={{ zIndex: 10 - index }}
         >
-          Dog face
+          <img
+            src={dogface}
+            className={'w-full h-full object-cover rounded-full'}
+            alt=""
+          />
         </div>
       ))}
     </div>
