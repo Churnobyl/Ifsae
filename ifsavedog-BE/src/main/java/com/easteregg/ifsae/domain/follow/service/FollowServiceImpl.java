@@ -8,6 +8,7 @@ import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,10 @@ public class FollowServiceImpl implements FollowService {
     public void deleteFollow(long userId, long dogId) {
         Follow follow = followRepository.findByUserIdAndDogId(userId, dogId).orElseThrow(NoSuchElementException::new);
         followRepository.delete(follow);
+    }
+
+    @Override
+    public boolean checkFollow(long userId, long dogId) {
+        return followRepository.findByUserIdAndDogId(userId, dogId).isPresent();
     }
 }
