@@ -1,6 +1,6 @@
 import datetime
 from service.get_datas import *
-from service.insert_values import *
+from service.insert_rank_values import *
 
 def rank_latest_dog():
     latest_dog = get_latest_1000_dogs()
