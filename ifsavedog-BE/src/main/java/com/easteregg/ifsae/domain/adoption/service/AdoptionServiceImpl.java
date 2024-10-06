@@ -1,9 +1,6 @@
 package com.easteregg.ifsae.domain.adoption.service;
 
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionApplierListDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionCreateRequest;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionDetailDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.dto.*;
 import com.easteregg.ifsae.domain.adoption.entity.Adoption;
 import com.easteregg.ifsae.domain.adoption.repository.AdoptionRepository;
 import com.easteregg.ifsae.domain.adoption.type.AdoptionStatus;
@@ -58,6 +55,24 @@ public class AdoptionServiceImpl implements AdoptionService {
                 .build();
 
         adoptionRepository.save(adoption);
+    }
+
+    @Override
+    public List<AdoptionShelterListRes> getShelterAdoptionList(User user) {
+        Shelter shelter = shelterUserRepository.findByUserId(user.getId())
+                // 쉘터가 없을 경우 예외처리
+                .orElseThrow(() -> new ShelterUserException(ErrorCode.SHELTER_NOT_FOUND))
+                .getShelter();
+
+        List<Adoption> adoptionList = adoptionRepository.findAdoptionsByShelterId(shelter.getId());
+
+        if (adoptionList.isEmpty()) {
+            throw new AdoptionException(ADOPTION_NOT_FOUND);
+        }
+
+        return adoptionList.stream()
+                .map(AdoptionShelterListRes::fromAdoption)
+                .toList();
     }
 
     @Override
