@@ -22,6 +22,12 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
+    @ExceptionHandler(DogException.class)
+    protected ResponseEntity<ErrorResponse> handleDogException(DogException e) {
+        log.error("[CustomSecurityException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
     @ExceptionHandler(UserException.class)
     protected ResponseEntity<ErrorResponse> handleUserException(UserException e) {
         log.error("[UserException] - {} : {}", e.getErrorCode(), e.getMessage(), e);
