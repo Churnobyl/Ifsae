@@ -1,14 +1,15 @@
 import classNames from 'classnames';
+import { DogType } from '@/types/dog/DogType';
 
 interface CardType {
-  name: string;
-  age: number;
+  id: number;
+  dog: DogType;
   duration: number;
-  image: string;
   category: 'donation' | 'adoption';
 }
 
-const AdoptionCard = ({ name, age, duration, image, category }: CardType) => {
+const AdoptionCard = ({ dog, duration, category }: CardType) => {
+  const { name, age, image } = dog;
   const bgColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
   const borderColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';
   const textColor = category === 'donation' ? 'bg-lightGray' : 'bg-lightBlue';

@@ -5,20 +5,14 @@ interface DonationItem {
   date: string;
   amount: number;
   image: string;
-  dog: Dog;
+  dogId: number;
 }
 
-interface Dog {
-  id: number;
-  name: string;
-  image: string;
-}
-
-const DonationItem = ({ dog, name, date, amount, image }: DonationItem) => {
+const DonationItem = ({ dogId, name, date, amount, image }: DonationItem) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/dog/${dog.id}`);
+    navigate(`/dog/${dogId}`);
   };
 
   return (

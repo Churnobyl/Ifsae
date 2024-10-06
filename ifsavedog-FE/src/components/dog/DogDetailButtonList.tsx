@@ -2,20 +2,32 @@ import { useState } from 'react';
 import { FaHeart, FaRegHeart, FaDonate, FaPaw } from 'react-icons/fa';
 import SquareButton from '@/components/common/SquareButton';
 
-const DogDetailButtonList = () => {
-  const [isFollowed, setIsFollowed] = useState(false);
+interface DogDetailButtonListProps {
+  follow: boolean; // 팔로우 여부는 boolean으로 처리
+  dogStatus: 'ADOPTED' | 'NOT_ADOPTED' | 'DEAD'; // dogStatus는 ADOPTED와 NOT_ADOPTED로 타입 지정
+}
+
+const DogDetailButtonList = ({
+  follow,
+  dogStatus,
+}: DogDetailButtonListProps) => {
+  const [isFollowed, setIsFollowed] = useState(follow); // 팔로우 여부
 
   const toggleFollow = () => {
     setIsFollowed(!isFollowed);
   };
 
+  // 후원 및 입양 종료 여부 확인
+  const canAdopt = dogStatus === 'NOT_ADOPTED';
+
   return (
     <div className="flex justify-between mt-4 space-x-4 max-w-xl mx-auto">
       {/* 후원하기 버튼 */}
       <SquareButton
-        label="후원하기"
-        icon={<FaDonate className="w-6 h-6 text-black" />} // 아이콘 크기 줄이고 색상 검정으로 변경
+        label={canAdopt ? '후원하기' : '후원종료'} // ADOPTED 상태면 "후원 종료"로 변경
+        icon={<FaDonate className="w-6 h-6 text-black" />}
         onClick={() => alert('후원하기 클릭됨')}
+        disabled={!canAdopt} // 입양된 경우 비활성화
       />
 
       {/* 팔로우 버튼 */}
@@ -27,15 +39,16 @@ const DogDetailButtonList = () => {
           ) : (
             <FaRegHeart className="w-6 h-6 text-black" />
           )
-        } // 팔로우 상태에 따른 하트 아이콘
+        }
         onClick={toggleFollow}
       />
 
       {/* 입양하기 버튼 */}
       <SquareButton
-        label="입양하기"
-        icon={<FaPaw className="w-6 h-6 text-black" />} // 입양 아이콘 크기 및 색상 수정
+        label={canAdopt ? '입양하기' : '입양종료'} // ADOPTED 상태면 "입양 종료"로 변경
+        icon={<FaPaw className="w-6 h-6 text-black" />}
         onClick={() => alert('입양하기 클릭됨')}
+        disabled={!canAdopt} // 입양된 경우 비활성화
       />
     </div>
   );

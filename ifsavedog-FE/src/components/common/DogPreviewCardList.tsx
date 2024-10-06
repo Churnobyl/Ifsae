@@ -1,8 +1,8 @@
 import DogPreviewCard from '@/components/common/DogPreviewCard';
-import { DogDetailType } from '@/types/dog/DogDetailType';
+import { DogType } from '@/types/dog/DogType';
 
 interface DogList {
-  dogList: DogDetailType[];
+  dogList: DogType[];
 }
 
 const DogPreviewCardList = ({ dogList }: DogList) => {
