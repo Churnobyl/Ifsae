@@ -33,6 +33,7 @@ import CenterDonationListPage from '@/pages/CenterDonationListPage';
 import DogDetailPage from '@/pages/DogDetailPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
+import DonationPage from '@/pages/DonationPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -178,6 +179,11 @@ const Router = () => {
       path: PATH.DOG_DETAIL + '/:id',
       errorElement: <NotFoundPage />,
       element: <DogDetailPage />,
+    },
+    {
+      path: PATH.DONATION,
+      errorElement: <NotFoundPage />,
+      element: <DonationPage />,
     },
   ];
 

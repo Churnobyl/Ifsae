@@ -2,23 +2,10 @@ import DogDetail from '@/components/dog/DogDetail';
 import DogDetailButtonList from '@/components/dog/DogDetailButtonList';
 import PostPreviewBoxList from '@/components/dog/PostPreviewBoxList';
 import testImage from '@/assets/logo.webp';
-
-interface Dog {
-  id: number;
-  name: string;
-  age: number;
-  gender: 'MALE' | 'FEMALE' | 'NEUTRAL';
-  dogStatus: 'NOT_ADOPTED' | 'ADOPTED';
-  species: string;
-  info: string;
-  image: string;
-  shelterId: number;
-  shelterName: string;
-  followCnt: number;
-}
+import { DogDetailType } from '@/types/dog/DogDetailType';
 
 const DogDetailPage = () => {
-  const dog: Dog = {
+  const dog: DogDetailType = {
     id: 1,
     name: '루루',
     gender: 'FEMALE',
@@ -42,11 +29,11 @@ const DogDetailPage = () => {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen overflow-x-hidden">
+    <div className="overflow-x-hidden overflow-y-auto">
       {' '}
       {/* 가로 스크롤 제거 */}
       {/* DogDetail과 DogDetailButtonList는 중앙에 여백이 있음 */}
-      <div className="max-w-xl mx-auto p-8">
+      <div className="max-w-xl mx-auto p-6 pt-2">
         <DogDetail dog={dog} />
         <DogDetailButtonList />
       </div>
