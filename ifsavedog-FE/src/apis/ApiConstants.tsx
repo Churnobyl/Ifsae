@@ -10,6 +10,9 @@ export enum ENDPOINT {
 
   // MyPage
   GET_MY_SHELTER = 'api/user/my-shelter',
+
+  //
+  DOG = 'api/dog'
 }
 
 export enum HTTP_STATUS {

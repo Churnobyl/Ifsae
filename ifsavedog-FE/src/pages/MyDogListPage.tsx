@@ -2,36 +2,34 @@ import { useState } from 'react';
 import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import SearchComponent from '@/components/common/Search';
 import testImage from '@/assets/logo.webp';
+import { DogType } from '@/types/dog/DogType';
 
 const exampleDogList = [
   {
     id: 1,
     name: '루루',
-    location: '다리 밑에서 발견',
-    gender: '중성화',
-    breed: '믹스',
     age: 1,
+    gender: 'FEMALE',
+    species: '포메라니안',
     image: testImage,
   },
   {
     id: 2,
     name: '코코',
-    location: '공원에서 발견',
-    gender: '남',
-    breed: '푸들',
     age: 1,
+    gender: 'MALE',
+    species: '푸들',
     image: testImage,
   },
   {
     id: 3,
     name: '보리',
-    location: '강가에서 발견',
-    gender: '여',
-    breed: '믹스',
     age: 2,
+    gender: 'FEMALE',
+    species: '믹스',
     image: testImage,
   },
-];
+] as DogType[];
 
 const MyDogListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');

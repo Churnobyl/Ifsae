@@ -1,18 +1,6 @@
-interface Dog {
-  id: number;
-  name: string;
-  age: number;
-  gender: 'MALE' | 'FEMALE' | 'NEUTRAL';
-  dogStatus: 'NOT_ADOPTED' | 'ADOPTED';
-  species: string;
-  info: string;
-  image: string;
-  shelterId: number;
-  shelterName: string;
-  followCnt: number;
-}
+import { DogDetailType } from '@/types/dog/DogDetailType';
 
-const DogDetail = ({ dog }: { dog: Dog }) => {
+const DogDetail = ({ dog }: { dog: DogDetailType }) => {
   const getGenderText = (gender: 'MALE' | 'FEMALE' | 'NEUTRAL') => {
     switch (gender) {
       case 'MALE':
