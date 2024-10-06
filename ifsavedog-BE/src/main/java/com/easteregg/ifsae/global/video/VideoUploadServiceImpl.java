@@ -3,6 +3,8 @@ package com.easteregg.ifsae.global.video;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.VideoUploadException;
 import com.easteregg.ifsae.global.s3.S3VideoUploader;
+import com.easteregg.ifsae.global.video.entity.CompressedVideo;
+import com.easteregg.ifsae.global.video.entity.CompressedVideoUrlSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,19 @@ public class VideoUploadServiceImpl implements VideoUploadService {
     private final VideoCompressor videoCompressor;
     private final S3VideoUploader s3VideoUploader;
 
-    public String compressAndUploadVideo(MultipartFile inputFile) {
+    public CompressedVideoUrlSet compressAndUploadVideo(MultipartFile inputFile) {
         try {
-            // 비디오 압축
-            File compressedFile = videoCompressor.compressVideo(inputFile, inputFile.getOriginalFilename());
-            
-            // 비디오 업로드
-            return s3VideoUploader.uploadFile(compressedFile);
+            String originalFilename = inputFile.getOriginalFilename();
+            assert originalFilename != null;
+            String baseFilename = originalFilename.substring(0, originalFilename.lastIndexOf('.'));
+
+            String thumbnailFilename = baseFilename + ".png";
+
+            CompressedVideo compressedVideoSet = videoCompressor.compressVideo(inputFile, originalFilename, thumbnailFilename);
+
+            return s3VideoUploader.uploadFile(compressedVideoSet);
         } catch (Exception e) {
-            log.error("[video] 업로드 과정 중 에러 발생 - {}", e);
+            log.error("[video] 업로드 과정 중 에러 발생 - {}", e.toString());
             throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
         }
     }

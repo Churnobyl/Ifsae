@@ -20,6 +20,7 @@ import com.easteregg.ifsae.global.exception.type.PostException;
 import com.easteregg.ifsae.global.exception.type.ShelterException;
 import com.easteregg.ifsae.global.exception.type.ShelterUserException;
 import com.easteregg.ifsae.global.video.VideoUploadService;
+import com.easteregg.ifsae.global.video.entity.CompressedVideoUrlSet;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
@@ -61,10 +62,10 @@ public class PostServiceImpl implements PostService {
         Shelter shelter = findShelterAndCheckUser(user, request.getShelterId());
 
         // 비디오 압축 및 저장
-        String fileUrl = videoUploadService.compressAndUploadVideo(multipartFile);
+        CompressedVideoUrlSet urlSet = videoUploadService.compressAndUploadVideo(multipartFile);
 
         // Post 생성 및 저장
-        Post savedPost = createAndSavePost(request, fileUrl, shelter);
+        Post savedPost = createAndSavePost(request, urlSet, shelter);
 
         // PostDog 연결 및 저장
         savePostDogs(savedPost, request.getDogIds());
@@ -143,8 +144,8 @@ public class PostServiceImpl implements PostService {
     /**
      * Post를 생성하고 저장하는 헬퍼 메서드
      */
-    private Post createAndSavePost(PostDto.Request request, String fileUrl, Shelter shelter) {
-        Post post = request.toEntity(fileUrl, shelter);
+    private Post createAndSavePost(PostDto.Request request, CompressedVideoUrlSet urlSet, Shelter shelter) {
+        Post post = request.toEntity(urlSet, shelter);
         return postRepository.save(post);
     }
 

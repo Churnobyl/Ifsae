@@ -81,7 +81,7 @@ video:
   ffmpeg:
     video-codec: h264
     audio-codec: mp3
-    crf: 42
+    crf: 35
     audio-bitrate: 256k
     scale: 1280:720
   emitter:
