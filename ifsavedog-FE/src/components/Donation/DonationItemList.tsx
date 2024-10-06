@@ -1,4 +1,4 @@
-import DonationItem from '@/components/donation/DonationItem';
+import DonationItem from '@/components/Donation/DonationItem';
 
 interface Donation {
   id: number;
