@@ -1,14 +1,18 @@
 package com.easteregg.ifsae.domain.adoption.service;
 
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionApplierListDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionCreateRequest;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionDetailDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.dto.*;
 import com.easteregg.ifsae.domain.user.entity.User;
+
 import java.util.List;
 
 public interface AdoptionService {
     void createAdoption(User user, AdoptionCreateRequest adoptionCreateRequest);
+
+    List<AdoptionShelterListRes> getShelterAdoptionList(User user);
+
+    List<AdoptionUserListRes> getUserAdoptionList(User user);
+
+    void acceptAdoption(User user, Long adoptionId);
 
     void rejectAdoption(User user, Long adoptionId);
 

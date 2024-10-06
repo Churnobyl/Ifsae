@@ -17,7 +17,7 @@ public class DonationDto {
     @Getter
     @NoArgsConstructor
     public static class createDonationRequest {
-        int contribution;
+        Integer contribution;
 
         public Donation toEntity(User user, Dog dog) {
             return Donation.builder()
@@ -37,7 +37,7 @@ public class DonationDto {
         private Long dogId;
         private String dogName;
         private String dogImage;
-        private int contribution;
+        private Integer contribution;
         private LocalDateTime donateDate;
 
         public static getUserDonatedListResponse fromEntity(Donation donation) {
@@ -61,7 +61,7 @@ public class DonationDto {
         private String userProfileImage;
         private Long dogId;
         private String dogName;
-        private int contribution;
+        private Integer contribution;
         private LocalDateTime donateDate;
 
         public static getShelterDonorListResponse fromEntity(Donation donation) {
