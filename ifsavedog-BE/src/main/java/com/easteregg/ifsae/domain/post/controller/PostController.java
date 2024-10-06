@@ -1,11 +1,12 @@
 package com.easteregg.ifsae.domain.post.controller;
 
 import com.easteregg.ifsae.domain.post.dto.PostDto;
+import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.service.PostService;
 import com.easteregg.ifsae.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,7 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> writePost(
             @AuthenticationPrincipal User user,
@@ -70,8 +72,18 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/mungtsu")
-    public ResponseEntity<?> getMungtsu(@AuthenticationPrincipal User user, Pageable pageable) {
-        return new ResponseEntity<>(postService.getMungtsuNext(user, pageable), HttpStatus.OK);
+    @GetMapping("/dog/{dogId}")
+    public ResponseEntity<?> getPostListByDogId(@PathVariable Long dogId) {
+        List<PostPreview> postList = postService.getPostList(dogId);
+
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
+
+    @GetMapping("/like")
+    public ResponseEntity<?> getPostListByLike(@AuthenticationPrincipal User user) {
+        List<PostPreview> postList = postService.getPostListByLike(user.getId());
+
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
 }

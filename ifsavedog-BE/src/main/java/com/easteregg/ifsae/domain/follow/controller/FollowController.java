@@ -44,7 +44,7 @@ public class FollowController {
     @GetMapping("/{dogId}")
     public ResponseEntity<?> checkFollow(@AuthenticationPrincipal User user, @PathVariable long dogId) {
         boolean isFollowed = followService.checkFollow(user.getId(), dogId);
-        return new ResponseEntity(Map.of("isFollowed", isFollowed), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("isFollowed", isFollowed), HttpStatus.OK);
     }
 
 

@@ -8,10 +8,11 @@ import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 public class PostDto {
 
@@ -19,6 +20,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class Request {
+
         private Long id;
 
         @NotNull(message = "[PostDto.Request] need title")
@@ -35,15 +37,15 @@ public class PostDto {
 
         public Post toEntity(String videoUrl, Shelter shelter) {
             return Post.builder()
-                    .id(id)
-                    .title(title)
-                    .content(content)
-                    .videoUrl(videoUrl)
-                    .shelter(shelter)
-                    .dogs(new ArrayList<>())
-                    .comments(new ArrayList<>())
-                    .likes(new ArrayList<>())
-                    .build();
+                       .id(id)
+                       .title(title)
+                       .content(content)
+                       .videoUrl(videoUrl)
+                       .shelter(shelter)
+                       .dogs(new ArrayList<>())
+                       .comments(new ArrayList<>())
+                       .likes(new ArrayList<>())
+                       .build();
         }
     }
 
@@ -51,6 +53,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class UpdateRequest {
+
         private Long id;
 
         @NotNull(message = "[PostDto.UpdateRequest] need title")
@@ -63,16 +66,16 @@ public class PostDto {
 
         public Post toEntity(Post originalPost) {
             return Post.builder()
-                    .id(originalPost.getId())
-                    .title(title)
-                    .content(content)
-                    .videoUrl(originalPost.getVideoUrl())
-                    .shelter(originalPost.getShelter())
-                    .comments(originalPost.getComments())
-                    .likes(originalPost.getLikes())
-                    .likeCnt(originalPost.getLikeCnt())
-                    .viewCnt(originalPost.getViewCnt())
-                    .build();
+                       .id(originalPost.getId())
+                       .title(title)
+                       .content(content)
+                       .videoUrl(originalPost.getVideoUrl())
+                       .shelter(originalPost.getShelter())
+                       .comments(originalPost.getComments())
+                       .likes(originalPost.getLikes())
+                       .likeCnt(originalPost.getLikeCnt())
+                       .viewCnt(originalPost.getViewCnt())
+                       .build();
         }
     }
 
@@ -80,6 +83,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class Response {
+
         private Long id;
         private String title;
         private String content;
@@ -90,5 +94,14 @@ public class PostDto {
         private List<PostLike> likes;
         private int likeCnt;
         private int viewCnt;
+    }
+
+    @Getter
+    @Builder
+    public static class PostPreview {
+
+        private Long id;
+        private String title;
+        private String imageUrl;
     }
 }
