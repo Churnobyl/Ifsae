@@ -1,9 +1,6 @@
 package com.easteregg.ifsae.domain.adoption.service;
 
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionApplierListDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionCreateRequest;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionDetailDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.dto.*;
 import com.easteregg.ifsae.domain.adoption.entity.Adoption;
 import com.easteregg.ifsae.domain.adoption.repository.AdoptionRepository;
 import com.easteregg.ifsae.domain.adoption.type.AdoptionStatus;
@@ -17,6 +14,7 @@ import com.easteregg.ifsae.domain.user.entity.UserProfile;
 import com.easteregg.ifsae.domain.user.repository.UserProfileRepository;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.AdoptionException;
+import com.easteregg.ifsae.global.exception.type.ShelterUserException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import jakarta.transaction.Transactional;
 
@@ -60,6 +58,24 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    public List<AdoptionShelterListRes> getShelterAdoptionList(User user) {
+        Shelter shelter = shelterUserRepository.findByUserId(user.getId())
+                // 쉘터가 없을 경우 예외처리
+                .orElseThrow(() -> new ShelterUserException(ErrorCode.SHELTER_NOT_FOUND))
+                .getShelter();
+
+        List<Adoption> adoptionList = adoptionRepository.findAdoptionsByShelterId(shelter.getId());
+
+        if (adoptionList.isEmpty()) {
+            throw new AdoptionException(ADOPTION_NOT_FOUND);
+        }
+
+        return adoptionList.stream()
+                .map(AdoptionShelterListRes::fromAdoption)
+                .toList();
+    }
+
+    @Override
     public void updateAdoption(User user, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest) {
         Adoption adoption = adoptionRepository.findById(adoptionId).orElseThrow(NoSuchElementException::new);
 
@@ -72,37 +88,61 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
-    public void rejectAdoption(User user, Long adoptionId) {
-        Adoption adoption = adoptionRepository.findById(adoptionId)
-                .map(foundAdoption -> {
-                    // 입양 상태가 WAITING이 아닐 경우 에러
-                    if (foundAdoption.getAdoptionStatus() != AdoptionStatus.WAITING) {
-                        throw new AdoptionException(ADOPTION_NOT_WAITING);
-                    }
-                    return foundAdoption;
-                })
-                // 입양 정보가 조회되지 않을 경우 에러
-                .orElseThrow(() -> new AdoptionException(ADOPTION_NOT_FOUND));
-
-        adoption.updateAdoptionStatus(REJECTED);
-
-        adoptionRepository.save(adoption);
-    }
-
-    @Override
     public void acceptAdoption(User user, Long adoptionId) {
+        // 유저의 shelterId와 입양 신청서의 shelterId가 같은지 확인
         Adoption adoption = adoptionRepository.findById(adoptionId)
                 .map(foundAdoption -> {
                     // 입양 상태가 WAITING이 아닐 경우 에러
                     if (foundAdoption.getAdoptionStatus() != AdoptionStatus.WAITING) {
                         throw new AdoptionException(ADOPTION_NOT_WAITING);
                     }
+
+                    Shelter shelter = shelterUserRepository.findByUserId(user.getId())
+                            // 쉘터가 없을 경우 예외처리
+                            .orElseThrow(() -> new ShelterUserException(ErrorCode.SHELTER_NOT_FOUND))
+                            .getShelter();
+
+                    // 입양 신청서 대상 쉘터와 관리자의 소속 쉘터가 다를 경우 에러
+                    if (!shelter.getId().equals(foundAdoption.getShelter().getId())) {
+                        throw new AdoptionException(USER_NOT_FOUND_IN_SHELTER);
+                    }
+
                     return foundAdoption;
                 })
                 // 입양 정보가 조회되지 않을 경우 에러
                 .orElseThrow(() -> new AdoptionException(ADOPTION_NOT_FOUND));
 
         adoption.updateAdoptionStatus(ACCEPTED);
+
+        adoptionRepository.save(adoption);
+    }
+
+    @Override
+    public void rejectAdoption(User user, Long adoptionId) {
+        // 유저의 shelterId와 입양 신청서의 shelterId가 같은지 확인
+        Adoption adoption = adoptionRepository.findById(adoptionId)
+                .map(foundAdoption -> {
+                    // 입양 상태가 WAITING이 아닐 경우 에러
+                    if (foundAdoption.getAdoptionStatus() != AdoptionStatus.WAITING) {
+                        throw new AdoptionException(ADOPTION_NOT_WAITING);
+                    }
+
+                    Shelter shelter = shelterUserRepository.findByUserId(user.getId())
+                            // 쉘터가 없을 경우 예외처리
+                            .orElseThrow(() -> new ShelterUserException(ErrorCode.SHELTER_NOT_FOUND))
+                            .getShelter();
+
+                    // 입양 신청서 대상 쉘터와 관리자의 소속 쉘터가 다를 경우 에러
+                    if (!shelter.getId().equals(foundAdoption.getShelter().getId())) {
+                        throw new AdoptionException(USER_NOT_FOUND_IN_SHELTER);
+                    }
+
+                    return foundAdoption;
+                })
+                // 입양 정보가 조회되지 않을 경우 에러
+                .orElseThrow(() -> new AdoptionException(ADOPTION_NOT_FOUND));
+
+        adoption.updateAdoptionStatus(REJECTED);
 
         adoptionRepository.save(adoption);
     }
