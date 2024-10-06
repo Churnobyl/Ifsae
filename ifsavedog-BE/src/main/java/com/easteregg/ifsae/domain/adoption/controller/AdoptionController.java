@@ -1,9 +1,6 @@
 package com.easteregg.ifsae.domain.adoption.controller;
 
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionApplierListDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionCreateRequest;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionDetailDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.dto.*;
 import com.easteregg.ifsae.domain.adoption.service.AdoptionService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
@@ -38,7 +35,13 @@ public class AdoptionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //TODO : shleter 입양 신청 받은 리스트 조회
+    @GetMapping("/shelters")
+    public ResponseEntity<?> getShelterAdoptionList(@AuthenticationPrincipal User user) {
+        List<AdoptionShelterListRes> shelterAdoptionList = adoptionService.getShelterAdoptionList(user);
+
+        return new ResponseEntity<>(shelterAdoptionList, HttpStatus.OK);
+    }
+
     //TODO : user가 입양 신청한 리스트 조회
 
     @GetMapping("/{adoptionId}")
