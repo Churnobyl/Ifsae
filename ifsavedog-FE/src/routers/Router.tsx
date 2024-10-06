@@ -30,7 +30,10 @@ import {
 } from 'react-router-dom';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import DogDetailPage from '@/pages/DogDetailPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
+import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
+import DonationPage from '@/pages/DonationPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -92,6 +95,10 @@ const Router = () => {
       path: PATH.USER_PROFILE_EDIT,
       element: <UserProfileEdit />,
     },
+    {
+      path: PATH.CENTER_PROFILE_EDIT,
+      element: <CenterProfileEdit />,
+    },
 
     {
       path: PATH.MAIN,
@@ -131,7 +138,7 @@ const Router = () => {
           element: <MainPage />,
         },
         {
-          path: PATH.MUNGTSU.slice(1), // Remove the leading '/' for child paths
+          path: PATH.MUNGTSU.slice(1),
           element: <MungtsuPage />,
         },
         {
@@ -151,23 +158,34 @@ const Router = () => {
             },
           ],
         },
+        {
+          path: PATH.FOLLOW,
+          errorElement: <NotFoundPage />,
+          element: <FollowPage />,
+        },
+        {
+          path: PATH.CENTER_DOG_LIST,
+          errorElement: <NotFoundPage />,
+          element: <MyDogListPage />,
+        },
+        {
+          path: PATH.CENTER_DONATION_LIST,
+          errorElement: <NotFoundPage />,
+          element: <CenterDonationListPage />,
+        },
+        {
+          path: PATH.DOG_DETAIL + '/:id',
+          errorElement: <NotFoundPage />,
+          element: <DogDetailPage />,
+        },
+        {
+          path: PATH.DONATION,
+          errorElement: <NotFoundPage />,
+          element: <DonationPage />,
+        },
       ],
     },
-    {
-      path: PATH.FOLLOW,
-      errorElement: <NotFoundPage />,
-      element: <FollowPage />,
-    },
-    {
-      path: PATH.CENTER_DOG_LIST,
-      errorElement: <NotFoundPage />,
-      element: <MyDogListPage />,
-    },
-    {
-      path: PATH.CENTER_DONATION_LIST,
-      errorElement: <NotFoundPage />,
-      element: <CenterDonationListPage />,
-    },
+
   ];
 
   const router = createBrowserRouter([...routes]);

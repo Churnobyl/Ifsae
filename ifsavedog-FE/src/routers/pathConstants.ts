@@ -39,5 +39,10 @@ export const PATH = {
   /** 비디오 미리보기 카드 */
   VIDEO_LIST: '/video',
   USER_LIKE_VIDEO: '/mypage/like-video',
+  
+  /** 강아지 상세 페이지 */
+  DOG_DETAIL: '/dog',
+  
   USER_PROFILE_EDIT: '/mypage/edit-profile',
+  CENTER_PROFILE_EDIT: '/mypage/center/edit-profile',
 };

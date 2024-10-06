@@ -5,6 +5,7 @@ import com.easteregg.ifsae.domain.post.service.PostService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,6 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> writePost(
             @AuthenticationPrincipal User user,
@@ -68,5 +68,10 @@ public class PostController {
     ) {
         postService.delete(user, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/mungtsu")
+    public ResponseEntity<?> getMungtsu(@AuthenticationPrincipal User user, Pageable pageable) {
+        return new ResponseEntity<>(postService.getMungtsuNext(user, pageable), HttpStatus.OK);
     }
 }

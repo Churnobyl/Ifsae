@@ -36,14 +36,14 @@ const MyPage = () => {
           <div
             onClick={() => setIsGeneralSelected(true)}
             className={`w-1/2 px-4 py-2 text-center cursor-pointer 
-              ${isGeneralSelected ? 'border-b-2' : 'text-lightGray'}`}
+            ${isGeneralSelected ? 'border-b-2' : 'text-lightGray'}`}
           >
             일반
           </div>
           <div
             onClick={() => setIsGeneralSelected(false)}
             className={`w-1/2 px-4 py-2 text-center cursor-pointer"
-            ${isGeneralSelected ? 'text-lightGray' : 'border-b-2'}`}
+          ${isGeneralSelected ? 'text-lightGray' : 'border-b-2'}`}
           >
             센터
           </div>

@@ -1,50 +1,87 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AdoptionCard from '@/components/Adoption/AdoptionCard';
 import DogPreview from '@/components/common/DogPreviewBox';
-import TestImage from '@/assets/logo.webp';
+import testImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
 import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
-
-interface Dog {
-  name: string;
-  age: number;
-  image: string;
-}
+import { DogType } from '@/types/dog/DogType';
 
 interface DonationInfo {
-  name: string;
-  age: number;
+  id: number;
+  dog: DogType;
   duration: number;
-  image: string;
-  category: 'adoption' | 'donation';
+  category: 'donation' | 'adoption';
 }
 
 const AdoptionPage = () => {
   const cardList: DonationInfo[] = [
     {
-      name: '루루',
-      age: 2,
+      id: 1,
+      dog: {
+        id: 1,
+        name: '루루',
+        age: 1,
+        gender: 'FEMALE',
+        species: '포메라니안',
+        image: testImage,
+      },
       duration: 3,
-      image: TestImage,
       category: 'adoption',
     },
   ];
+  const recommenedList = [
+    {
+      id: 1,
+      name: '루루',
+      age: 1,
+      gender: 'FEMALE',
+      species: '포메라니안',
+      image: testImage,
+    },
+    {
+      id: 2,
+      name: '코코',
+      age: 1,
+      gender: 'MALE',
+      species: '푸들',
+      image: testImage,
+    },
+    {
+      id: 3,
+      name: '보리',
+      age: 2,
+      gender: 'FEMALE',
+      species: '믹스',
+      image: testImage,
+    },
+  ] as DogType[];
 
-  const recommenedList: Dog[] = [
-    { name: '초코', age: 1, image: TestImage },
-    { name: '코코', age: 2, image: TestImage },
-    { name: '보리', age: 3, image: TestImage },
-    { name: '바니', age: 4, image: TestImage },
-    { name: '말티', age: 5, image: TestImage },
-  ];
-
-  const followList: Dog[] = [
-    { name: '초코', age: 1, image: TestImage },
-    { name: '코코', age: 2, image: TestImage },
-    { name: '보리', age: 3, image: TestImage },
-    { name: '바니', age: 4, image: TestImage },
-    { name: '말티', age: 5, image: TestImage },
-  ];
+  const followList = [
+    {
+      id: 1,
+      name: '루루',
+      age: 1,
+      gender: 'FEMALE',
+      species: '포메라니안',
+      image: testImage,
+    },
+    {
+      id: 2,
+      name: '코코',
+      age: 1,
+      gender: 'MALE',
+      species: '푸들',
+      image: testImage,
+    },
+    {
+      id: 3,
+      name: '보리',
+      age: 2,
+      gender: 'FEMALE',
+      species: '믹스',
+      image: testImage,
+    },
+  ] as DogType[];
 
   const recommenedRef = useRef<HTMLDivElement | null>(null);
   const followRef = useRef<HTMLDivElement | null>(null);
@@ -115,11 +152,10 @@ const AdoptionPage = () => {
         <div>
           {cardList.map((donationInfo) => (
             <AdoptionCard
-              key={donationInfo.name}
-              name={donationInfo.name}
-              age={donationInfo.age}
+              key={donationInfo.id}
+              id={donationInfo.id}
+              dog={donationInfo.dog}
               duration={donationInfo.duration}
-              image={donationInfo.image}
               category={donationInfo.category}
             />
           ))}
@@ -143,8 +179,15 @@ const AdoptionPage = () => {
           >
             <div className="flex space-x-4">
               {recommenedList.map((dog) => (
-                <div className="flex-none w-1/3" key={dog.name}>
-                  <DogPreview name={dog.name} age={dog.age} image={dog.image} />
+                <div className="flex-none w-1/3" key={dog.id}>
+                  <DogPreview
+                    id={dog.id}
+                    name={dog.name}
+                    age={dog.age}
+                    image={dog.image}
+                    gender={'FEMALE'}
+                    species={''}
+                  />
                 </div>
               ))}
             </div>
@@ -166,8 +209,15 @@ const AdoptionPage = () => {
           <div ref={followRef} className="mt-4 overflow-x-auto scrollbar-hide">
             <div className="flex space-x-4">
               {followList.map((dog) => (
-                <div className="flex-none w-1/3" key={dog.name}>
-                  <DogPreview name={dog.name} age={dog.age} image={dog.image} />
+                <div className="flex-none w-1/3" key={dog.id}>
+                  <DogPreview
+                    id={dog.id}
+                    name={dog.name}
+                    age={dog.age}
+                    image={dog.image}
+                    gender={'FEMALE'}
+                    species={''}
+                  />
                 </div>
               ))}
             </div>

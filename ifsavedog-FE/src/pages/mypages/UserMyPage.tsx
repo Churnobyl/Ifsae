@@ -13,11 +13,11 @@ const UserMyPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center text-black">
-      <div className="w-5/6 bg-whiteGray m-2 p-4 rounded-lg mb-6">
+      <div className="w-11/12 flex flex-row justify-around bg-whiteGray m-2 p-4 rounded-lg mb-6">
         <img
           src={profileImgUrl ? profileImgUrl : DefaultProfileImg}
           alt="User Profile Image"
-          className="w-16 h-16 rounded-full mr-4"
+          className="w-20 h-20 rounded-full mr-4"
         />
 
         <div>
@@ -26,42 +26,36 @@ const UserMyPage = () => {
         </div>
       </div>
 
-      <div className="border-t border-b border-lightGray py-6 px-2 mb-6">
+      <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-6 px-2 mb-6">
         <div className="flex justify-around items-center">
           <div className="flex flex-col items-center">
-            <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-              <img src={HeartIcon} alt="like" className="w-[35px] h-[35px]" />
-              <p className="text-sm font-medium text-gray-600">
-                좋아요 한 영상
-              </p>
+            <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+              <img src={HeartIcon} alt="like" className="w-8 h-8" />
+              <p className="text-sm font-medium">좋아요 한 영상</p>
             </div>
           </div>
 
           <div className="w-[1px] h-[24px] bg-black rounded-full mx-2"></div>
 
           <div className="flex flex-col items-center">
-            <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-              <img
-                src={EditProfileICon}
-                alt="like"
-                className="w-[35px] h-[35px]"
-              />
-              <p className="text-sm font-medium text-gray-600">프로필 수정</p>
+            <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+              <img src={EditProfileICon} alt="like" className="w-8 h-8" />
+              <p className="text-sm font-medium">프로필 수정</p>
             </div>
           </div>
 
           <div className="w-[1px] h-[24px] bg-black rounded-full mx-2"></div>
 
           <div className="flex flex-col items-center">
-            <div className="w-[90px] h-[90px] bg-whiteGray rounded-xl flex flex-col items-center justify-center">
-              <img src={RankingIcon} alt="like" className="w-[35px] h-[35px]" />
-              <p className="text-sm font-medium text-gray-600">{grade}</p>
+            <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
+              <img src={RankingIcon} alt="like" className="w-8 h-8" />
+              <p className="text-sm font-medium">{grade}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="px-2">
+      <div className="px-3 w-11/12">
         <div className="flex items-center mb-4">
           <BsFillPeopleFill size={24} className="mr-2" />
           <p className="text-lg font-semibold">팔로우</p>
