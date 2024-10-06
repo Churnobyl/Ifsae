@@ -18,7 +18,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,16 +79,19 @@ public class Dog {
         this.gender = Gender.valueOf(dogCreateRequest.getGender());
         this.dogStatus = DogStatus.valueOf(dogCreateRequest.getDogStatus());
         this.info = dogCreateRequest.getInfo();
+    }
 
+    public void updateDogStatus(DogStatus dogsStatus) {
+        this.dogStatus = dogsStatus;
     }
 
     public DogListDto toDogListDto() {
         return DogListDto.builder()
-                         .id(this.getId())
-                         .name(this.getName())
-                         .image(this.getImage())
-                         .shelterId(this.getShelterDog().getShelter().getId())
-                         .shelterName(this.getShelterDog().getShelter().getName())
-                         .build();
+                .id(this.getId())
+                .name(this.getName())
+                .image(this.getImage())
+                .shelterId(this.getShelterDog().getShelter().getId())
+                .shelterName(this.getShelterDog().getShelter().getName())
+                .build();
     }
 }
