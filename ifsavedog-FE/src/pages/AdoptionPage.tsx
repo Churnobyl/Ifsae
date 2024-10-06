@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import AdoptionCard from '@/components/adoption/AdoptionCard';
+import AdoptionCard from '@/components/Adoption/AdoptionCard';
 import DogPreview from '@/components/common/DogPreviewBox';
 import TestImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';

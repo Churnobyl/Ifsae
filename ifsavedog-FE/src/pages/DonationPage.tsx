@@ -1,4 +1,4 @@
-import DonationItemList from '@/components/donation/DonationItemList';
+import DonationItemList from '@/components/Donation/DonationItemList';
 import testImage from '@/assets/logo.webp';
 
 interface Dog {
