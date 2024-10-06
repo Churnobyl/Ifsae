@@ -42,7 +42,12 @@ public class AdoptionController {
         return new ResponseEntity<>(shelterAdoptionList, HttpStatus.OK);
     }
 
-    //TODO : user가 입양 신청한 리스트 조회
+    @GetMapping("/users")
+    public ResponseEntity<?> getUserAdoptionList(@AuthenticationPrincipal User user) {
+        List<AdoptionUserListRes> userAdoptionList = adoptionService.getUserAdoptionList(user);
+
+        return new ResponseEntity<>(userAdoptionList, HttpStatus.OK);
+    }
 
     @GetMapping("/{adoptionId}")
     public ResponseEntity<AdoptionDetailDto> getAdoption(@AuthenticationPrincipal User user,
