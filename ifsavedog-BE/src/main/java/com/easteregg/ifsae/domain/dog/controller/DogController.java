@@ -6,7 +6,9 @@ import com.easteregg.ifsae.domain.dog.service.DogService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import jakarta.transaction.Transactional;
+
 import java.io.IOException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 @Slf4j
 public class DogController {
-
     private final DogService dogService;
 
     @PostMapping

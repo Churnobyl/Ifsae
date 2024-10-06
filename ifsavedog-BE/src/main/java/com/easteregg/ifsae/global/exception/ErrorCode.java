@@ -25,6 +25,10 @@ public enum ErrorCode {
     INVALID_PASSWORD("비밀번호가 옳지 않습니다.", HttpStatus.UNAUTHORIZED),
     FORBIDDEN("사용자의 권한이 없습니다.", HttpStatus.FORBIDDEN),
 
+    // 개 관련 에러
+    SPECIES_NOT_FOUND("품종을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    DOG_NOT_FOUND("개를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
     // 기부 관련 에러
     DONATION_NOT_ALLOWED("기부할 수 없는 대상입니다.", HttpStatus.BAD_REQUEST),
     DONATION_NOT_FOUND("기부 내역이 없습니다.", HttpStatus.NOT_FOUND),
@@ -45,6 +49,9 @@ public enum ErrorCode {
 
     // 센터 - 유저 관련 에러
     USER_NOT_FOUND_IN_SHELTER("해당 쉘터에 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+
+    // 센터 - 개 관련 에러
+    DOG_NOT_FOUND_IN_SHELTER("강아지가 소속된 쉘터를 찾을 수 없습니다.", HttpStatus.UNAUTHORIZED),
 
     // 사용자 관련 에러
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
