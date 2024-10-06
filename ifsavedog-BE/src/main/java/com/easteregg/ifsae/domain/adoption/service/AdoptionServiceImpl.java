@@ -76,6 +76,19 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    public List<AdoptionUserListRes> getUserAdoptionList(User user) {
+        List<Adoption> adoptionList = adoptionRepository.findAdoptionsByUserId(user.getId());
+
+        if (adoptionList.isEmpty()) {
+            throw new AdoptionException(ADOPTION_NOT_FOUND);
+        }
+
+        return adoptionList.stream()
+                .map(AdoptionUserListRes::fromAdoption)
+                .toList();
+    }
+
+    @Override
     public void updateAdoption(User user, long adoptionId, AdoptionUpdateRequest adoptionUpdateRequest) {
         Adoption adoption = adoptionRepository.findById(adoptionId).orElseThrow(NoSuchElementException::new);
 

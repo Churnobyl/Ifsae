@@ -10,6 +10,8 @@ public interface AdoptionService {
 
     List<AdoptionShelterListRes> getShelterAdoptionList(User user);
 
+    List<AdoptionUserListRes> getUserAdoptionList(User user);
+
     void acceptAdoption(User user, Long adoptionId);
 
     void rejectAdoption(User user, Long adoptionId);
