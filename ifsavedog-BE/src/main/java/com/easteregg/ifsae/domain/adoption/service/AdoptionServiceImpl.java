@@ -23,6 +23,7 @@ import com.easteregg.ifsae.global.exception.type.ShelterUserException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,7 @@ public class AdoptionServiceImpl implements AdoptionService {
                 .adoptionPurpose(adoptionCreateRequest.getAdoptionPurpose())
                 .absencePlan(adoptionCreateRequest.getAbsencePlan())
                 .adoptionStatus(WAITING)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         adoptionRepository.save(adoption);
