@@ -34,4 +34,8 @@ public class ShelterDog {
     @JoinColumn(name = "dog_id")
     @JsonIgnore // 순환 참조 방지
     private Dog dog;
+
+    public void updateShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
 }
