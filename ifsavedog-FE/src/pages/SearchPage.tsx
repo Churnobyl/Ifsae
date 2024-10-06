@@ -50,7 +50,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center">
       <div className="w-11/12 h-full py-4">
         <div className="px-2 text-xl font-semibold">영상 검색</div>
         <Input
@@ -62,7 +62,7 @@ const SearchPage = () => {
           type="text"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
           {filteredVideos.length > 0 ? (
             filteredVideos.map((video) => (
               <div

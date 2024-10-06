@@ -38,7 +38,7 @@ const DogDetailPage = () => {
     };
 
     fetchDogDetail(); // 강아지 정보만 불러오기
-  }, []); // 빈 배열: 컴포넌트가 처음 렌더링될 때 한 번만 호출
+  }, [id]); // 빈 배열: 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   if (loading) {
     return <div>Loading...</div>; // 로딩 중일 때 표시할 UI
