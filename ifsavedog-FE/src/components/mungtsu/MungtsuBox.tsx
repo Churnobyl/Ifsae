@@ -1,6 +1,13 @@
 import DogFaces from '@/components/mungtsu/selectPanel/DogFaces';
+import SelectIcon from '@/components/mungtsu/selectPanel/SelectIcon';
 import { useEffect, useRef, useState } from 'react';
-import { FaRegCirclePause, FaRegCirclePlay } from 'react-icons/fa6';
+import { AiOutlineLike } from 'react-icons/ai';
+import { FaShareAlt } from 'react-icons/fa';
+import {
+  FaCommentDots,
+  FaRegCirclePause,
+  FaRegCirclePlay,
+} from 'react-icons/fa6';
 
 const sampleUrl =
   'https://www.shutterstock.com/shutterstock/videos/1107237865/preview/stock-footage-portraits-of-happy-people-looking-at-camera-in-one-footage-beautiful-faces-of-young-women-and.mp4';
@@ -10,17 +17,14 @@ const MungtsuBox = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  const [wasManuallyPaused, setWasManuallyPaused] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
-        setWasManuallyPaused(true);
       } else {
         videoRef.current.play();
-        setWasManuallyPaused(false);
       }
       setIsPlaying(!isPlaying);
     }
@@ -60,8 +64,9 @@ const MungtsuBox = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !wasManuallyPaused) {
+          if (entry.isIntersecting) {
             if (videoElement) {
+              videoElement.currentTime = 0;
               videoElement.play();
               setIsPlaying(true);
             }
@@ -85,7 +90,7 @@ const MungtsuBox = () => {
         observer.unobserve(videoElement);
       }
     };
-  }, [wasManuallyPaused]);
+  }, []);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -162,28 +167,27 @@ const MungtsuBox = () => {
 
       <div
         className="select-panel absolute w-full h-full flex items-end justify-center pointer-events-none"
-        style={{ zIndex: 5 }}
+        style={{ zIndex: 999 }}
       >
-        <div className="flex flex-col items-center w-full justify-stretch">
-          <div className={'flex flex-row'}>
-            <div>요양소 아이콘</div>
-            <div>요양소 이름</div>
+        <div className="flex flex-col p-4 w-full justify-stretch">
+          <div className={'flex flex-row text-white items-center'}>
+            <div className="w-8">
+              <img
+                src={'/src/assets/center-profile.png'}
+                className={'w-full h-full object-cover rounded-full'}
+                alt=""
+              />
+            </div>
+            <div>아이조아보육원</div>
           </div>
-          <div>비디오 제목</div>
+          <div className={'text-white overflow-hidden'}>
+            밥먹고 똥싸는 강아지 모음
+          </div>
         </div>
-        <div>
-          <div className={'flex flex-col'}>
-            <div>좋아요 아이콘</div>
-            <div>좋아요 수</div>
-          </div>
-          <div>
-            <div>댓글 아이콘</div>
-            <div>댓글 수</div>
-          </div>
-          <div>
-            <div>공유 아이콘</div>
-            <div>공유</div>
-          </div>
+        <div className={'flex flex-col items-end p-4 gap-4'}>
+          <SelectIcon label={'50'} icon={AiOutlineLike} /> {/** 좋아요 */}
+          <SelectIcon label={'40'} icon={FaCommentDots} /> {/** 댓글 */}
+          <SelectIcon label={'공유'} icon={FaShareAlt} /> {/** 공유 */}
           <DogFaces />
         </div>
       </div>
