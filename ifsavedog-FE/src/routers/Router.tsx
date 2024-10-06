@@ -138,7 +138,7 @@ const Router = () => {
           element: <MainPage />,
         },
         {
-          path: PATH.MUNGTSU.slice(1), // Remove the leading '/' for child paths
+          path: PATH.MUNGTSU.slice(1),
           element: <MungtsuPage />,
         },
         {
