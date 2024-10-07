@@ -4,7 +4,7 @@ from apscheduler.triggers.cron import CronTrigger
 from job.sequential import *
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(sequential_job_every_day, CronTrigger(hour=1, minute=0))
+scheduler.add_job(sequential_job_daily, CronTrigger(hour=1, minute=0))
 
 try:
   scheduler.start()

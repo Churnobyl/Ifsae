@@ -28,9 +28,21 @@ def sequential_job_daily(date):
     start_date = (today - before_date(date)).strftime('%Y%m%d') # 오늘 기준 date일 전 선택
     end_date = (today - before_date(1)).strftime('%Y%m%d') # 오늘 기준 1일 전 날짜 선택
     input_all_dogs(start_date, end_date)
+
     # 1. 강아지 api 쏘고 mariaDB에 삽입
     # 2. 추가된 정보 참고해서 image download
     # 3. 다운로드 된 강아지 image 모델 이용해서 vector 뽑기
     new_dog_vector_list = infer_dog_image_vector_by_date(yesterday)
     calculate_dog_character_score(new_dog_vector_list)
     rank_image_vector()   
+
+    # 4. 몽고 DB에 추천 랭크 넣기
+    # 비개인화 추천 알고리즘
+    # - 최신순
+    # - 인기순
+
+    # 유저 별 개인화 추천 알고리즘
+    # image vecctor즘rank
+    rank_image_vector()
+
+    # 5. 최종 랭킹 mariaDB에 삽입
