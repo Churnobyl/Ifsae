@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import DonationItem from '@/components/Donation/DonationItem';
-=======
 import DonationItem from '@/components/donation/DonationItem';
->>>>>>> 4e1fe297be7b12b93c4d6364401290e1a5a25077
 
 interface Donation {
   name: string;
