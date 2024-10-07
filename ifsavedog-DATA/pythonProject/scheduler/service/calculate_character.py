@@ -1,9 +1,8 @@
-from transformers import AutoModelForImageClassification
-from dotenv import load_dotenv
 from service.get_datas import *
 from service.set_datas import *
-
+from constant_value import *
 import pandas as pd
+import numpy as np
 
 # 이미지벡터 데이터를 score_id_list로 변환
 def make_score_id_list(result):
@@ -23,19 +22,21 @@ def make_score_id_list(result):
 
 # 유사도의 가중치를 주어 견종별 점수를 계산
 def score_exponential(score_id_list):
-    model = AutoModelForImageClassification.from_pretrained("wesleyacheng/dog-breeds-multiclass-image-classification-with-vit")
     results = []
     for entry in score_id_list:
       id = entry['id']
       desertion_no = entry['desertion_no']
       scores = entry['scores']
+      
       df = pd.DataFrame(scores, columns=['Score', 'ID'])
       df = df.sort_values(by='Score', ascending=False)
       df['id'] = id
       df['desertion_no'] = desertion_no
-      df["Label"] = df["ID"].apply(lambda x: model.config.id2label[x])
+      df["Label"] = df["ID"].apply(lambda x: dog_label[x])
+      
+      
       df["minmax"] = (df["Score"] - df["Score"].min()) / (df["Score"].max() - df["Score"].min())
-      df["exponential"] = df["Score"].apply(lambda x: (2.71828182845904523536028747135266249775724709369995 ** (x)) - 1)
+      df["exponential"] = df["Score"].apply(lambda x: np.exp(x) - 1)
       df_top_5_scores = df.nlargest(5, 'Score')
       df["percentile"] = df_top_5_scores["exponential"] / df_top_5_scores["exponential"].sum()
       results.append(df)
