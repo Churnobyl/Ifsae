@@ -6,6 +6,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaHandHoldingHeart } from 'react-icons/fa';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
+import ProfileCard from '@/components/common/ProfileCard';
 
 const UserMyPage = () => {
   const userStateStore = useUserStateStore();
@@ -13,20 +14,14 @@ const UserMyPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center text-black">
-      <div className="w-11/12 flex flex-row justify-around bg-whiteGray m-2 p-4 rounded-lg mb-6">
-        <img
-          src={profileImgUrl ? profileImgUrl : DefaultProfileImg}
-          alt="User Profile Image"
-          className="w-20 h-20 rounded-full mr-4"
-        />
+      <ProfileCard
+        profileImgUrl={profileImgUrl ? profileImgUrl : DefaultProfileImg}
+        name={nickname}
+        email={email}
+        isUserProfile={true}
+      />
 
-        <div>
-          <p className="text-lg font-semibold">{nickname}</p>
-          <p className="text-gray-500">{email}</p>
-        </div>
-      </div>
-
-      <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-6 px-2 mb-6">
+      <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-4 px-2 mb-6">
         <div className="flex justify-around items-center">
           <div className="flex flex-col items-center">
             <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">
