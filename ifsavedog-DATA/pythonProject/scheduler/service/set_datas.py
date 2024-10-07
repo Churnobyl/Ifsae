@@ -4,7 +4,9 @@ from db.mongo import get_mongo_db
 from db.maria import get_db
 
 from models.rank import Rank
-from datetime import datetime
+import datetime
+from dateutil.relativedelta import relativedelta
+from models.dog import Dog
 
 def insert_dog_image_vector(dog_vector_list):
     with get_mongo_db() as mongo:
@@ -50,12 +52,26 @@ def upsert_user_recommendation_rank(user_id, rank_list):
     session.commit()
     session.close()
     
-def insert_dog_character_score(dog_data):    
-    get_mongo_db().dog_character.insert_one(dog_data)
+def insert_dog_character_score(dog_data):
+    with get_mongo_db() as mongo:
+        mongo.dog_character.insert_one(dog_data)    
     
 def insert_user_character_rank_to_mongo(final_data):
-    get_mongo_db().user_character_rank.insert_one(final_data)
+    with get_mongo_db() as mongo:
+        mongo.user_character_rank.insert_one(final_data)
     
 def delete_old_data():
-    three_years_ago = datetime.datetime.now() - datetime.timedelta(days=365*3)
-    get_mongo_db().test.delete_many({'happenDt': {'$lt': three_years_ago.strftime('%Y%m%d')}})
+    three_years_ago = datetime.datetime.now() - relativedelta(years=3)
+    with get_mongo_db() as mongo:
+        mongo.test.delete_many({'happenDt': {'$lt': three_years_ago.strftime('%Y%m%d')}})
+    
+def insert_dog(dog):
+    with get_db() as db:
+        db.add_all(dog)
+        db.commit()
+        
+def update_dog(dog):
+    with get_db() as db:
+        db.bulk_update_mappings(Dog, dog)
+        db.commit()
+        
