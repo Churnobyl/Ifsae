@@ -1,13 +1,18 @@
 import CenterProfileImg from '@/assets/center-profile.png';
 import EditProfileICon from '@/assets/icon/edit-profile.svg';
-import ManageVideoIcon from '@/assets/icon/video-camera.svg';
 import PawIcon from '@/assets/icon/paw-print.svg';
-import { FaHandHoldingHeart } from 'react-icons/fa';
-import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
+import ManageVideoIcon from '@/assets/icon/video-camera.svg';
 import ProfileCard from '@/components/common/ProfileCard';
+import { PATH } from '@/routers/pathConstants';
+import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
+import { FaHandHoldingHeart } from 'react-icons/fa';
+import { FaPencil } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 
-const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
-  const { name, address, phone, content, shelterProfileImg } = shelterData;
+const CenterMyPage = () => {
+  const myShelterDetailStore = useMyShelterDetailStore();
+  const { name, address, phone, content, shelterProfileImg } =
+    myShelterDetailStore;
 
   return (
     <>
@@ -54,6 +59,12 @@ const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
             <FaHandHoldingHeart size={24} className="mr-2" />
             <p className="text-lg font-semibold">후원자 관리</p>
           </div>
+          <Link to={'/' + PATH.CREATE_POST}>
+            <div className="flex items-center mb-4 cursor-pointer">
+              <FaPencil size={24} className="mr-2" />
+              <p className="text-lg font-semibold">글쓰기</p>
+            </div>
+          </Link>
         </div>
       </div>
     </>

@@ -5,3 +5,7 @@ import { ShelterCreateType } from '@/types/shelter/ShelterCreateRequest';
 export const createShelterApi = async (userInput: ShelterCreateType) => {
   return await instance.post(ENDPOINT.CREATE_SHELTER, userInput);
 };
+
+export const getMyShelterApi = async () => {
+  return await instance.get(ENDPOINT.GET_MY_SHELTER);
+};

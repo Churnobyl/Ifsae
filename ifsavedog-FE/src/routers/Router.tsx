@@ -18,6 +18,7 @@ import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
+import CreatePostPage from '@/pages/mypages/CreatePostPage';
 import MyPage from '@/pages/mypages/MyPage';
 import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
@@ -137,6 +138,22 @@ const Router = () => {
               path: PATH.CENTER_DETAIL + '/:id',
               errorElement: <NotFoundPage />,
               element: <CenterDetailPage />,
+            },
+            {
+              path: PATH.CREATE_POST,
+              errorElement: <NotFoundPage />,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.ACTIVE}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreatePostPage />,
+                },
+              ],
             },
           ],
         },

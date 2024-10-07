@@ -24,3 +24,7 @@ export const checkFollowApi = async (dogId: number) => {
 export const followDogListApi = async () => {
   return await instance.get(ENDPOINT.FOLLOW_DOG_LIST);
 };
+
+export const getDogListByShelterIdApi = async (shelterId: number) => {
+  return await instance.get(ENDPOINT.GET_DOG_LIST_BY_SHELTER_ID + shelterId);
+};

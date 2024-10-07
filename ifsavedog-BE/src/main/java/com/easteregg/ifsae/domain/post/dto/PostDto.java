@@ -30,7 +30,6 @@ public class PostDto {
         @Size(min = 1, max = 100, message = "[PostDto.Request] invalid title size")
         private String title;
         private String content;
-        private String videoUrl;
 
         @Column(name = "shelter_id")
         private Long shelterId;
