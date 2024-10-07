@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface DonationService {
     void createDonation(User user, DonationDto.createDonationRequest request, Long dogId);
+
     List<DonationDto.getUserDonatedListResponse> getUserDonatedList(User user);
+
     List<DonationDto.getShelterDonorListResponse> getShelterDonorList(User user);
 }

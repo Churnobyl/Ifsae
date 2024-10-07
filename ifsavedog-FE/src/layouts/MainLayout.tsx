@@ -15,7 +15,7 @@ const MainLayout = ({
   showBottombar,
 }: MainLayoutInterface) => {
   return (
-    <div className="relative flex flex-col w-screen h-screen overflow-hidden">
+    <div className="relative flex flex-col w-screen h-screen">
       {showTopbar && <Topbar className="sticky top-0 left-0 w-full z-10" />}
       <div
         className={classNames('flex-grow', {
