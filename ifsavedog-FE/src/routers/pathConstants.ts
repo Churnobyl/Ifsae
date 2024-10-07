@@ -32,17 +32,15 @@ export const PATH = {
   CENTER_DOG_LIST: '/MyDogList',
   CENTER_DONATION_LIST: '/CenterDonationList',
 
-  /** 유저 마이페이지 */
-  USER_MYPAGE: '/mypage/user',
-  CENTER_MYPAGE: '/mypage/center',
-
   /** 비디오 미리보기 카드 */
   VIDEO_LIST: '/video',
   USER_LIKE_VIDEO: '/mypage/like-video',
-  
+
   /** 강아지 상세 페이지 */
   DOG_DETAIL: '/dog',
-  
+
   USER_PROFILE_EDIT: '/mypage/edit-profile',
   CENTER_PROFILE_EDIT: '/mypage/center/edit-profile',
+
+  CENTER_DETAIL: '/center',
 };

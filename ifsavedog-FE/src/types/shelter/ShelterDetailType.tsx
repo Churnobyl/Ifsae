@@ -5,4 +5,5 @@ export type ShelterDetailType = {
   phone: string;
   content: string;
   canBeDonated: boolean;
+  shelterProfileImg: string;
 };
