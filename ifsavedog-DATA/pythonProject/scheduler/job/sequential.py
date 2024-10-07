@@ -27,4 +27,13 @@ def sequential_job_daily(date):
     start_date = (today - before_date(date)).strftime('%Y%m%d') # 오늘 기준 date일 전 선택
     end_date = (today - before_date(1)).strftime('%Y%m%d') # 오늘 기준 1일 전 날짜 선택
     input_all_dogs(start_date, end_date)
+    # 4. 몽고 DB에 추천 랭크 넣기
+    # 비개인화 추천 알고리즘
+    # - 최신순
+    # - 인기순
+
+    # 유저 별 개인화 추천 알고리즘
+    # image vecctor즘rank
     rank_image_vector()
+
+    # 5. 최종 랭킹 mariaDB에 삽입
