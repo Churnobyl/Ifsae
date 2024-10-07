@@ -12,6 +12,7 @@ import com.easteregg.ifsae.domain.shelter.entity.ShelterUser;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterRepository;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.global.elasticsearch.service.ESPostService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.PostException;
 import com.easteregg.ifsae.global.exception.type.ShelterException;
@@ -32,13 +33,13 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
-
     private final PostRepository postRepository;
     private final PostDogRepository postDogRepository;
     private final ShelterRepository shelterRepository;
     private final ShelterUserRepository shelterUserRepository;
     private final VideoUploadService videoUploadService;
     private final DogRepository dogRepository;
+    private final ESPostService esPostService;
 
     @Override
     public Slice<Post> getPostSlice(Pageable pageable) {
@@ -62,6 +63,7 @@ public class PostServiceImpl implements PostService {
 
         // Post 생성 및 저장
         Post savedPost = createAndSavePost(request, fileUrl, shelter);
+        esPostService.savePost(savedPost);
 
         // PostDog 연결 및 저장
         savePostDogs(savedPost, request.getDogIds());
@@ -80,12 +82,15 @@ public class PostServiceImpl implements PostService {
         updatedPost.updateDogs(postDogs);
 
         postRepository.save(updatedPost);
+        esPostService.updatePost(updatedPost);
     }
 
     @Override
     public void delete(User user, Long postId) {
         checkUserInShelter(user, findPostById(postId).getShelter().getId());
+
         postRepository.deleteById(postId);
+        esPostService.deletePost(findPostById(postId));
     }
 
     /**

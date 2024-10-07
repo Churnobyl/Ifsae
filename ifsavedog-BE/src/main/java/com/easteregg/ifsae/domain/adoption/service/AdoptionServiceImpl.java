@@ -16,6 +16,7 @@ import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.entity.UserProfile;
 import com.easteregg.ifsae.domain.user.repository.UserProfileRepository;
+import com.easteregg.ifsae.global.elasticsearch.service.ESDogService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.AdoptionException;
 import com.easteregg.ifsae.global.exception.type.DogException;
@@ -44,6 +45,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     private final ShelterUserRepository shelterUserRepository;
     private final ShelterDogRepository shelterDogRepository;
     private final UserProfileRepository userProfileRepository;
+    private final ESDogService esDogService;
 
     @Override
     public void createAdoption(User user, AdoptionCreateRequest adoptionCreateRequest) {
@@ -106,6 +108,7 @@ public class AdoptionServiceImpl implements AdoptionService {
         }
 
         adoption.updateAdoption(adoptionUpdateRequest);
+
         adoptionRepository.save(adoption);
     }
 
@@ -148,6 +151,8 @@ public class AdoptionServiceImpl implements AdoptionService {
         // 개 입양 상태 변경
         dog.updateDogStatus(DogStatus.ADOPTED);
         dogRepository.save(dog);
+
+        esDogService.updateDog(dog);
     }
 
     @Override
