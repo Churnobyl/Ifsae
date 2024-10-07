@@ -89,9 +89,10 @@ public class Dog {
         return DogListDto.builder()
                 .id(this.getId())
                 .name(this.getName())
+                .age(this.getAge())
+                .gender(this.getGender())
                 .image(this.getImage())
-                .shelterId(this.getShelterDog().getShelter().getId())
-                .shelterName(this.getShelterDog().getShelter().getName())
+                .species(this.getSpecies())
                 .build();
     }
 }
