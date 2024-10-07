@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from pymongo import MongoClient
 from settings import config
 
@@ -11,3 +12,6 @@ db = client[db_name]
 
 def get_mongo_db():
     return db
+
+def close_mongo_client():
+    client.close()
