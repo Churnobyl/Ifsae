@@ -88,4 +88,7 @@ def get_breed_score():
 def get_dog_character_by_id(id):
     with get_mongo_db() as mongo:
         return mongo.dog_character.find_one({"id": id})   
-    
+
+def get_dog_data_by_desertion_no(desertion_no):
+    with get_db() as db:
+        return db.query(Dog).filter(Dog.desertion_no == desertion_no).first()
