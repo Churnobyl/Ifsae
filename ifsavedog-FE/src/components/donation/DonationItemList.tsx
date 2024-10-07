@@ -1,4 +1,4 @@
-import DonationItem from '@/components/Donation/DonationItem';
+import DonationItem from '@/components/donation/DonationItem';
 
 interface Donation {
   name: string;

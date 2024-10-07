@@ -4,33 +4,25 @@ import ManageVideoIcon from '@/assets/icon/video-camera.svg';
 import PawIcon from '@/assets/icon/paw-print.svg';
 import { FaHandHoldingHeart } from 'react-icons/fa';
 import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
+import ProfileCard from '@/components/common/ProfileCard';
 
 const CenterMyPage = ({ shelterData }: { shelterData: ShelterDetailType }) => {
-  const { name, address, phone, content } = shelterData;
+  const { name, address, phone, content, shelterProfileImg } = shelterData;
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center text-black">
-        <div className="w-11/12 bg-whiteGray m-2 p-4 rounded-lg mb-6">
-          <div className="flex flex-row mb-4 justify-around">
-            <img
-              src={CenterProfileImg}
-              alt="Center Profile Image"
-              className="w-20 h-20 rounded-full mr-4"
-            />
-            <div className="space-y-[1px]">
-              <p className="text-lg font-semibold">{name}</p>
-              <p className="text-sm">{address}</p>
-              <p className="text-sm text-gray">{phone}</p>
-            </div>
-          </div>
+      <div className="w-full flex flex-col items-center justify-center text-black">
+        <ProfileCard
+          profileImgUrl={
+            shelterProfileImg ? shelterProfileImg : CenterProfileImg
+          }
+          name={name ? name : '정보 불러오기 실패'}
+          address={address ? address : '정보 불러오기 실패'}
+          phone={phone ? phone : '010-0000-0000'}
+          content={content ? content : '                     '}
+        />
 
-          <div className="flex justify-center">
-            <p className="w-5/6 text-sm">{content}</p>
-          </div>
-        </div>
-
-        <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-6 px-2 mb-6">
+        <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-4 px-2 mb-6">
           <div className="flex justify-around items-center">
             <div className="flex flex-col items-center">
               <div className="w-24 h-24 bg-whiteGray rounded-xl flex flex-col items-center justify-center">

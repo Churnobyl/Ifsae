@@ -34,6 +34,7 @@ import DogDetailPage from '@/pages/DogDetailPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 import DonationPage from '@/pages/DonationPage';
+import CenterDetailPage from '@/pages/CenterDetailPage';
 
 const Router = () => {
   const accessToken = useTokenStore((state) => state.accessToken);
@@ -183,9 +184,13 @@ const Router = () => {
           errorElement: <NotFoundPage />,
           element: <DonationPage />,
         },
+        {
+          path: PATH.CENTER_DETAIL + '/:id',
+          errorElement: <NotFoundPage />,
+          element: <CenterDetailPage />,
+        },
       ],
     },
-
   ];
 
   const router = createBrowserRouter([...routes]);

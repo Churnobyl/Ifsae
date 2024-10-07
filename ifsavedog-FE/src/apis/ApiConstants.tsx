@@ -12,7 +12,11 @@ export enum ENDPOINT {
   GET_MY_SHELTER = 'api/user/my-shelter',
 
   //
-  DOG = 'api/dog'
+  DOG = 'api/dog',
+
+  POSTLIST_DOG = 'api/post/dog',
+
+  FOLLOW = "api/follow",
 }
 
 export enum HTTP_STATUS {
