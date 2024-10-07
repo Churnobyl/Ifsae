@@ -1,18 +1,20 @@
+import { useEffect, useState } from 'react';
 import DonationItemList from '@/components/donation/DonationItemList';
-import testImage from '@/assets/logo.webp';
+import { donationListApi } from '@/apis/donation/donationApi'; // API import
 
 interface Donation {
-  name: string;
-  date: string;
-  amount: number;
-  image: string;
   dogId: number;
+  dogName: string;
+  dogImage: string;
+  contribution: number;
+  donateDate: string;
 }
 
+// 월별로 후원 데이터를 그룹화하는 함수
 const groupByMonth = (donations: Donation[]) => {
   return donations.reduce(
     (grouped, donation) => {
-      const month = new Date(donation.date).toLocaleString('ko-KR', {
+      const month = new Date(donation.donateDate).toLocaleString('ko-KR', {
         month: 'long',
         year: 'numeric',
       });
@@ -23,8 +25,7 @@ const groupByMonth = (donations: Donation[]) => {
           donations: [],
         };
       }
-
-      grouped[month].totalAmount += donation.amount;
+      grouped[month].totalAmount += donation.contribution;
       grouped[month].donations.push(donation);
 
       return grouped;
@@ -34,44 +35,38 @@ const groupByMonth = (donations: Donation[]) => {
 };
 
 const DonationPage = () => {
-  const donationData: Donation[] = [
-    {
-      dogId: 1,
-      date: '2023-08-24',
-      amount: 6000,
-      name: '순자',
-      image: testImage,
-    },
-    {
-      date: '2023-08-24',
-      amount: 6000,
-      dogId: 2,
-      name: '루루',
-      image: testImage,
-    },
-    {
-      dogId: 3,
-      date: '2023-08-24',
-      amount: 6000,
-      name: '루루',
-      image: testImage,
-    },
-    {
-      dogId: 4,
-      date: '2023-07-15',
-      amount: 5000,
-      name: '하늘',
-      image: testImage,
-    },
-    {
-      dogId: 5,
-      date: '2023-07-22',
-      amount: 7000,
-      name: '달이',
-      image: testImage,
-    },
-  ];
+  const [donationData, setDonationData] = useState<Donation[]>([]); // 후원 데이터 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState<string | null>(null); // 에러 상태
 
+  // 후원 목록을 API로부터 불러오는 함수
+  useEffect(() => {
+    const fetchDonationList = async () => {
+      try {
+        const response = await donationListApi(); // API 호출
+        setDonationData(response.data); // 후원 데이터 상태 업데이트
+      } catch (error) {
+        setError('후원 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching donation list:', error);
+      } finally {
+        setLoading(false); // 로딩 완료
+      }
+    };
+
+    fetchDonationList(); // 컴포넌트 렌더링 시 API 호출
+  }, []);
+
+  // 로딩 상태 처리
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // 에러 상태 처리
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  // 월별로 그룹화된 후원 데이터를 렌더링
   const groupedDonations = groupByMonth(donationData);
 
   return (
