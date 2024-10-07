@@ -12,13 +12,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(AdoptionException.class)
     protected ResponseEntity<ErrorResponse> handleAdoptionExceptionException(AdoptionException e) {
-        log.error("[CustomSecurityException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        log.error("[AdoptionException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
     @ExceptionHandler(CustomSecurityException.class)
     protected ResponseEntity<ErrorResponse> handleCustomSecurityException(CustomSecurityException e) {
         log.error("[CustomSecurityException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(DogException.class)
+    protected ResponseEntity<ErrorResponse> handleDogException(DogException e) {
+        log.error("[DogException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
@@ -54,7 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DonationException.class)
     protected ResponseEntity<ErrorResponse> handleDonationException(DonationException e) {
-        log.error("[ShelterUserException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
+        log.error("[DonationException] - {} : {}", e.getErrorCode(), e.getErrorCode().getMessage(), e);
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 

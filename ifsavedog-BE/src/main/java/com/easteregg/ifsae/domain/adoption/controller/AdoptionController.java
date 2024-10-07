@@ -1,9 +1,6 @@
 package com.easteregg.ifsae.domain.adoption.controller;
 
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionApplierListDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionCreateRequest;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionDetailDto;
-import com.easteregg.ifsae.domain.adoption.dto.AdoptionUpdateRequest;
+import com.easteregg.ifsae.domain.adoption.dto.*;
 import com.easteregg.ifsae.domain.adoption.service.AdoptionService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
@@ -38,8 +35,19 @@ public class AdoptionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //TODO : shleter 입양 신청 받은 리스트 조회
-    //TODO : user가 입양 신청한 리스트 조회
+    @GetMapping("/shelters")
+    public ResponseEntity<?> getShelterAdoptionList(@AuthenticationPrincipal User user) {
+        List<AdoptionShelterListRes> shelterAdoptionList = adoptionService.getShelterAdoptionList(user);
+
+        return new ResponseEntity<>(shelterAdoptionList, HttpStatus.OK);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getUserAdoptionList(@AuthenticationPrincipal User user) {
+        List<AdoptionUserListRes> userAdoptionList = adoptionService.getUserAdoptionList(user);
+
+        return new ResponseEntity<>(userAdoptionList, HttpStatus.OK);
+    }
 
     @GetMapping("/{adoptionId}")
     public ResponseEntity<AdoptionDetailDto> getAdoption(@AuthenticationPrincipal User user,
@@ -57,14 +65,13 @@ public class AdoptionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //TODO : 입양 신청 수락 로직
-//    @PutMapping("/accept/{adoptionId}")
-//    public ResponseEntity<CommonSuccessResponse> acceptAdoption(@AuthenticationPrincipal User user,
-//                                                                @PathVariable Long adoptionId) {
-//        adoptionService.rejectAdoption(user, adoptionId);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PutMapping("/accept/{adoptionId}")
+    public ResponseEntity<CommonSuccessResponse> acceptAdoption(@AuthenticationPrincipal User user,
+                                                                @PathVariable Long adoptionId) {
+        adoptionService.acceptAdoption(user, adoptionId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PutMapping("/reject/{adoptionId}")
     public ResponseEntity<CommonSuccessResponse> rejectAdoption(@AuthenticationPrincipal User user,
