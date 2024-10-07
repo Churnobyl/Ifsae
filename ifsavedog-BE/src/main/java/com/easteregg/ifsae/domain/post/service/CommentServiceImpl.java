@@ -13,12 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
@@ -27,6 +25,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findPostById(postId).orElseThrow(()
                 -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
         Comment comment = request.toEntity(user, post);
+
         commentRepository.save(comment);
     }
 
