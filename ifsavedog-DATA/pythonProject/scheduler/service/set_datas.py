@@ -51,3 +51,6 @@ def upsert_user_recommendation_rank(user_id, rank_list):
     
 def insert_dog_character_score(dog_data):    
     get_mongo_db().dog_character.insert_one(dog_data)
+    
+def insert_user_character_rank_to_mongo(final_data):
+    get_mongo_db().user_character_rank.insert_one(final_data)

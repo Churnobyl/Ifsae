@@ -1,8 +1,21 @@
 import pandas as pd
 import numpy as np
 import constant_value as cv
+from sqlalchemy.orm import class_mapper
 
-def make_dataframe(survey_data, dog_data):  
+def isExistData(obj):
+    if obj is None:      
+      return False  # 결과가 없으면 False 반환
+
+    # 클래스의 모든 속성(컬럼) 접근
+    for column in class_mapper(obj.__class__).columns:
+      value = getattr(obj, column.key)  # ORM 객체의 각 속성(컬럼) 값 가져오기
+      if value is None or value == '':  # None 또는 빈 문자열 확인
+        return False
+    return True
+
+
+def make_dataframe(survey_data, dog_vector_data):  
   user_dataset = pd.DataFrame()
   user_dataset['user_id'] = [survey_data.user_id]
   user_dataset['운동 강도'] = [survey_data.exercise_level]
@@ -14,7 +27,7 @@ def make_dataframe(survey_data, dog_data):
   user_dataset['훈련 용이성'] = [survey_data.training_experience]
   user_dataset['아이와의 친화력'] = [survey_data.child_friendliness]
   
-  dog_dataset = pd.DataFrame(list(dog_data))
+  dog_dataset = pd.DataFrame(list(dog_vector_data))
   
   return user_dataset, dog_dataset
 
@@ -33,8 +46,7 @@ def calculate_weighted_euclidean_distance(row, user_score, weight):
   )
   return distance
 
-def rank_dog_by_character(db, dog_dataset, user_dataset):
-  collection = db['user_character_rank']
+def rank_dog_by_character(dog_dataset, user_dataset):
   weight = cv.weight
   # 각 강아지와 A가 매긴 점수와의 유클리드 거리(가중치 적용)를 계산하여 새로운 열로 추가
   dog_dataset["euclideanDistance"] = dog_dataset.apply(calculate_weighted_euclidean_distance, axis=1, user_score = user_dataset, weight=weight)
@@ -49,12 +61,6 @@ def rank_dog_by_character(db, dog_dataset, user_dataset):
     "rank_list": dog_dataset[["dog_id", "desertion_no", "euclideanDistance"]].to_dict('records')
   }
   return final_data
-
-  # MongoDB에 삽입
-def insert_user_character_rank_to_mongo(db, final_data):
-  collection = db['user_character_rank']
-  collection.insert_one(final_data)
-
 ## 유저별 유클리드 거리를 통한 강아지 순위 리스팅 끝 ##
 
 
