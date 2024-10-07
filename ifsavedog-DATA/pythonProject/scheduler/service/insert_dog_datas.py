@@ -6,16 +6,9 @@ import pandas as pd
 from settings import config
 
 from models.dog import Dog
-from db.mongo import get_mongo_db
-
-
-def delete_data():     
-    today = datetime.datetime.now()
-    three_years_ago = today - datetime.timedelta(days=365*3)
-    get_mongo_db().test.delete_many({'happenDt': {'$lt': three_years_ago.strftime('%Y%m%d')}})
 
 ## API 호출 함수
-def get_data(start_date, end_date) :         
+def get_API_data(start_date, end_date) :         
     url = config.API_URL
     
     # API 요청    
@@ -92,24 +85,19 @@ def preprocess_data(df) :
 ## 데이터 전처리 함수 끝 ##
 
 ## 데이터 삽입 시작 ##
-def insert_data_to_sql(db, df) :     
-    for _, row in df.iterrows():
-        # 각 행 돌면서 중복된 desertion_no가 있는지 확인
-        dog = db.query(Dog).filter(Dog.desertion_no == row['desertion_no']).first()
-        if dog:
-            continue
-        dog = Dog(
-            age=row['age'],
-            dog_status=row['dog_status'],
-            gender=row['gender'],
-            species_name=row['species_name'],
-            desertion_no=row['desertion_no'],
-            happen_dt=row['happenDt'],
-            image=row['image'],
-            dir=row['dir'],
-            info=row['info'],
-            name=row['name']
-            )
-        db.add(dog)
+def make_data_sqlform(row) :              
+    dog = Dog(
+        age=row['age'],
+        dog_status=row['dog_status'],
+        gender=row['gender'],
+        species_name=row['species_name'],
+        desertion_no=row['desertion_no'],
+        happen_dt=row['happenDt'],
+        image=row['image'],
+        dir=row['dir'],
+        info=row['info'],
+        name=row['name']
+        )
+    db.add(dog)
     db.commit()
 ## 데이터 삽입 끝 ##

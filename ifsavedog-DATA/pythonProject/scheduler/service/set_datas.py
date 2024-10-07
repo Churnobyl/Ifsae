@@ -4,6 +4,7 @@ from db.mongo import get_mongo_db
 from db.maria import get_db
 
 from models.rank import Rank
+from datetime import datetime
 
 def insert_dog_image_vector(dog_vector_list):
     with get_mongo_db() as mongo:
@@ -54,3 +55,7 @@ def insert_dog_character_score(dog_data):
     
 def insert_user_character_rank_to_mongo(final_data):
     get_mongo_db().user_character_rank.insert_one(final_data)
+    
+def delete_old_data():
+    three_years_ago = datetime.datetime.now() - datetime.timedelta(days=365*3)
+    get_mongo_db().test.delete_many({'happenDt': {'$lt': three_years_ago.strftime('%Y%m%d')}})
