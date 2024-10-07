@@ -28,7 +28,7 @@ public class ESPost {
     private String content;
 
     @Field(type = FieldType.Keyword)
-    private List<String> dogIds;
+    private List<String> dogNames;
 
     @Field(type = FieldType.Nested)
     private ESShelter shelter;
