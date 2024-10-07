@@ -5,11 +5,14 @@ import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.post.entity.PostLike;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
+import com.easteregg.ifsae.global.video.entity.CompressedVideoUrlSet;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -35,17 +38,18 @@ public class PostDto {
         @Column(name = "dog_ids")
         private List<Long> dogIds;
 
-        public Post toEntity(String videoUrl, Shelter shelter) {
+        public Post toEntity(CompressedVideoUrlSet urlSet, Shelter shelter) {
             return Post.builder()
-                       .id(id)
-                       .title(title)
-                       .content(content)
-                       .videoUrl(videoUrl)
-                       .shelter(shelter)
-                       .dogs(new ArrayList<>())
-                       .comments(new ArrayList<>())
-                       .likes(new ArrayList<>())
-                       .build();
+                    .id(id)
+                    .title(title)
+                    .content(content)
+                    .videoUrl(urlSet.getVideoUrl())
+                    .thumbnailUrl(urlSet.getThumbnailUrl())
+                    .shelter(shelter)
+                    .dogs(new ArrayList<>())
+                    .comments(new ArrayList<>())
+                    .likes(new ArrayList<>())
+                    .build();
         }
     }
 
@@ -66,16 +70,16 @@ public class PostDto {
 
         public Post toEntity(Post originalPost) {
             return Post.builder()
-                       .id(originalPost.getId())
-                       .title(title)
-                       .content(content)
-                       .videoUrl(originalPost.getVideoUrl())
-                       .shelter(originalPost.getShelter())
-                       .comments(originalPost.getComments())
-                       .likes(originalPost.getLikes())
-                       .likeCnt(originalPost.getLikeCnt())
-                       .viewCnt(originalPost.getViewCnt())
-                       .build();
+                    .id(originalPost.getId())
+                    .title(title)
+                    .content(content)
+                    .videoUrl(originalPost.getVideoUrl())
+                    .shelter(originalPost.getShelter())
+                    .comments(originalPost.getComments())
+                    .likes(originalPost.getLikes())
+                    .likeCnt(originalPost.getLikeCnt())
+                    .viewCnt(originalPost.getViewCnt())
+                    .build();
         }
     }
 
