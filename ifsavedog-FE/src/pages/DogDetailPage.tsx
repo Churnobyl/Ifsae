@@ -20,16 +20,6 @@ const DogDetailPage = () => {
   const [isFollowed, setIsFollowed] = useState(false); // 팔로우 상태 관리 추가
   const [isProcessing, setIsProcessing] = useState(false); // API 요청 중인지 여부 관리
 
-  // 팔로우 상태 확인 함수 (처음 렌더링 시 호출)
-  const fetchFollowStatus = async () => {
-    try {
-      const response = await checkFollowApi(Number(id)); // 팔로우 상태 확인 API 호출
-      setIsFollowed(response.data.isFollowed); // 서버로부터 받은 팔로우 상태 업데이트
-    } catch (error) {
-      console.error('팔로우 상태를 확인하는 중 오류 발생:', error);
-    }
-  };
-
   // 팔로우 상태 변경 함수
   const toggleFollow = async () => {
     if (isProcessing) return; // 중복 요청 방지
@@ -52,6 +42,16 @@ const DogDetailPage = () => {
   // 강아지 정보와 팔로우 상태 및 게시글을 불러오는 useEffect
   useEffect(() => {
     const fetchDogDetailAndPosts = async () => {
+      // 팔로우 상태 확인 함수 (처음 렌더링 시 호출)
+      const fetchFollowStatus = async () => {
+        try {
+          const response = await checkFollowApi(Number(id)); // 팔로우 상태 확인 API 호출
+          setIsFollowed(response.data.isFollowed); // 서버로부터 받은 팔로우 상태 업데이트
+        } catch (error) {
+          console.error('팔로우 상태를 확인하는 중 오류 발생:', error);
+        }
+      };
+
       try {
         // 강아지 정보 가져오기
         const response = await dogDetailApi(Number(id));
