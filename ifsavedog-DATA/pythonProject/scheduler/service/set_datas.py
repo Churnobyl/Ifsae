@@ -44,3 +44,4 @@ def upsert_user_recommendation_rank(user_id, rank_list):
         session.bulk_insert_mappings(Rank, values)
     
     session.commit()
+    session.close()
