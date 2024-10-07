@@ -40,6 +40,7 @@ public enum ErrorCode {
     INVALID_FILE_FORMAT("잘못된 파일 형식입니다.", HttpStatus.BAD_REQUEST),
     FAILED_TO_UPLOAD_PROFILE_IMG("업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_PAGE_REQUEST("잘못된 페이지 요청입니다.", HttpStatus.NOT_FOUND),
+    FILE_NOT_FOUND("썸네일 파일이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
 
     // 포스트 관련 에러
     POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

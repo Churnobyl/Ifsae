@@ -35,6 +35,9 @@ public class Post extends BaseEntity {
     private String videoUrl;
 
     @NotNull
+    private String thumbnailUrl;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
