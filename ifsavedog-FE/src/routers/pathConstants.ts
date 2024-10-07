@@ -43,4 +43,7 @@ export const PATH = {
   CENTER_PROFILE_EDIT: 'mypage/center/edit-profile',
 
   CENTER_DETAIL: 'center',
+
+  /** 센터 글쓰기 */
+  CREATE_POST: 'mypage/center/write',
 };
