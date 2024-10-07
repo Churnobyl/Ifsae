@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DonationUserPreviewCard from '@/components/User/DonationUserPreviewCard';
+import DonationUserPreviewCard from '@/components/user/DonationUserPreviewCard';
 import testImage from '@/assets/logo.webp';
 
 const exampleDonationUsers = [
