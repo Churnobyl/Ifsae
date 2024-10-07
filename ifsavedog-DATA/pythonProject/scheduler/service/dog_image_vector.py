@@ -36,5 +36,5 @@ def infer_dog_image_vector_boot(strform):
     result = infer_dog_image_vector(dog_list)
     
     insert_list = [{"id": v, **result[v]} for v in result]
-    print(len(insert_list))
+    print(len(insert_list)) 
     insert_dog_image_vector(insert_list)
