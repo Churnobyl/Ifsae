@@ -1,5 +1,7 @@
 package com.easteregg.ifsae.domain.dog.dto;
 
+import com.easteregg.ifsae.domain.dog.entity.Species;
+import com.easteregg.ifsae.domain.dog.type.Gender;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,9 +12,11 @@ public class DogListDto {
 
     private String name;
 
+    private int age;
+
+    private Gender gender;
+
     private String image;
 
-    private long shelterId;
-
-    private String shelterName;
+    private Species species;
 }

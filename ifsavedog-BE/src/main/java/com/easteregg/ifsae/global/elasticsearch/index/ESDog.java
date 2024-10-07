@@ -1,6 +1,5 @@
 package com.easteregg.ifsae.global.elasticsearch.index;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -16,7 +15,6 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Mapping(mappingPath = "/index/dog-mappings.json")
 @Setting(settingPath = "/index/tokenizer-settings.json")
 public class ESDog {
-
     @Id
     @Field(type = FieldType.Keyword)
     private String id;
@@ -27,11 +25,6 @@ public class ESDog {
     @Field(type = FieldType.Text)
     private String breed;
 
-    @Field(type = FieldType.Keyword)
-    private String imgUrl;
-
     @Field(type = FieldType.Nested)
     private ESShelter shelter;
-
-
 }

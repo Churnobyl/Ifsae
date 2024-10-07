@@ -16,6 +16,7 @@ import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterDogRepository;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.global.elasticsearch.service.ESDogService;
 import com.easteregg.ifsae.global.exception.type.DogException;
 import com.easteregg.ifsae.global.exception.type.ShelterException;
 import com.easteregg.ifsae.global.s3.S3ImageUploader;
@@ -23,7 +24,6 @@ import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -44,9 +44,11 @@ public class DogServiceImpl implements DogService {
     private final ShelterDogRepository shelterDogRepository;
     private final FollowRepository followRepository;
     private final S3ImageUploader s3ImageUploader;
+    private final ESDogService esDogService;
+
 
     @Override
-    public Dog createDog(User user, DogCreateRequest dogCreateRequest) {
+    public void createDog(User user, DogCreateRequest dogCreateRequest, MultipartFile dogImage) throws IOException {
         Species species = speciesRepository.findByName(dogCreateRequest.getSpecies())
                 .orElseThrow(() -> new DogException(SPECIES_NOT_FOUND));
 
@@ -63,14 +65,18 @@ public class DogServiceImpl implements DogService {
                 .info(dogCreateRequest.getInfo())
                 .build();
 
+        String imageUrl = s3ImageUploader.upload(dogImage);
+        dog.updateDogProfileImage(imageUrl);
+
+        dogRepository.save(dog);
+        esDogService.saveDog(dog);
+
         ShelterDog shelterDog = ShelterDog.builder()
                 .shelter(shelter)
                 .dog(dog)
                 .build();
 
         shelterDogRepository.save(shelterDog);
-
-        return dogRepository.save(dog);
     }
 
     @Override
@@ -86,6 +92,8 @@ public class DogServiceImpl implements DogService {
                 .orElseThrow(() -> new DogException(DOG_NOT_FOUND));
 
         dog.updateDogInfo(dogCreateRequest);
+
+        esDogService.updateDog(dog);
     }
 
     @Override
@@ -121,7 +129,6 @@ public class DogServiceImpl implements DogService {
 
         return dogs.stream()
                 .map(Dog::toDogListDto).collect(Collectors.toList());
-
     }
 
     @Override
@@ -132,6 +139,5 @@ public class DogServiceImpl implements DogService {
                 .map(Follow::getDog).toList();
 
         return dogs.stream().map(Dog::toDogListDto).collect(Collectors.toList());
-
     }
 }
