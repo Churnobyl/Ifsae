@@ -52,7 +52,7 @@ const LoginPage = () => {
         // 유저 State 저장
         userStateStore.setUserState(data);
         setErrMessage(''); // 에러메시지 삭제
-        navigate(PATH.MAIN); // MAIN페이지로 이동
+        navigate('/' + PATH.MAIN); // MAIN페이지로 이동
       }
     } catch (error) {
       // 에러 발생
@@ -107,11 +107,11 @@ const LoginPage = () => {
             <span>로그인</span>
           </button>
           <div className="flex flex-row justify-end gap-1 text-sm text-black">
-            <NavLink to={`${PATH.PASSWORD_RESET}`} className="text-main">
+            <NavLink to={`/${PATH.PASSWORD_RESET}`} className="text-main">
               비밀번호 재설정
             </NavLink>
             <div> | </div>
-            <NavLink to={`${PATH.SIGNUP}`} className="text-main">
+            <NavLink to={`/${PATH.SIGNUP}`} className="text-main">
               회원가입
             </NavLink>
           </div>

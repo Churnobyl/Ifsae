@@ -120,7 +120,7 @@ const SignupForm = () => {
 
       if (response.status === HTTP_STATUS.OK) {
         tokenStore.setAccessToken(response.data.accessToken);
-        navigate(PATH.LOGIN);
+        navigate('/' + PATH.LOGIN);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
