@@ -12,7 +12,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface DogService {
-    Dog createDog(User user, DogCreateRequest dogCreateRequest);
+    void createDog(User user, DogCreateRequest dogCreateRequest, MultipartFile dogImage) throws IOException;
 
     void updateDogProfileImage(MultipartFile dogImage, Dog dog) throws IOException;
 

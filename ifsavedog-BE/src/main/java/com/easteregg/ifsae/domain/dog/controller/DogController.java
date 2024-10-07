@@ -34,9 +34,7 @@ public class DogController {
     public ResponseEntity<CommonSuccessResponse> createDog(@AuthenticationPrincipal User user,
                                                            @RequestPart DogCreateRequest dogCreateRequest,
                                                            @RequestPart MultipartFile dogImage) throws IOException {
-
-        Dog dog = dogService.createDog(user, dogCreateRequest);
-        dogService.updateDogProfileImage(dogImage, dog);
+        dogService.createDog(user, dogCreateRequest, dogImage);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
