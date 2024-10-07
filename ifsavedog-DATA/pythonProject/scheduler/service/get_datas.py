@@ -70,6 +70,15 @@ def get_latest_dog_rank():
         return mongo.latest_dog_rank.find_one({})
 
 def get_liked_dog_rank():
-    with get_mongo_db() as mongo:
-        return mongo.liked_dog_rank.find_one({})
+    return get_mongo_db().liked_dog_rank.find_one({})
+    
+# collection 으로부터 이미지벡터 데이터를 가져옴
+def get_image_data():
+  return get_mongo_db.dog_image_vector.find({},{"_id": 0, "id": 1, "image_vector": 1, "desertion_no": 1})
+
+def get_breed_score():
+    return get_mongo_db().breed_score.find()
+
+def get_dog_character_by_id(id):
+    return get_mongo_db().dog_character.find_one({"id": id})
     
