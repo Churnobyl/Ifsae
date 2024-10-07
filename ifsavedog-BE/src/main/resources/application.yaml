@@ -95,3 +95,7 @@ elasticsearch:
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
   fingerprint: ${ES_FINGERPRINT}
+
+# FASTAPI Settings
+fastApi:
+  endpoint: ${ENDPOINT}
