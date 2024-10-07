@@ -8,6 +8,8 @@ def cos_sim(A, B):
 
 def user_prefer_image_vectors(user_id):
     ratings = get_user_rating(user_id=user_id)
+    if len(ratings) == 0:
+        return None
     dog_list = {"id": {"$in": [item.dog_id for item in ratings]}} 
     prefer_dog_list = get_dog_image_vectors_list(dog_list)
     prefer_vector_list = [dog['image_vector'] for dog in prefer_dog_list]
@@ -31,19 +33,24 @@ def rank_cos_similarity(user_id, dog_vector_list=None):
     # mongo db 접근.
     # 코사인 유사도 계산
     # 
-    
     user_prefer_vect = user_prefer_image_vectors(user_id=user_id)
+    print('got user_prefer_vect')
+    
+    if user_prefer_vect is None:
+        return None
+    
     dog_image_vector_list = []
     if dog_vector_list == None:
         dog_image_vector_list = get_all_image_vector()
     else:
         dog_image_vector_list = dog_vector_list
     
+    print('got dog_image_vector_list')
     similarlityDict = dict()
     for dog in dog_image_vector_list:
         similarlityDict[dog['id']] = (dog['desertion_no'], cos_sim(np.array(user_prefer_vect), np.array(dog['image_vector'])))
     
     
-    ranking = sorted([(k, *similarlityDict[k]) for k in similarlityDict], key=lambda x : x[2], reverse=True)[2000]
+    ranking = sorted([(k, *similarlityDict[k]) for k in similarlityDict], key=lambda x : x[2], reverse=True)[:2000]
     return ranking
     
