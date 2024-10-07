@@ -41,7 +41,7 @@ public class Donation {
     private Dog dog;
 
     @NotNull
-    private int contribution;
+    private Integer contribution;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

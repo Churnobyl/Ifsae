@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class DogCreateRequest {
-
     private String name;
 
     private int age;
@@ -18,5 +17,4 @@ public class DogCreateRequest {
     private String species;
 
     private String info;
-
 }

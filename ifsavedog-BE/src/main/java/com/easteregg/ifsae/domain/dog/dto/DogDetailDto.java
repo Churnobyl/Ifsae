@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class DogDetailDto {
-
     private long id;
 
     private String name;
@@ -30,5 +29,4 @@ public class DogDetailDto {
     private String shelterName;
 
     private int followerCnt;
-
 }

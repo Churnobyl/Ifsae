@@ -25,6 +25,8 @@ public class Shelter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String profileImgUrl;
+
     @NotNull
     private String name;
 

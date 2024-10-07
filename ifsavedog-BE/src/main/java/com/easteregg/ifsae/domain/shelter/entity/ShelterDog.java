@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.shelter.entity;
 
 import com.easteregg.ifsae.domain.dog.entity.Dog;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,9 +27,15 @@ public class ShelterDog {
 
     @ManyToOne
     @JoinColumn(name = "shelter_id")
+    @JsonIgnore // 순환 참조 방지
     private Shelter shelter;
 
     @OneToOne
     @JoinColumn(name = "dog_id")
+    @JsonIgnore // 순환 참조 방지
     private Dog dog;
+
+    public void updateShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
 }
