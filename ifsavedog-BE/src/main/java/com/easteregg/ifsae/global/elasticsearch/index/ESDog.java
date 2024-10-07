@@ -25,9 +25,6 @@ public class ESDog {
     @Field(type = FieldType.Text)
     private String breed;
 
-    @Field(type = FieldType.Keyword)
-    private String imgUrl;
-
     @Field(type = FieldType.Nested)
     private ESShelter shelter;
 }
