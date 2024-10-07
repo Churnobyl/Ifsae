@@ -20,3 +20,7 @@ export const unFollowApi = async (dogId: number) => {
 export const checkFollowApi = async (dogId: number) => {
   return await instance.get(ENDPOINT.FOLLOW + '/' + dogId);
 };
+
+export const followDogListApi = async () => {
+  return await instance.get(ENDPOINT.FOLLOW_DOG_LIST);
+};

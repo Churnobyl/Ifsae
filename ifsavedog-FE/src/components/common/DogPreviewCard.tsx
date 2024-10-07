@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { DogType } from '@/types/dog/DogType';
 
 interface DogProps {
@@ -5,6 +6,12 @@ interface DogProps {
 }
 
 const DogPreviewCard = ({ dog }: DogProps) => {
+  const navigate = useNavigate(); // 페이지 이동을 위한 훅
+
+  const handleViewProfile = () => {
+    navigate(`/dog/${dog.id}`); // 강아지의 ID를 포함해 프로필 페이지로 이동
+  };
+
   const getGenderText = (gender: 'MALE' | 'FEMALE' | 'NEUTRAL') => {
     switch (gender) {
       case 'MALE':
@@ -34,7 +41,10 @@ const DogPreviewCard = ({ dog }: DogProps) => {
       </div>
 
       <div className="mt-auto rounded-md bg-darkbase">
-        <button className="px-3 py-1 text-sm-bold text-white rounded-md self-end">
+        <button
+          onClick={handleViewProfile}
+          className="px-3 py-1 text-sm-bold text-white rounded-md self-end"
+        >
           상세보기
         </button>
       </div>

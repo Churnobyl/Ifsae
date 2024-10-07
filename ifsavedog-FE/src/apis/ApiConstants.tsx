@@ -13,10 +13,11 @@ export enum ENDPOINT {
 
   //
   DOG = 'api/dog',
+  FOLLOW_DOG_LIST = 'api/dog/follow',
 
   POSTLIST_DOG = 'api/post/dog',
 
-  FOLLOW = "api/follow",
+  FOLLOW = 'api/follow',
 }
 
 export enum HTTP_STATUS {
