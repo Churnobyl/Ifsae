@@ -33,4 +33,4 @@ def sequential_job_daily(date):
     # 3. 다운로드 된 강아지 image 모델 이용해서 vector 뽑기
     new_dog_vector_list = infer_dog_image_vector_by_date(yesterday)
     calculate_dog_character_score(new_dog_vector_list)
-    rank_image_vector()
+    rank_image_vector()   
