@@ -1,11 +1,11 @@
 import DonationItem from '@/components/donation/DonationItem';
 
 interface Donation {
-  name: string;
-  date: string;
-  amount: number;
-  image: string;
   dogId: number;
+  dogName: string;
+  dogImage: string;
+  contribution: number;
+  donateDate: string;
 }
 
 interface DonationItemList {
@@ -29,10 +29,10 @@ const DonationItemList = ({
       {donations.map((donation) => (
         <DonationItem
           dogId={donation.dogId}
-          name={donation.name}
-          date={donation.date}
-          amount={donation.amount}
-          image={donation.image}
+          dogName={donation.dogName}
+          donateDate={donation.donateDate}
+          contribution={donation.contribution}
+          dogImage={donation.dogImage}
         />
       ))}
     </div>
