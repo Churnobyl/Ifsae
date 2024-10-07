@@ -3,6 +3,11 @@ import datetime
 from job.dog_image import *
 from service.latest_dog import rank_latest_dog
 from job.image_vector_filter import rank_image_vector
+from job.input_all_dogs import input_all_dogs
+
+today = datetime.date.today()
+def before_date(d):
+    return datetime.timedelta(days=d)
 
 def sequential_job_for_new_data():
     today = datetime.date.today().strftime('%Y%m%d')
@@ -18,6 +23,8 @@ def sequential_job_for_new_data():
     download_dog_image_by_date(today)
     rank_latest_dog()
 
-def sequential_job_daily():
-    today = datetime.date.today().strftime('%Y%m%d')
+def sequential_job_daily(date):    
+    start_date = (today - before_date(date)).strftime('%Y%m%d') # 오늘 기준 date일 전 선택
+    end_date = (today - before_date(1)).strftime('%Y%m%d') # 오늘 기준 1일 전 날짜 선택
+    input_all_dogs(start_date, end_date)
     rank_image_vector()
