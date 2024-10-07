@@ -40,7 +40,7 @@ const CreateShelterPage = () => {
 
       if (response.status === HTTP_STATUS.CREATED) {
         userStateStore.setUserStatus('ACTIVE');
-        navigate(PATH.MAIN, { replace: true });
+        navigate('/' + PATH.MAIN, { replace: true });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
