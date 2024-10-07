@@ -1,12 +1,9 @@
 from transformers import AutoModelForImageClassification
 from dotenv import load_dotenv
+from service.get_datas import *
+from service.set_datas import *
 
 import pandas as pd
-
-# collection 으로부터 이미지벡터 데이터를 가져옴
-def get_image_data(collection):
-  return collection.find({},{"_id": 0, "id": 1, "image_vector": 1, "desertion_no": 1}
-)
 
 # 이미지벡터 데이터를 score_id_list로 변환
 def make_score_id_list(result):
@@ -45,13 +42,13 @@ def score_exponential(score_id_list):
     return results
 
 # 이미지의 유사도를 이용해 강아지의 특성별 점수를 계산
-def calculate_character_score(db, results):
-    collection = db['breed_score']
-    df_scoring = pd.DataFrame(list(collection.find()))    
+def calculate_character_score(results):
+    data = get_breed_score()
+    df_scoring = pd.DataFrame(list(data))    
 
     df_scoring["견종"] = df_scoring["견종"].str.lower()
-    final_results = []
     
+    final_results = []    
     for df in results:
       df["Label"] = df["Label"].str.lower()
       # df와 df_scoring을 견종/Label 기준으로 상위 5개만 병합  
@@ -78,15 +75,14 @@ def calculate_character_score(db, results):
     return final_df
   
 # 계산된 특성별 점수를 MongoDB에 삽입
-def insert_to_mongo_character_score(db, final_df):    
-    collection = db['dog_character']
+def insert_to_mongo_character_score(final_df):        
     for index,row in final_df.iterrows():
         try:
-            existing_data = collection.find_one({'id': int(row['id'])})
+            id = int(row['id'])            
+            existing_data = get_dog_character_by_id(id)
             # id가 존재하지 않으면 데이터 삽입
-            if existing_data is None:
-              print(row.to_dict())
-              collection.insert_one(row.to_dict())
+            if existing_data is None:       
+              insert_dog_character_score(row.to_dict())              
             else:
               print(f"Data with id {row['id']} already exists, skipping.")
         except Exception as e:

@@ -29,20 +29,25 @@ def upsert_user_recommendation_rank(user_id, rank_list):
     if len(rank_list) != 100:
         raise ValueError('List Lenghth Error: rank_list must be 100 length')
     
-    with get_mongo_db() as mongo:  
-        rows = mongo.query(Rank).filter(Rank.user_id == user_id).order_by(Rank.ranking).all()
-        if len(rows) > 0:
-            update_values = [
-                {"id": rank.id, "ranking": rank.ranking, "user_id": user_id, "dog_id": rank_list[rank.ranking - 1]['dog_id']}
-                for rank in rows
-            ]
-            mongo.bulk_update_mappings(Rank, update_values)
-        else:
-            values = [
-                {"ranking": i+1, "user_id": user_id, "dog_id": rank['dog_id']}
-                for i, rank in enumerate(rank_list)
-            ]
-            print(values)
-            mongo.bulk_insert_mappings(Rank, values)
-        
-        mongo.commit()
+    session = next(get_db())
+    
+    rows = session.query(Rank).filter(Rank.user_id == user_id).order_by(Rank.ranking).all()
+    if len(rows) > 0:
+        update_values = [
+            {"id": rank.id, "ranking": rank.ranking, "user_id": user_id, "dog_id": rank_list[rank.ranking - 1]['dog_id']}
+            for rank in rows
+        ]
+        session.bulk_update_mappings(Rank, update_values)
+    else:
+        values = [
+            {"ranking": i+1, "user_id": user_id, "dog_id": rank['dog_id']}
+            for i, rank in enumerate(rank_list)
+        ]
+        print(values)
+        session.bulk_insert_mappings(Rank, values)
+    
+    session.commit()
+    session.close()
+    
+def insert_dog_character_score(dog_data):    
+    get_mongo_db().dog_character.insert_one(dog_data)
