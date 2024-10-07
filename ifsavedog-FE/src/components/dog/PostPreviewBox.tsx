@@ -2,7 +2,7 @@ interface PostPreviewBoxProps {
   id: number;
   title: string;
   imageUrl: string;
-  onClick?: (id: number) => void;
+  onClick?: (id: number) => void; // 선택적 클릭 이벤트
 }
 
 const PostPreviewBox = ({
@@ -13,8 +13,8 @@ const PostPreviewBox = ({
 }: PostPreviewBoxProps) => {
   return (
     <div
-      className="w-full h-32 overflow-hidden cursor-pointer box-border" // box-border로 크기 조정
-      onClick={() => onClick && onClick(id)} // 클릭 이벤트 핸들러
+      className="w-full h-32 overflow-hidden cursor-pointer box-border"
+      onClick={() => onClick && onClick(id)} // 클릭 이벤트가 있을 때만 실행
     >
       <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
     </div>
