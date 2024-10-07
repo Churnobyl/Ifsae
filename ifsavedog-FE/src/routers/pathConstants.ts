@@ -19,4 +19,28 @@ export const PATH = {
   SIGNUP: '/signup',
   /** 회원가입 결과 페이지 */
   SIGNUP_RESULT: '/signup-result',
+  /** 팔로우 목록 페이지 */
+  FOLLOW: '/follow',
+  /** 훠원 목록 페이지 */
+  DONATION: '/donation',
+  /** 유저 선호도 페이지 */
+  USER_RECOMMEND: '/recommend/user-recommend',
+  /** 센터 생성 페이지 */
+  CREATE_CENTER: '/center/create-center',
+
+  /** 센터 강아지 리스트 페이지 */
+  CENTER_DOG_LIST: '/MyDogList',
+  CENTER_DONATION_LIST: '/CenterDonationList',
+
+  /** 비디오 미리보기 카드 */
+  VIDEO_LIST: '/video',
+  USER_LIKE_VIDEO: '/mypage/like-video',
+
+  /** 강아지 상세 페이지 */
+  DOG_DETAIL: '/dog',
+
+  USER_PROFILE_EDIT: '/mypage/edit-profile',
+  CENTER_PROFILE_EDIT: '/mypage/center/edit-profile',
+
+  CENTER_DETAIL: '/center',
 };

@@ -48,11 +48,11 @@ export const Input = ({
       <div className="relative flex items-center">
         {Icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-            <Icon size={24} color={'var(--color-black)'} />
+            <Icon size={20} color={'var(--color-black)'} />
           </div>
         )}
         <input
-          className="w-full h-12 pl-10 rounded-2xl outline-none bg-gray text-lightGray focus:bg-lightBlue"
+          className="w-full h-12 pl-10 rounded-2xl outline-none bg-lightGray focus:bg-lightBlue"
           name={name}
           value={value}
           onChange={onChange}

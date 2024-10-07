@@ -5,13 +5,17 @@ import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.post.entity.PostLike;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
+import com.easteregg.ifsae.global.video.entity.CompressedVideoUrlSet;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 public class PostDto {
 
@@ -19,6 +23,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class Request {
+
         private Long id;
 
         @NotNull(message = "[PostDto.Request] need title")
@@ -33,12 +38,13 @@ public class PostDto {
         @Column(name = "dog_ids")
         private List<Long> dogIds;
 
-        public Post toEntity(String videoUrl, Shelter shelter) {
+        public Post toEntity(CompressedVideoUrlSet urlSet, Shelter shelter) {
             return Post.builder()
                     .id(id)
                     .title(title)
                     .content(content)
-                    .videoUrl(videoUrl)
+                    .videoUrl(urlSet.getVideoUrl())
+                    .thumbnailUrl(urlSet.getThumbnailUrl())
                     .shelter(shelter)
                     .dogs(new ArrayList<>())
                     .comments(new ArrayList<>())
@@ -51,6 +57,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class UpdateRequest {
+
         private Long id;
 
         @NotNull(message = "[PostDto.UpdateRequest] need title")
@@ -80,6 +87,7 @@ public class PostDto {
     @Builder
     @ToString
     public static class Response {
+
         private Long id;
         private String title;
         private String content;
@@ -90,5 +98,14 @@ public class PostDto {
         private List<PostLike> likes;
         private int likeCnt;
         private int viewCnt;
+    }
+
+    @Getter
+    @Builder
+    public static class PostPreview {
+
+        private Long id;
+        private String title;
+        private String imageUrl;
     }
 }

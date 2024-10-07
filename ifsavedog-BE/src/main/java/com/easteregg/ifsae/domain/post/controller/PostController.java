@@ -1,8 +1,10 @@
 package com.easteregg.ifsae.domain.post.controller;
 
 import com.easteregg.ifsae.domain.post.dto.PostDto;
+import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.service.PostService;
 import com.easteregg.ifsae.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -69,4 +71,19 @@ public class PostController {
         postService.delete(user, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/dog/{dogId}")
+    public ResponseEntity<?> getPostListByDogId(@PathVariable Long dogId) {
+        List<PostPreview> postList = postService.getPostList(dogId);
+
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<?> getPostListByLike(@AuthenticationPrincipal User user) {
+        List<PostPreview> postList = postService.getPostListByLike(user.getId());
+
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
 }

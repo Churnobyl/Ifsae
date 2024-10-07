@@ -4,6 +4,19 @@ export enum ENDPOINT {
   SIGNUP = 'api/auth/signup',
   EMAIL_AUTH = 'api/auth/email-auth',
   VERIFY_EMAIL_CODE = 'api/auth/verify-emailcode',
+
+  // Shelter
+  CREATE_SHELTER = 'api/shelter',
+
+  // MyPage
+  GET_MY_SHELTER = 'api/user/my-shelter',
+
+  //
+  DOG = 'api/dog',
+
+  POSTLIST_DOG = 'api/post/dog',
+
+  FOLLOW = "api/follow",
 }
 
 export enum HTTP_STATUS {

@@ -69,4 +69,9 @@ public class UserController {
         userService.updateUserProfileImg(user, profileImg);
         return ResponseEntity.ok(CommonSuccessResponse.of("프로필 사진 수정에 성공했습니다."));
     }
+
+    @GetMapping("/my-shelter")
+    public ResponseEntity<?> getMyShelter(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getMyShelter(user.getId()));
+    }
 }

@@ -33,7 +33,7 @@ spring:
       password: ${REDIS_PASSWORD}
 
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 frontend:
   url: http://localhost:5173

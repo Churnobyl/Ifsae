@@ -2,6 +2,7 @@ package com.easteregg.ifsae.global.video;
 
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.VideoUploadException;
+import com.easteregg.ifsae.global.video.entity.CompressedVideo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,31 +40,52 @@ public class VideoCompressor {
      * @param emitter 프론트단에 진행상황 전달
      * @return 압축된 파일 경로
      */
-    public File compressVideo(MultipartFile multipartFile, String outputFilePath) throws IOException, InterruptedException {
+    public CompressedVideo compressVideo(MultipartFile multipartFile, String outputFilePath, String thumbnailPath) throws IOException, InterruptedException {
         final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
         final Pattern TIME_PATTERN = Pattern.compile("time=(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
 
         File inputFile = convertMultipartFileToFile(multipartFile);
 
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "ffmpeg", "-i", inputFile.getAbsolutePath(),
-                "-vcodec", videoCodec, // 비디오 코덱
-                "-acodec", audioCodec,  // 오디오 코덱
-                "-b:a", audioBitrate,  // 오디오 비트레이트
-                "-vf", "scale=" + scale, // 해상도 조정
-                "-crf", crf, // Constant Rate Factor 사용 (변경 가능 default: 23)
-                outputFilePath // 출력 파일 경로
-        );
+        extractThumbnail(inputFile, thumbnailPath);
 
+        double totalDuration = compressVideoFile(inputFile, outputFilePath, DURATION_PATTERN, TIME_PATTERN);
+
+        CompressedVideo compressedVideo = new CompressedVideo();
+        compressedVideo.setCompressedVideo(new File(outputFilePath));
+        compressedVideo.setThumbnailPath(thumbnailPath);
+        return compressedVideo;
+    }
+
+    private void extractThumbnail(File inputFile, String thumbnailPath) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "ffmpeg", "-ss", "0",
+                "-i", inputFile.getAbsolutePath(),
+                "-frames:v", "1",
+                thumbnailPath
+        );
         Process process = processBuilder.start();
 
+        try (BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            String line;
+            while ((line = stdError.readLine()) != null) {
+            }
+        }
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            log.error("[video] 썸네일 추출 실패. 에러코드 - {}", exitCode);
+            throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
+        }
+    }
+
+    private double compressVideoFile(File inputFile, String outputFilePath, Pattern DURATION_PATTERN, Pattern TIME_PATTERN) throws IOException, InterruptedException {
+        Process process = getCompressionProcess(inputFile, outputFilePath);
         BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
         String line;
         double totalDuration = 0;
         double currentProgress = 0;
 
-        // Duration 추출
         while ((line = stdError.readLine()) != null) {
             Matcher durationMatcher = DURATION_PATTERN.matcher(line);
             if (durationMatcher.find()) {
@@ -72,22 +94,36 @@ public class VideoCompressor {
             }
         }
 
-        // 압축 진행 상황 추적
         while ((line = stdError.readLine()) != null) {
             Matcher timeMatcher = TIME_PATTERN.matcher(line);
             if (timeMatcher.find()) {
                 double currentTime = parseTimeToSeconds(timeMatcher);
                 currentProgress = (currentTime / totalDuration) * 100;
+                log.info("[비디오 압축] {}%", currentProgress);
             }
         }
 
         int exitCode = process.waitFor();
-        if (exitCode == 0) {
-            return new File(outputFilePath);
-        } else {
+        if (exitCode != 0) {
             log.error("[video] 압축 실패. 에러코드 - {}", exitCode);
             throw new VideoUploadException(ErrorCode.UNEXPECTED_ERROR);
         }
+
+        return totalDuration;
+    }
+
+    private Process getCompressionProcess(File inputFile, String outputFilePath) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "ffmpeg", "-i", inputFile.getAbsolutePath(),
+                "-vcodec", videoCodec, // Video codec
+                "-acodec", audioCodec,  // Audio codec
+                "-b:a", audioBitrate,   // Audio bitrate
+                "-vf", "scale=" + scale, // Scale
+                "-crf", crf,            // Constant Rate Factor
+                outputFilePath          // Output video file path
+        );
+
+        return processBuilder.start();
     }
 
     /**
