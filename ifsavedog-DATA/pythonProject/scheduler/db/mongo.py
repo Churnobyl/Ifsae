@@ -6,12 +6,12 @@ mongo_url = config.MONGO_URL
 db_name = config.MONGO_DBNAME
 # MongoDB 클라이언트 생성
 
-client = MongoClient(mongo_url)
-# 데이터베이스와 컬렉션 선택
-db = client[db_name]
-
+@contextmanager
 def get_mongo_db():
-    return db
-
-def close_mongo_client():
-    client.close()
+    client = MongoClient(mongo_url)
+    # 데이터베이스와 컬렉션 선택
+    db = client[db_name]
+    try:
+        yield db
+    finally:
+        client.close()
