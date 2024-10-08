@@ -10,24 +10,27 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ESDogService {
-
     private final ESDogRepository esDogRepository;
 
     public void saveDog(Dog dog) {
         ESDog esDog = ESDog.builder()
-                           .id(dog.getId().toString())
-                           .name(dog.getName())
-                           .breed(dog.getSpecies().getName())
-                           .imgUrl(dog.getImage())
-                           .shelter(ESShelter.builder()
-                                             .shelterId(dog.getShelterDog().getShelter().getId().toString())
-                                             .name(dog.getShelterDog().getShelter().getName())
-                                             .build())
-                           .build();
+                .id(Long.toString(dog.getId()))
+                .name(dog.getName())
+                .shelter(ESShelter.builder()
+                        .shelterId(dog.getShelterDog().getShelter().getId().toString())
+                        .name(dog.getShelterDog().getShelter().getName())
+                        .build())
+                .build();
+
         esDogRepository.save(esDog);
     }
 
+    public void updateDog(Dog dog) {
+        deleteDog(dog);
+        saveDog(dog);
+    }
+
     public void deleteDog(Dog dog) {
-        esDogRepository.deleteById(dog.getId().toString());
+        esDogRepository.deleteById(Long.toString(dog.getId()));
     }
 }
