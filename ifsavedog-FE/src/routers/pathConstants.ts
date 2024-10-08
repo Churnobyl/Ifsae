@@ -34,7 +34,7 @@ export const PATH = {
 
   /** 비디오 미리보기 카드 */
   USER_LIKE_VIDEO: 'mypage/like-video',
-  VIDEO_DETAIL: 'video',
+  VIDEO_DETAIL: 'post',
 
   /** 강아지 상세 페이지 */
   DOG_DETAIL: 'dog',
