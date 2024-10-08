@@ -1,12 +1,4 @@
-from service.recommendation import *
-from service.latest_dog import *
-from service.liked_dog import *
-from job.image_vector_filter import *
+from job.sequential import sequential_job_daily
 
-from db.mongo import *
+sequential_job_daily(date=1)
 
-# print(type(rank_latest_dog()))
-rank_latest_dog()
-# rank_liked_dog()
-# insert_recommendation_rank(29)
-# rank_image_vector_by_user(29)
