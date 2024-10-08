@@ -33,8 +33,8 @@ export const PATH = {
   CENTER_DONATION_LIST: 'CenterDonationList',
 
   /** 비디오 미리보기 카드 */
-  VIDEO_LIST: 'video',
   USER_LIKE_VIDEO: 'mypage/like-video',
+  VIDEO_DETAIL: 'video',
 
   /** 강아지 상세 페이지 */
   DOG_DETAIL: 'dog',
