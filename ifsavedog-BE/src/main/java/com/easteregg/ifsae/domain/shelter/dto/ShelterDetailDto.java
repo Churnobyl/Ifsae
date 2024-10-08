@@ -9,6 +9,8 @@ public class ShelterDetailDto {
 
     private Long id;
 
+    private String profileImgUrl;
+
     private String name;
 
     private String address;

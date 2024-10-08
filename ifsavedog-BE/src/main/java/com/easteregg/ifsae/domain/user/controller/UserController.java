@@ -63,11 +63,11 @@ public class UserController {
      * 프로필 사진 수정
      */
     @PutMapping("/profile-img")
-    public ResponseEntity<CommonSuccessResponse> updateUserProfileImg(@AuthenticationPrincipal User user,
+    public ResponseEntity<String> updateUserProfileImg(@AuthenticationPrincipal User user,
                                                                       @RequestParam MultipartFile profileImg)
             throws IOException {
-        userService.updateUserProfileImg(user, profileImg);
-        return ResponseEntity.ok(CommonSuccessResponse.of("프로필 사진 수정에 성공했습니다."));
+
+        return ResponseEntity.ok(userService.updateUserProfileImg(user, profileImg));
     }
 
     @GetMapping("/my-shelter")
