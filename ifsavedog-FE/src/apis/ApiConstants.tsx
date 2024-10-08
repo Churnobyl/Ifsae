@@ -24,6 +24,7 @@ export enum ENDPOINT {
 
   // Post
   CREATE_POST = 'api/post',
+  LIKE_POST_LIST = 'api/post/like',
 }
 
 export enum HTTP_STATUS {
