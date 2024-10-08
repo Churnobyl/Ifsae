@@ -15,6 +15,7 @@ import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
+import VideoDetailPage from '@/pages/VideoDetailPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 import CreatePostPage from '@/pages/mypages/CreatePostPage';
@@ -168,6 +169,11 @@ const Router = () => {
     {
       path: PATH.LANDING,
       element: <LandingPage />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: PATH.VIDEO_DETAIL + '/:id',
+      element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },
 
