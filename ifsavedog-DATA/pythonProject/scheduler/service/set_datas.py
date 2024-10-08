@@ -28,6 +28,12 @@ def update_latest_dog_rank(rank_list):
             "$set": {"rank_list": rank_list}
             }, upsert=True)
 
+def update_liked_dog_rank(rank_list):
+    with get_mongo_db() as mongo:
+        mongo.liked_dog_rank.update_one({}, {
+            "$set": {"rank_list": rank_list}
+        }, upsert=True)
+
 def upsert_user_recommendation_rank(user_id, rank_list):
     if len(rank_list) != 100:
         raise ValueError('List Lenghth Error: rank_list must be 100 length')

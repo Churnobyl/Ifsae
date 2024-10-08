@@ -7,3 +7,7 @@ def insert_image_vector_rank(user_id, rank_sorted_list):
 def insert_latest_rank(latest_list):
     rank_list = [{"dog_id": i.id, "desertion_no": i.desertion_no, "happen_dt": i.happen_dt} for i in latest_list]
     update_latest_dog_rank(rank_list)
+
+def insert_liked_rank(liked_list):
+    rank_list = [{"dog_id": i[1], "desertion_no": i[3], "count": i[2]} for i in liked_list]
+    update_liked_dog_rank(rank_list)
