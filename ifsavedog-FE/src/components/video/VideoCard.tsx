@@ -7,15 +7,10 @@ interface VideoCardProps {
   videoId: string;
   thumbnailUrl?: string | null;
   title: string;
-  isOner: boolean;
+  type: 'likeVideo' | 'myVideo' | 'shelterVideo';
 }
 
-const VideoCard = ({
-  videoId,
-  thumbnailUrl,
-  title,
-  isOner,
-}: VideoCardProps) => {
+const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -87,20 +82,24 @@ const VideoCard = ({
             left: `${menuPosition.left}px`,
           }}
         >
-          {isOner ? (
-            <div>
-              <button className="w-full px-2 py-1 hover:bg-main rounded-t-lg">
-                수정하기
+          <div>
+            {type === 'myVideo' && (
+              <>
+                <button className="w-full px-2 py-1 hover:bg-main rounded-t-lg">
+                  수정하기
+                </button>
+                <button className="w-full px-2 py-1 hover:bg-main rounded-b-lg">
+                  삭제하기
+                </button>
+              </>
+            )}
+
+            {type === 'likeVideo' && (
+              <button className="w-full px-2 py-1 hover:bg-main rounded-lg">
+                좋아요 취소
               </button>
-              <button className="w-full px-2 py-1 hover:bg-main rounded-b-lg">
-                삭제하기
-              </button>
-            </div>
-          ) : (
-            <button className="w-full px-2 py-1 hover:bg-main rounded-lg">
-              좋아요 취소
-            </button>
-          )}
+            )}
+          </div>
         </div>
       )}
     </div>
