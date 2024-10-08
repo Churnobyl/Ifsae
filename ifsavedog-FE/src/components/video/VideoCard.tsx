@@ -1,10 +1,12 @@
 import DefaultThumbnail from '@/assets/running-dog.png';
 import DotMenu from '@/assets/icon/dot-menu.svg';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { deletePostApi } from '@/apis/post/postApi';
 
 // props 타입 정의
 interface VideoCardProps {
-  videoId: string;
+  videoId: number;
   thumbnailUrl?: string | null;
   title: string;
   type: 'likeVideo' | 'myVideo' | 'shelterVideo';
@@ -15,6 +17,7 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
   const thumbnailSrc = thumbnailUrl ? thumbnailUrl : DefaultThumbnail;
 
@@ -33,9 +36,9 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
   const handleOutsideClick = (event: MouseEvent) => {
     if (
       menuRef.current &&
-      !menuRef.current.contains(event.target as Node) && // 메뉴 내부가 아닌지 확인
+      !menuRef.current.contains(event.target as Node) &&
       menuButtonRef.current &&
-      !menuButtonRef.current.contains(event.target as Node) // 메뉴 버튼이 아닌지 확인
+      !menuButtonRef.current.contains(event.target as Node)
     ) {
       setMenuVisible(false); // 메뉴 닫기
     }
@@ -49,11 +52,29 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
     };
   }, []);
 
+  // 수정하기 버튼을 눌렀을 때 수정 페이지로 이동
+  const handleEdit = () => {
+    navigate(`/edit/${videoId}`); // 수정 페이지로 이동
+  };
+
+  // 삭제하기 버튼을 눌렀을 때 삭제 API 호출
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+    if (confirmDelete) {
+      try {
+        await deletePostApi(Number(videoId)); // 삭제 API 호출
+        alert('삭제되었습니다.');
+        // 삭제 후 페이지를 새로고침하거나 목록을 업데이트하는 로직을 추가할 수 있음
+        window.location.reload(); // 새로고침
+      } catch (error) {
+        console.error('Failed to delete post:', error);
+        alert('삭제에 실패했습니다.');
+      }
+    }
+  };
+
   return (
-    <div
-      className="w-[140px] h-[130px] rounded-lg overflow-hidden bg-white"
-      id={videoId}
-    >
+    <div className="w-[140px] h-[130px] rounded-lg overflow-hidden bg-white">
       {/* 비디오 썸네일 */}
       <img
         src={thumbnailSrc}
@@ -75,20 +96,26 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
       {menuVisible && (
         <div
           ref={menuRef} // 메뉴 div의 ref 추가
-          className="absolute right-0 top-[40px] w-[60px] text-center text-[10px] bg-white shadow-lg rounded-lg z-10"
+          className="absolute right-0 top-[40px] w-[70px] text-[10px] bg-white shadow-lg rounded-lg z-10"
           style={{
             position: 'fixed',
             top: `${menuPosition.top}px`,
-            left: `${menuPosition.left}px`,
+            left: `${menuPosition.left - 60}px`,
           }}
         >
           <div>
             {type === 'myVideo' && (
               <>
-                <button className="w-full px-2 py-1 hover:bg-main rounded-t-lg">
+                <button
+                  className="w-full px-2 py-1 hover:bg-main rounded-t-lg"
+                  onClick={handleEdit}
+                >
                   수정하기
                 </button>
-                <button className="w-full px-2 py-1 hover:bg-main rounded-b-lg">
+                <button
+                  className="w-full px-2 py-1 hover:bg-main rounded-b-lg"
+                  onClick={handleDelete}
+                >
                   삭제하기
                 </button>
               </>

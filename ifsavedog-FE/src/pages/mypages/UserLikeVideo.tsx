@@ -12,10 +12,10 @@ interface Post {
 
 // Video 타입 정의
 interface Video {
-  videoId: string;
+  videoId: number;
   thumbnailUrl: string;
   title: string;
-  type: 'likeVideo';
+  type: 'likeVideo' | 'myVideo' | 'shelterVideo';
 }
 
 const UserLikeVideo = () => {
@@ -28,11 +28,11 @@ const UserLikeVideo = () => {
     const fetchLikedVideos = async () => {
       try {
         const response = await likePostListApi(); // API 호출
-        const posts: Post[] = response.data.postList || []; // postList가 undefined일 경우 빈 배열로 처리
+        const posts: Post[] = response.data || []; // postList가 undefined일 경우 빈 배열로 처리
 
         // postList 데이터를 videoData 형식에 맞게 변환
         const formattedData: Video[] = posts.map((post) => ({
-          videoId: post.id.toString(), // id를 문자열로 변환
+          videoId: post.id,
           thumbnailUrl: post.imageUrl || DefaultThumbnail, // imageUrl이 없으면 기본 썸네일 사용
           title: post.title,
           type: 'likeVideo',

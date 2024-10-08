@@ -2,7 +2,7 @@ import VideoCard from '@/components/video/VideoCard';
 
 // Video 타입 정의
 interface Video {
-  videoId: string;
+  videoId: number;
   thumbnailUrl?: string | null;
   title: string;
   type: 'likeVideo' | 'myVideo' | 'shelterVideo';

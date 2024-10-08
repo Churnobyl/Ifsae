@@ -23,7 +23,7 @@ export enum ENDPOINT {
   SHELTER_DONATION_LIST = 'api/donations/shelters',
 
   // Post
-  CREATE_POST = 'api/post',
+  POST = 'api/post',
   LIKE_POST_LIST = 'api/post/like',
 }
 
