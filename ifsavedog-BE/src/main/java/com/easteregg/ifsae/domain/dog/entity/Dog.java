@@ -14,13 +14,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,10 +48,7 @@ public class Dog {
     @Enumerated(EnumType.ORDINAL)
     private DogStatus dogStatus;
 
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "species_id")
-    private Species species;
+    private String species;
 
     private String info;
 
@@ -73,11 +67,16 @@ public class Dog {
         this.image = imageUrl;
     }
 
+    public void updateShelterDog(ShelterDog shelterDog) {
+        this.shelterDog = shelterDog;
+    }
+
     public void updateDogInfo(DogCreateRequest dogCreateRequest) {
         this.name = dogCreateRequest.getName();
         this.age = dogCreateRequest.getAge();
         this.gender = Gender.valueOf(dogCreateRequest.getGender());
         this.dogStatus = DogStatus.valueOf(dogCreateRequest.getDogStatus());
+        this.species = dogCreateRequest.getSpecies();
         this.info = dogCreateRequest.getInfo();
     }
 
@@ -87,12 +86,12 @@ public class Dog {
 
     public DogListDto toDogListDto() {
         return DogListDto.builder()
-                .id(this.getId())
-                .name(this.getName())
-                .age(this.getAge())
-                .gender(this.getGender())
-                .image(this.getImage())
-                .species(this.getSpecies())
-                .build();
+                         .id(this.getId())
+                         .name(this.getName())
+                         .age(this.getAge())
+                         .gender(this.getGender())
+                         .image(this.getImage())
+                         .species(this.getSpecies())
+                         .build();
     }
 }
