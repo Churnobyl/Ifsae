@@ -43,7 +43,7 @@ public class PostController {
     }
 
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> writePost(
             @AuthenticationPrincipal User user,
             @RequestPart(value = "data") PostDto.Request request,

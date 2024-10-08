@@ -77,13 +77,13 @@ springdoc:
 
 # Video Settings
 video:
-  chunk-size: 1048576
+  chunk-size: 5242880
   ffmpeg:
     video-codec: h264
     audio-codec: mp3
-    crf: 35
+    crf: 28
     audio-bitrate: 256k
-    scale: 1280:720
+    scale: 640:480
   emitter:
     event-name: progress
   directory:
