@@ -1,5 +1,4 @@
 import SignupForm from '@/components/signup/SignupForm';
-import VideoList from '@/components/video/VideoList';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterDetailPage from '@/pages/CenterDetailPage';
@@ -90,10 +89,6 @@ const Router = () => {
                   element: <CreateShelterPage />,
                 },
               ],
-            },
-            {
-              path: PATH.VIDEO_LIST,
-              element: <VideoList />,
             },
 
             /** 세경이의 테스트용 url */
