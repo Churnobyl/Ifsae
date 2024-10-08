@@ -1,4 +1,4 @@
-import { getDogListByShelterIdApi } from '@/apis/dog/dogApi';
+import { shelterDogListApi } from '@/apis/dog/dogApi';
 import { Input } from '@/components/index';
 import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 import { DogListDtoType } from '@/types/dog/DogListDtoType';
@@ -17,7 +17,7 @@ const CreatePostPage = () => {
   console.log(dogList);
 
   const getDogList = useCallback(async () => {
-    const response = await getDogListByShelterIdApi(myShelterStateStore.id);
+    const response = await shelterDogListApi(myShelterStateStore.id);
     setDogList(response.data);
   }, [myShelterStateStore.id]);
 
