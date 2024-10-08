@@ -5,6 +5,7 @@ import testImage from '@/assets/logo.webp';
 import LeftArrow from '@/assets/icon/leftarrow.svg';
 import RightArrow from '@/assets/icon/rightarrow.svg';
 import { DogType } from '@/types/dog/DogType';
+import { followDogListApi } from '@/apis/dog/dogApi'; // API import
 
 interface DonationInfo {
   id: number;
@@ -29,6 +30,7 @@ const AdoptionPage = () => {
       category: 'adoption',
     },
   ];
+
   const recommenedList = [
     {
       id: 1,
@@ -56,32 +58,9 @@ const AdoptionPage = () => {
     },
   ] as DogType[];
 
-  const followList = [
-    {
-      id: 1,
-      name: '루루',
-      age: 1,
-      gender: 'FEMALE',
-      species: '포메라니안',
-      image: testImage,
-    },
-    {
-      id: 2,
-      name: '코코',
-      age: 1,
-      gender: 'MALE',
-      species: '푸들',
-      image: testImage,
-    },
-    {
-      id: 3,
-      name: '보리',
-      age: 2,
-      gender: 'FEMALE',
-      species: '믹스',
-      image: testImage,
-    },
-  ] as DogType[];
+  const [followList, setFollowList] = useState<DogType[]>([]); // 팔로우 강아지 목록 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState<string | null>(null); // 에러 상태
 
   const recommenedRef = useRef<HTMLDivElement | null>(null);
   const followRef = useRef<HTMLDivElement | null>(null);
@@ -145,6 +124,31 @@ const AdoptionPage = () => {
     };
   }, []);
 
+  // API로 팔로우 목록을 가져오는 함수
+  useEffect(() => {
+    const fetchFollowList = async () => {
+      try {
+        const response = await followDogListApi(); // API 호출
+        setFollowList(response.data); // 받아온 강아지 목록 상태 업데이트
+      } catch (error) {
+        setError('팔로우한 강아지 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching follow list:', error);
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+
+    fetchFollowList(); // 컴포넌트 렌더링 시 API 호출
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중일 때 표시할 UI
+  }
+
+  if (error) {
+    return <div>{error}</div>; // 에러 발생 시 표시할 UI
+  }
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="w-11/12 mb-4">
@@ -188,8 +192,8 @@ const AdoptionPage = () => {
                   name={dog.name}
                   age={dog.age}
                   image={dog.image}
-                  gender={'FEMALE'}
-                  species={''}
+                  gender={dog.gender}
+                  species={dog.species}
                 />
               </div>
             ))}
@@ -197,7 +201,7 @@ const AdoptionPage = () => {
         </div>
       </div>
 
-      <div className="w-11/12">
+      <div className="w-11/12 relative">
         <div className=" text-lg font-semibold list-title">
           😀 내가 팔로우 하는 강아지
         </div>
@@ -213,18 +217,22 @@ const AdoptionPage = () => {
         )}
         <div ref={followRef} className="mt-1 overflow-x-auto scrollbar-hide">
           <div className="flex space-x-2">
-            {followList.map((dog) => (
-              <div className="flex-none" key={dog.id}>
-                <DogPreview
-                  id={dog.id}
-                  name={dog.name}
-                  age={dog.age}
-                  image={dog.image}
-                  gender={'FEMALE'}
-                  species={''}
-                />
-              </div>
-            ))}
+            {followList.length > 0 ? (
+              followList.map((dog) => (
+                <div className="flex-none" key={dog.id}>
+                  <DogPreview
+                    id={dog.id}
+                    name={dog.name}
+                    age={dog.age}
+                    image={dog.image}
+                    gender={dog.gender}
+                    species={dog.species}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>팔로우한 강아지가 없습니다.</div>
+            )}
           </div>
         </div>
       </div>
