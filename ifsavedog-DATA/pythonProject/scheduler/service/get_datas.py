@@ -37,7 +37,7 @@ def get_dogs_by_date_list(date_list):
 
 def get_dogs_ordered_by_date(num):
     with get_db() as db:
-        return db.query(Dog).order_by(Dog.happen_dt).limit(num).all()
+        return db.query(Dog).order_by(Dog.happen_dt.desc()).limit(num).all()
 
 def get_dogs_boot(strform):
     with get_db() as db:
