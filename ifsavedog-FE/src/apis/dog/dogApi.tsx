@@ -10,13 +10,21 @@ export const dogPostApi = async (dogId: number) => {
 };
 
 export const followApi = async (dogId: number) => {
-  return await instance.post(`${ENDPOINT.FOLLOW}?id=${dogId}`);
+  return await instance.post(`${ENDPOINT.FOLLOW}?dogId=${dogId}`);
 };
 
 export const unFollowApi = async (dogId: number) => {
-  return await instance.delete(`${ENDPOINT.FOLLOW}?id=${dogId}`);
+  return await instance.delete(`${ENDPOINT.FOLLOW}?dogId=${dogId}`);
 };
 
 export const checkFollowApi = async (dogId: number) => {
-  return await instance.get(ENDPOINT.POSTLIST_DOG + '/' + dogId);
+  return await instance.get(ENDPOINT.FOLLOW + '/' + dogId);
+};
+
+export const followDogListApi = async () => {
+  return await instance.get(ENDPOINT.FOLLOW_DOG_LIST);
+};
+
+export const shelterDogListApi = async (shelterId: number) => {
+  return await instance.get(ENDPOINT.SHELTER_DOG_LIST + '/' + shelterId);
 };

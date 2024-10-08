@@ -1,14 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 
 interface DonationItem {
-  name: string;
-  date: string;
-  amount: number;
-  image: string;
   dogId: number;
+  dogName: string;
+  dogImage: string;
+  contribution: number;
+  donateDate: string;
 }
 
-const DonationItem = ({ dogId, name, date, amount, image }: DonationItem) => {
+const DonationItem = ({
+  dogId,
+  dogName,
+  donateDate,
+  contribution,
+  dogImage,
+}: DonationItem) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -21,17 +27,17 @@ const DonationItem = ({ dogId, name, date, amount, image }: DonationItem) => {
       onClick={handleClick}
     >
       <img
-        src={image}
-        alt={name}
+        src={dogImage}
+        alt={dogName}
         className="w-12 h-12 rounded-full object-cover mr-4"
       />
       <div className="flex-grow">
-        <h3 className="font-bold text-gray-700">{name}</h3>
-        <p className="text-sm text-lightGray">
-          {new Date(date).toLocaleDateString('ko-KR')}
+        <h3 className="font-bold text-gray-600">{dogName}</h3>
+        <p className="text-sm text-gray">
+          {new Date(donateDate).toLocaleDateString('ko-KR')}
         </p>
       </div>
-      <span className="text-sm text-black">총 {amount} 원</span>
+      <span className="text-sm text-black">총 {contribution} 원</span>
     </div>
   );
 };

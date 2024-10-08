@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.shelter.controller;
 
 import com.easteregg.ifsae.domain.shelter.dto.ShelterCreateRequest;
+import com.easteregg.ifsae.domain.shelter.dto.ShelterDetailDto;
 import com.easteregg.ifsae.domain.shelter.service.ShelterService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
@@ -33,7 +34,7 @@ public class ShelterController {
     }
 
     @GetMapping("{shelterId}")
-    public ResponseEntity<?> getShelterDetail(@PathVariable long shelterId) {
+    public ResponseEntity<ShelterDetailDto> getShelterDetail(@PathVariable long shelterId) {
         return new ResponseEntity<>(shelterService.findShelterById(shelterId), HttpStatus.OK);
     }
 

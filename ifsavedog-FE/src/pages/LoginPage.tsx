@@ -1,11 +1,16 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
 import { loginApi } from '@/apis/auth/authApi';
+import { getMyShelterApi } from '@/apis/shelter/shelterApi';
 import { Input } from '@/components/index';
 import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
 import { useTokenStore } from '@/stores/auth/tokenStore';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 import { UserReponseType } from '@/types/auth/UserResponseType';
+import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
+import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
+import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
 import axios from 'axios';
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -22,6 +27,7 @@ const LoginPage = () => {
 
   const tokenStore = useTokenStore(); // 토큰 스토어 호출
   const userStateStore = useUserStateStore(); // 유저 상태 스토어 호출
+  const myShelterStateStore = useMyShelterDetailStore(); // 내 센터 상태 스토어 호출
   const navigate = useNavigate(); // 로그인 성공 후 이동할 Navigate 호출
 
   // Input 반영
@@ -35,6 +41,26 @@ const LoginPage = () => {
     },
     [],
   );
+
+  /**
+   * 센터 정보 추가 로직
+   */
+  const handleMyShelter = useCallback(async () => {
+    try {
+      const response = await getMyShelterApi();
+      const data: ShelterDetailType = response.data;
+
+      // 성공
+      if (response.status === HTTP_STATUS.OK) {
+        myShelterStateStore.setShelterState(data);
+      }
+    } catch (error) {
+      // 에러 발생
+      if (axios.isAxiosError(error)) {
+        setErrMessage(error.response!.data.errorMessage);
+      }
+    }
+  }, [myShelterStateStore]);
 
   /**
    * 로그인 로직
@@ -51,8 +77,14 @@ const LoginPage = () => {
 
         // 유저 State 저장
         userStateStore.setUserState(data);
+        if (
+          data.role === UserRoleEnum.ROLE_CENTER.toString() &&
+          data.userStatus === UserStatusEnum.ACTIVE.toString()
+        ) {
+          await handleMyShelter();
+        }
         setErrMessage(''); // 에러메시지 삭제
-        navigate(PATH.MAIN); // MAIN페이지로 이동
+        navigate('/' + PATH.MAIN); // MAIN페이지로 이동
       }
     } catch (error) {
       // 에러 발생
@@ -66,7 +98,7 @@ const LoginPage = () => {
         password: '',
       });
     }
-  }, [navigate, tokenStore, userInput, userStateStore]);
+  }, [handleMyShelter, navigate, tokenStore, userInput, userStateStore]);
 
   // Enter 키 입력 시 로그인
   const handleKeyDown = useCallback(
@@ -107,11 +139,11 @@ const LoginPage = () => {
             <span>로그인</span>
           </button>
           <div className="flex flex-row justify-end gap-1 text-sm text-black">
-            <NavLink to={`${PATH.PASSWORD_RESET}`} className="text-main">
+            <NavLink to={`/${PATH.PASSWORD_RESET}`} className="text-main">
               비밀번호 재설정
             </NavLink>
             <div> | </div>
-            <NavLink to={`${PATH.SIGNUP}`} className="text-main">
+            <NavLink to={`/${PATH.SIGNUP}`} className="text-main">
               회원가입
             </NavLink>
           </div>

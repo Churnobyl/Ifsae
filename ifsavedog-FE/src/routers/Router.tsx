@@ -1,10 +1,11 @@
 import SignupForm from '@/components/signup/SignupForm';
-import SignupResult from '@/components/signup/SignupResult';
-import VideoList from '@/components/video/VideoList';
 import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
+import CenterDetailPage from '@/pages/CenterDetailPage';
+import CenterDonationListPage from '@/pages/CenterDonationListPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
-import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import DogDetailPage from '@/pages/DogDetailPage';
+import DonationPage from '@/pages/DonationPage';
 import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -12,32 +13,27 @@ import MainContainer from '@/pages/MainContainer';
 import MainPage from '@/pages/MainPage';
 import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
-import MyPage from '@/pages/mypages/MyPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
+import NotFoundPage from '@/pages/errorPages/NotFoundPage';
+import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
+import CreatePostPage from '@/pages/mypages/CreatePostPage';
+import MyPage from '@/pages/mypages/MyPage';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
+import PrivateRoute from '@/routers/PrivateRoute';
 import { PATH } from '@/routers/pathConstants';
-import { useTokenStore } from '@/stores/auth/tokenStore';
-import { useUserStateStore } from '@/stores/auth/userStateStore';
 import { UserRoleEnum } from '@/types/auth/UserRoleEnum';
 import { UserStatusEnum } from '@/types/auth/UserStatusEnum';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import {
-  Navigate,
   RouteObject,
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
-import CenterDonationListPage from '@/pages/CenterDonationListPage';
-import DogDetailPage from '@/pages/DogDetailPage';
-import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
-import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
-import DonationPage from '@/pages/DonationPage';
-import CenterDetailPage from '@/pages/CenterDetailPage';
 
 const Router = () => {
-  const accessToken = useTokenStore((state) => state.accessToken);
   const [cookies, setCookie] = useCookies();
 
   useEffect(() => {
@@ -51,146 +47,132 @@ const Router = () => {
 
   const routes: RouteObject[] = [
     {
-      path: PATH.LANDING,
-      errorElement: <NotFoundPage />,
-      element: <LandingPage />,
-    },
-    {
-      path: PATH.LOGIN,
-      errorElement: <NotFoundPage />,
-      element: <LoginPage />,
-    },
-    {
-      path: PATH.SIGNUP,
-      errorElement: <NotFoundPage />,
+      path: '/',
+      element: <PrivateRoute />,
       children: [
         {
           path: '',
-          element: <SignupForm />,
-        },
-        {
-          path: 'signup-result',
-          element: <SignupResult />,
-        },
-      ],
-    },
-    {
-      path: PATH.USER_RECOMMEND,
-      element: <UserRecommendPage />,
-    },
-    {
-      path: PATH.CREATE_CENTER,
-      element: <CreateShelterPage />,
-    },
-    {
-      path: PATH.VIDEO_LIST,
-      element: <VideoList />,
-    },
-
-    /** 세경이의 테스트용 url */
-    {
-      path: PATH.USER_LIKE_VIDEO,
-      element: <UserLikeVideo />,
-    },
-    {
-      path: PATH.USER_PROFILE_EDIT,
-      element: <UserProfileEdit />,
-    },
-    {
-      path: PATH.CENTER_PROFILE_EDIT,
-      element: <CenterProfileEdit />,
-    },
-
-    {
-      path: PATH.MAIN,
-      errorElement: <NotFoundPage />,
-      element: (() => {
-        if (accessToken) {
-          if (
-            // 근데 유저 상태가 PENDING이면
-            useUserStateStore.getState().userStatus ===
-            UserStatusEnum.PENDING.toString()
-          ) {
-            if (
-              // ROLE이 일반 유저면
-              useUserStateStore.getState().role ===
-              UserRoleEnum.ROLE_GENERAL_USER.toString()
-            ) {
-              // return <Navigate to={PATH.USER_RECOMMEND} />;
-            } else if (
-              // ROLE이 센터면
-              useUserStateStore.getState().role ===
-              UserRoleEnum.ROLE_CENTER.toString()
-            ) {
-              return <Navigate to={PATH.CREATE_CENTER} />;
-            }
-          }
-          return <MainContainer />;
-        } else if (cookies.hasViewed === true) {
-          // 액세스 토큰은 없는데 랜딩페이지를 봤으면
-          return <Navigate to={PATH.LOGIN} />;
-        } else {
-          return <Navigate to={PATH.LANDING} />; // 액세스 토큰도 없고 랜딩페이지도 안 봤으면
-        }
-      })(),
-      children: [
-        {
-          path: '',
-          element: <MainPage />,
-        },
-        {
-          path: PATH.MUNGTSU.slice(1),
-          element: <MungtsuPage />,
-        },
-        {
-          path: PATH.ADOPTION.slice(1),
-          element: <AdoptionPage />,
-        },
-        {
-          path: PATH.SEARCH.slice(1),
-          element: <SearchPage />,
-        },
-        {
-          path: PATH.MYPAGE.slice(1),
+          element: <MainContainer />,
+          errorElement: <NotFoundPage />,
           children: [
+            { path: PATH.MAIN, element: <MainPage /> },
+            { path: PATH.MUNGTSU, element: <MungtsuPage /> },
+            { path: PATH.ADOPTION, element: <AdoptionPage /> },
+            { path: PATH.SEARCH, element: <SearchPage /> },
+            { path: PATH.MYPAGE, element: <MyPage /> },
             {
-              path: '',
-              element: <MyPage />,
+              path: PATH.USER_RECOMMEND,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_GENERAL_USER}
+                  userStatus={UserStatusEnum.PENDING}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <UserRecommendPage />,
+                },
+              ],
+            },
+            {
+              path: PATH.CREATE_CENTER,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.PENDING}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreateShelterPage />,
+                },
+              ],
+            },
+
+            /** 세경이의 테스트용 url */
+            {
+              path: PATH.USER_LIKE_VIDEO,
+              element: <UserLikeVideo />,
+            },
+            {
+              path: PATH.USER_PROFILE_EDIT,
+              element: <UserProfileEdit />,
+            },
+            {
+              path: PATH.CENTER_PROFILE_EDIT,
+              element: <CenterProfileEdit />,
+            },
+            {
+              path: PATH.FOLLOW,
+              errorElement: <NotFoundPage />,
+              element: <FollowPage />,
+            },
+            {
+              path: PATH.CENTER_DOG_LIST,
+              errorElement: <NotFoundPage />,
+              element: <MyDogListPage />,
+            },
+            {
+              path: PATH.CENTER_DONATION_LIST,
+              errorElement: <NotFoundPage />,
+              element: <CenterDonationListPage />,
+            },
+            {
+              path: PATH.DOG_DETAIL + '/:id',
+              errorElement: <NotFoundPage />,
+              element: <DogDetailPage />,
+            },
+            {
+              path: PATH.DONATION,
+              errorElement: <NotFoundPage />,
+              element: <DonationPage />,
+            },
+            {
+              path: PATH.CENTER_DETAIL + '/:id',
+              errorElement: <NotFoundPage />,
+              element: <CenterDetailPage />,
+            },
+            {
+              path: PATH.CREATE_POST,
+              errorElement: <NotFoundPage />,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.ACTIVE}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreatePostPage />,
+                },
+              ],
             },
           ],
         },
-        {
-          path: PATH.FOLLOW,
-          errorElement: <NotFoundPage />,
-          element: <FollowPage />,
-        },
-        {
-          path: PATH.CENTER_DOG_LIST,
-          errorElement: <NotFoundPage />,
-          element: <MyDogListPage />,
-        },
-        {
-          path: PATH.CENTER_DONATION_LIST,
-          errorElement: <NotFoundPage />,
-          element: <CenterDonationListPage />,
-        },
-        {
-          path: PATH.DOG_DETAIL + '/:id',
-          errorElement: <NotFoundPage />,
-          element: <DogDetailPage />,
-        },
-        {
-          path: PATH.DONATION,
-          errorElement: <NotFoundPage />,
-          element: <DonationPage />,
-        },
-        {
-          path: PATH.CENTER_DETAIL + '/:id',
-          errorElement: <NotFoundPage />,
-          element: <CenterDetailPage />,
-        },
       ],
     },
+
+    {
+      path: PATH.LOGIN,
+      element: <LoginPage />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: PATH.SIGNUP,
+      element: <SignupForm />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: PATH.LANDING,
+      element: <LandingPage />,
+      errorElement: <NotFoundPage />,
+    },
+
+    // 언제든 접근 가능한 경로
+    { path: '*', element: <NotFoundPage /> },
   ];
 
   const router = createBrowserRouter([...routes]);

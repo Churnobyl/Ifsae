@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import AdoptionCard from '@/components/adoption/AdoptionCard';
 import DogPreview from '@/components/common/DogPreviewBox';
 import testImage from '@/assets/logo.webp';
-import LeftArrow from '@/assets/icon/scroll-arrow-left.svg';
-import RightArrow from '@/assets/icon/scroll-arrow-right.svg';
+import LeftArrow from '@/assets/icon/leftarrow.svg';
+import RightArrow from '@/assets/icon/rightarrow.svg';
 import { DogType } from '@/types/dog/DogType';
+import { followDogListApi } from '@/apis/dog/dogApi'; // API import
 
 interface DonationInfo {
   id: number;
@@ -29,6 +30,7 @@ const AdoptionPage = () => {
       category: 'adoption',
     },
   ];
+
   const recommenedList = [
     {
       id: 1,
@@ -56,32 +58,9 @@ const AdoptionPage = () => {
     },
   ] as DogType[];
 
-  const followList = [
-    {
-      id: 1,
-      name: '루루',
-      age: 1,
-      gender: 'FEMALE',
-      species: '포메라니안',
-      image: testImage,
-    },
-    {
-      id: 2,
-      name: '코코',
-      age: 1,
-      gender: 'MALE',
-      species: '푸들',
-      image: testImage,
-    },
-    {
-      id: 3,
-      name: '보리',
-      age: 2,
-      gender: 'FEMALE',
-      species: '믹스',
-      image: testImage,
-    },
-  ] as DogType[];
+  const [followList, setFollowList] = useState<DogType[]>([]); // 팔로우 강아지 목록 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState<string | null>(null); // 에러 상태
 
   const recommenedRef = useRef<HTMLDivElement | null>(null);
   const followRef = useRef<HTMLDivElement | null>(null);
@@ -145,82 +124,115 @@ const AdoptionPage = () => {
     };
   }, []);
 
-  return (
-    <div>
-      <h2 className="text-3xl">😀 맞춤 입양 추천</h2>
-      <div className="p-4">
-        <div>
-          {cardList.map((donationInfo) => (
-            <AdoptionCard
-              key={donationInfo.id}
-              id={donationInfo.id}
-              dog={donationInfo.dog}
-              duration={donationInfo.duration}
-              category={donationInfo.category}
-            />
-          ))}
-        </div>
+  // API로 팔로우 목록을 가져오는 함수
+  useEffect(() => {
+    const fetchFollowList = async () => {
+      try {
+        const response = await followDogListApi(); // API 호출
+        setFollowList(response.data); // 받아온 강아지 목록 상태 업데이트
+      } catch (error) {
+        setError('팔로우한 강아지 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching follow list:', error);
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
 
-        <div className="relative">
-          <div className="list-title">😀 당신을 기다려요</div>
-          {isRecommenedScrollable.left && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              <img src={LeftArrow} className="w-6 h-6 opacity-50" />
-            </div>
-          )}
-          {isRecommenedScrollable.right && (
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              <img src={RightArrow} className="w-6 h-6 opacity-50" />
-            </div>
-          )}
-          <div
-            ref={recommenedRef}
-            className="mt-4 overflow-x-auto scrollbar-hide"
-          >
-            <div className="flex space-x-4">
-              {recommenedList.map((dog) => (
-                <div className="flex-none w-1/3" key={dog.id}>
-                  <DogPreview
-                    id={dog.id}
-                    name={dog.name}
-                    age={dog.age}
-                    image={dog.image}
-                    gender={'FEMALE'}
-                    species={''}
-                  />
-                </div>
-              ))}
-            </div>
+    fetchFollowList(); // 컴포넌트 렌더링 시 API 호출
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중일 때 표시할 UI
+  }
+
+  if (error) {
+    return <div>{error}</div>; // 에러 발생 시 표시할 UI
+  }
+
+  return (
+    <div className="w-full flex flex-col items-center justify-center">
+      <div className="w-11/12 mb-4">
+        <div className=" font-semibold text-2xl m-2 mb-3">
+          😀 맞춤 입양 추천
+        </div>
+        {cardList.map((donationInfo) => (
+          <AdoptionCard
+            key={donationInfo.id}
+            id={donationInfo.id}
+            dog={donationInfo.dog}
+            duration={donationInfo.duration}
+            category={donationInfo.category}
+          />
+        ))}
+      </div>
+
+      <div className="w-11/12 relative">
+        <div className="text-lg font-semibold list-title">
+          😀 당신을 기다려요
+        </div>
+        {isRecommenedScrollable.left && (
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
+            <img src={LeftArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
+        {isRecommenedScrollable.right && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
+            <img src={RightArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
+        <div
+          ref={recommenedRef}
+          className="mt-1 overflow-x-auto scrollbar-hide"
+        >
+          <div className="flex space-x-2">
+            {recommenedList.map((dog) => (
+              <div className="flex-none" key={dog.id}>
+                <DogPreview
+                  id={dog.id}
+                  name={dog.name}
+                  age={dog.age}
+                  image={dog.image}
+                  gender={dog.gender}
+                  species={dog.species}
+                />
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        <div className="relative">
-          <div className="list-title">😀 내가 팔로우하는 강아지</div>
-          {isFollowScrollable.left && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              <img src={LeftArrow} className="w-6 h-6 opacity-50" />
-            </div>
-          )}
-          {isFollowScrollable.right && (
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-              <img src={RightArrow} className="w-6 h-6 opacity-50" />
-            </div>
-          )}
-          <div ref={followRef} className="mt-4 overflow-x-auto scrollbar-hide">
-            <div className="flex space-x-4">
-              {followList.map((dog) => (
-                <div className="flex-none w-1/3" key={dog.id}>
+      <div className="w-11/12 relative">
+        <div className=" text-lg font-semibold list-title">
+          😀 내가 팔로우 하는 강아지
+        </div>
+        {isFollowScrollable.left && (
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
+            <img src={LeftArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
+        {isFollowScrollable.right && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
+            <img src={RightArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
+        <div ref={followRef} className="mt-1 overflow-x-auto scrollbar-hide">
+          <div className="flex space-x-2">
+            {followList.length > 0 ? (
+              followList.map((dog) => (
+                <div className="flex-none" key={dog.id}>
                   <DogPreview
                     id={dog.id}
                     name={dog.name}
                     age={dog.age}
                     image={dog.image}
-                    gender={'FEMALE'}
-                    species={''}
+                    gender={dog.gender}
+                    species={dog.species}
                   />
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <div>팔로우한 강아지가 없습니다.</div>
+            )}
           </div>
         </div>
       </div>

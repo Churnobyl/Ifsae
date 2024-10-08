@@ -1,10 +1,12 @@
 import { HTTP_STATUS } from '@/apis/ApiConstants';
-import { createShelterApi } from '@/apis/shelter/shelterApi';
+import { createShelterApi, getMyShelterApi } from '@/apis/shelter/shelterApi';
 import { Input } from '@/components/index';
 import MainLayout from '@/layouts/MainLayout';
 import { PATH } from '@/routers/pathConstants';
 import { useUserStateStore } from '@/stores/auth/userStateStore';
+import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 import { useShelterCreateStore } from '@/stores/shelter/shelterCreateStore';
+import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
 import axios from 'axios';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { BiSolidHomeHeart } from 'react-icons/bi';
@@ -16,6 +18,7 @@ import { MoonLoader } from 'react-spinners';
 
 const CreateShelterPage = () => {
   const shelterCreateStore = useShelterCreateStore();
+  const myShelterStateStore = useMyShelterDetailStore();
   const userStateStore = useUserStateStore();
 
   const handleInputChange = useCallback(
@@ -31,6 +34,26 @@ const CreateShelterPage = () => {
   const navigate = useNavigate();
 
   /**
+   * 센터 정보 추가 로직
+   */
+  const handleMyShelter = useCallback(async () => {
+    try {
+      const response = await getMyShelterApi();
+      const data: ShelterDetailType = response.data;
+
+      // 성공
+      if (response.status === HTTP_STATUS.OK) {
+        myShelterStateStore.setShelterState(data);
+      }
+    } catch (error) {
+      // 에러 발생
+      if (axios.isAxiosError(error)) {
+        setErrMessage(error.response!.data.errorMessage);
+      }
+    }
+  }, [myShelterStateStore]);
+
+  /**
    * 제출 로직
    */
   const handleSignup = useCallback(async () => {
@@ -40,7 +63,8 @@ const CreateShelterPage = () => {
 
       if (response.status === HTTP_STATUS.CREATED) {
         userStateStore.setUserStatus('ACTIVE');
-        navigate(PATH.MAIN, { replace: true });
+        await handleMyShelter();
+        navigate('/' + PATH.MAIN, { replace: true });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -49,7 +73,7 @@ const CreateShelterPage = () => {
     } finally {
       setIsSubmitPending(false);
     }
-  }, [navigate, shelterCreateStore.userInput, userStateStore]);
+  }, [handleMyShelter, navigate, shelterCreateStore.userInput, userStateStore]);
 
   return (
     <MainLayout showTopbar={false} showBottombar={false}>
