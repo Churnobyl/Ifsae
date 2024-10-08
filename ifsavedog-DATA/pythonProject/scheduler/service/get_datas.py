@@ -15,7 +15,7 @@ def get_all_image_vector():
 
 def get_all_rating():
     with get_db() as db:
-        return db.query(Rating).all()
+        return db.query(Rating, Dog).filter(Rating.dog_id == Dog.id).all()
 
 def get_user_rating(user_id):
     with get_db() as db:
@@ -70,7 +70,8 @@ def get_latest_dog_rank():
         return mongo.latest_dog_rank.find_one({})
 
 def get_liked_dog_rank():
-    return get_mongo_db().liked_dog_rank.find_one({})
+    with get_mongo_db() as mongo:
+        return mongo.liked_dog_rank.find_one({})
     
 # collection 으로부터 이미지벡터 데이터를 가져옴
 def get_all_image_vector():
