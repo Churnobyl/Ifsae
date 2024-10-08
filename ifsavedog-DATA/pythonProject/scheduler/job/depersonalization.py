@@ -6,3 +6,5 @@ def rank_latest_dog():
     
     insert_latest_rank(latest_dog)
 
+def rank_liked_dog():
+    pass
