@@ -19,7 +19,7 @@ import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 import CreatePostPage from '@/pages/mypages/CreatePostPage';
 import MyPage from '@/pages/mypages/MyPage';
-import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideoPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 import PrivateRoute from '@/routers/PrivateRoute';
 import { PATH } from '@/routers/pathConstants';

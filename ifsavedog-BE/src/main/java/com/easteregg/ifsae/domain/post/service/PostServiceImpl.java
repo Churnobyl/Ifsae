@@ -15,7 +15,6 @@ import com.easteregg.ifsae.domain.shelter.entity.ShelterUser;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterRepository;
 import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
-import com.easteregg.ifsae.global.elasticsearch.service.ESPostService;
 import com.easteregg.ifsae.global.exception.ErrorCode;
 import com.easteregg.ifsae.global.exception.type.PostException;
 import com.easteregg.ifsae.global.exception.type.ShelterException;
@@ -36,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
     private final PostDogRepository postDogRepository;
     private final ShelterRepository shelterRepository;
@@ -43,7 +43,6 @@ public class PostServiceImpl implements PostService {
     private final VideoUploadService videoUploadService;
     private final DogRepository dogRepository;
     private final PostLikeRepository postLikeRepository;
-    private final ESPostService esPostService;
 
     @Override
     public Slice<Post> getPostSlice(Pageable pageable) {
@@ -67,7 +66,6 @@ public class PostServiceImpl implements PostService {
 
         // Post 생성 및 저장
         Post savedPost = createAndSavePost(request, urlSet, shelter);
-        esPostService.savePost(savedPost);
 
         // PostDog 연결 및 저장
         savePostDogs(savedPost, request.getDogIds());
@@ -86,15 +84,12 @@ public class PostServiceImpl implements PostService {
         updatedPost.updateDogs(postDogs);
 
         postRepository.save(updatedPost);
-        esPostService.updatePost(updatedPost);
     }
 
     @Override
     public void delete(User user, Long postId) {
         checkUserInShelter(user, findPostById(postId).getShelter().getId());
-
         postRepository.deleteById(postId);
-        esPostService.deletePost(findPostById(postId));
     }
 
     @Override
@@ -127,6 +122,26 @@ public class PostServiceImpl implements PostService {
                                                        .imageUrl(post.getVideoUrl())
                                                        .build())
                        .toList();
+    }
+
+    @Override
+    public void createLike(User user, long postId) {
+        Post post = findPostById(postId);
+
+        postLikeRepository.save(new PostLike(user, post));
+    }
+
+    @Override
+    public void deleteLike(User user, long postId) {
+        PostLike postLike = postLikeRepository.findByUserIdAndPostId(user.getId(), postId)
+                                              .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
+
+        postLikeRepository.delete(postLike);
+    }
+
+    @Override
+    public boolean checkPostLike(User user, long postId) {
+        return postLikeRepository.findByUserIdAndPostId(user.getId(), postId).isPresent();
     }
 
     /**

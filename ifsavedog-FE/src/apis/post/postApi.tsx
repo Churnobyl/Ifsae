@@ -3,7 +3,7 @@ import { instance } from '@/apis/axios';
 import { PostRequestType } from '@/types/post/PostRequestType';
 
 export const likePostListApi = async () => {
-  return await instance.get(ENDPOINT.LIKE_POST_LIST);
+  return await instance.get(ENDPOINT.POST_LIKE);
 };
 
 export const deletePostApi = async (postId: number) => {
@@ -15,4 +15,16 @@ export const createPostApi = async (data: PostRequestType, video: File) => {
     data: new Blob([JSON.stringify(data)], { type: 'application/json' }),
     video: video,
   });
+};
+
+export const createPostLikeApi = async (postId: number) => {
+  return await instance.post(`${ENDPOINT.POST_LIKE}?postId=${postId}`);
+};
+
+export const deletePostLikeApi = async (postId: number) => {
+  return await instance.delete(`${ENDPOINT.POST_LIKE}?postId=${postId}`);
+};
+
+export const checkPostLikeApi = async (postId: number) => {
+  return await instance.get(ENDPOINT.POST_LIKE + '/' + postId);
 };

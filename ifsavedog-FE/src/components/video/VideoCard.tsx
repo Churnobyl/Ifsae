@@ -2,7 +2,7 @@ import DefaultThumbnail from '@/assets/running-dog.png';
 import DotMenu from '@/assets/icon/dot-menu.svg';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deletePostApi } from '@/apis/post/postApi';
+import { deletePostApi, deletePostLikeApi } from '@/apis/post/postApi';
 
 // props 타입 정의
 interface VideoCardProps {
@@ -73,8 +73,32 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
     }
   };
 
+  // 좋아요 취소 버튼을 눌렀을 때 좋아요 취소 API 호출
+  const handleUnlike = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파 중지
+    const confirmUnlike = window.confirm('정말 좋아요를 취소하시겠습니까?');
+    if (confirmUnlike) {
+      try {
+        await deletePostLikeApi(videoId); // 좋아요 취소 API 호출
+        alert('좋아요가 취소되었습니다.');
+        window.location.reload(); // 새로고침
+      } catch (error) {
+        console.error('Failed to unlike the post:', error);
+        alert('좋아요 취소에 실패했습니다.');
+      }
+    }
+  };
+
+  // 비디오 카드를 클릭했을 때 비디오 상세 페이지로 이동
+  const handleCardClick = () => {
+    navigate(`/post/${videoId}`); // 비디오 상세 페이지로 이동
+  };
+
   return (
-    <div className="w-[140px] h-[130px] rounded-lg overflow-hidden bg-white">
+    <div
+      className="w-[140px] h-[130px] rounded-lg overflow-hidden bg-white cursor-pointer"
+      onClick={handleCardClick} // 카드 클릭 시 상세 페이지로 이동
+    >
       {/* 비디오 썸네일 */}
       <img
         src={thumbnailSrc}
@@ -85,7 +109,13 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
       {/* 제목 및 메뉴 버튼 */}
       <div className="py-1 flex justify-between items-center">
         <p className="text-[10px] font-medium text-black">{title}</p>
-        <button ref={menuButtonRef} onClick={toggleMenu}>
+        <button
+          ref={menuButtonRef}
+          onClick={(e) => {
+            e.stopPropagation(); // 메뉴 버튼 클릭 시 카드 클릭 이벤트 방지
+            toggleMenu();
+          }}
+        >
           <div>
             <img src={DotMenu} alt="menu" className="w-2 h-4" />
           </div>
@@ -122,7 +152,10 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
             )}
 
             {type === 'likeVideo' && (
-              <button className="w-full px-2 py-1 hover:bg-main rounded-lg">
+              <button
+                className="w-full px-2 py-1 hover:bg-main rounded-lg"
+                onClick={handleUnlike} // 좋아요 취소
+              >
                 좋아요 취소
               </button>
             )}

@@ -18,7 +18,7 @@ interface Video {
   type: 'likeVideo' | 'myVideo' | 'shelterVideo';
 }
 
-const UserLikeVideo = () => {
+const UserLikeVideoPage = () => {
   // videoData 상태 설정 (Video[] 타입)
   const [videoData, setVideoData] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -74,4 +74,4 @@ const UserLikeVideo = () => {
   );
 };
 
-export default UserLikeVideo;
+export default UserLikeVideoPage;
