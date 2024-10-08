@@ -4,7 +4,9 @@ import com.easteregg.ifsae.domain.post.dto.PostDto;
 import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.service.PostService;
 import com.easteregg.ifsae.domain.user.entity.User;
+import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +46,7 @@ public class PostController {
     }
 
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> writePost(
             @AuthenticationPrincipal User user,
             @RequestPart(value = "data") PostDto.Request request,
@@ -85,5 +88,26 @@ public class PostController {
 
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
+
+    @PostMapping("/like")
+    public ResponseEntity<CommonSuccessResponse> addPostLike(@AuthenticationPrincipal User user,
+                                                             @RequestParam long postId) {
+        postService.createLike(user, postId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<CommonSuccessResponse> deletePostLike(@AuthenticationPrincipal User user,
+                                                                @RequestParam long postId) {
+        postService.deleteLike(user, postId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/like/{postId}")
+    public ResponseEntity<?> checkPostLike(@AuthenticationPrincipal User user, @PathVariable long postId) {
+        boolean isLiked = postService.checkPostLike(user, postId);
+        return new ResponseEntity<>(Map.of("isLiked", isLiked), HttpStatus.OK);
+    }
+
 
 }
