@@ -1,31 +1,18 @@
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; // useLocation 추가
 import DogDetail from '@/components/dog/DogDetail';
 import { DogDetailType } from '@/types/dog/DogDetailType';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-const dummyDogData: DogDetailType = {
-  id: 1,
-  name: 'Lucky',
-  age: 3,
-  gender: 'MALE',
-  dogStatus: 'NOT_ADOPTED',
-  species: 'Shih Tzu',
-  info: '사람을 좋아하고 잘 따르는 강아지입니다. 중성화가 되어 있으며, 다른 동물들과도 잘 지냅니다.',
-  image: 'https://example.com/dog.jpg', // 강아지 이미지 URL
-  shelterId: 101,
-  shelterName: 'Happy Shelter',
-  followCnt: 124,
-};
 
 const CreateDonationPage = () => {
   const [donationAmount, setDonationAmount] = useState<string>('');
   const navigate = useNavigate();
+  const location = useLocation(); // useLocation 훅 사용
+  const { dog } = location.state as { dog: DogDetailType }; // 전달된 dog 정보 받아오기
 
   const handleDonationAmountChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = e.target.value;
-
     setDonationAmount(value);
   };
 
@@ -52,7 +39,8 @@ const CreateDonationPage = () => {
       <div className="w-11/12 flex flex-col ">
         <div className="text-2xl font-semibold p-2">후원 신청하기</div>
 
-        <DogDetail dog={dummyDogData} />
+        {/* 전달받은 dog 정보를 DogDetail 컴포넌트에 전달 */}
+        <DogDetail dog={dog} />
 
         <div className="w-full flex flex-col items-center">
           <div className="w-11/12 flex flex-col my-3">

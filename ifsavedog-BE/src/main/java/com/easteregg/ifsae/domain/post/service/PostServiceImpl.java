@@ -105,7 +105,7 @@ public class PostServiceImpl implements PostService {
                        .map(post -> PostDto.PostPreview.builder()
                                                        .id(post.getId())
                                                        .title(post.getTitle())
-                                                       .imageUrl(post.getVideoUrl())
+                                                       .imageUrl(post.getThumbnailUrl())
                                                        .build())
                        .toList();
     }
@@ -121,7 +121,7 @@ public class PostServiceImpl implements PostService {
                        .map(post -> PostDto.PostPreview.builder()
                                                        .id(post.getId())
                                                        .title(post.getTitle())
-                                                       .imageUrl(post.getVideoUrl())
+                                                       .imageUrl(post.getThumbnailUrl())
                                                        .build())
                        .toList();
     }
