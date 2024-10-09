@@ -47,7 +47,9 @@ public class PostServiceImpl implements PostService {
     private final PostLikeRepository postLikeRepository;
 
     @Override
-    public Slice<Post> getPostSlice(Pageable pageable) {
+    public Slice<Post> getPostSlice(User user, Pageable pageable) {
+
+
         return postRepository.findPostsBy(pageable);
     }
 

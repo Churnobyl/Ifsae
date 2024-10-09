@@ -3,9 +3,10 @@ import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterDetailPage from '@/pages/CenterDetailPage';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import CreateDogPage from '@/pages/CreateDogPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DogDetailPage from '@/pages/DogDetailPage';
-import DonationPage from '@/pages/DonationPage';
+import MyDonationListPage from '@/pages/MyDonationListPage';
 import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -15,11 +16,12 @@ import MungtsuPage from '@/pages/MungtsuPage';
 import MyDogListPage from '@/pages/MyDogListPage';
 import SearchPage from '@/pages/SearchPage';
 import UserRecommendPage from '@/pages/UserRecommendPage';
+import VideoDetailPage from '@/pages/VideoDetailPage';
 import NotFoundPage from '@/pages/errorPages/NotFoundPage';
 import CenterProfileEdit from '@/pages/mypages/CenterProfileEdit';
 import CreatePostPage from '@/pages/mypages/CreatePostPage';
 import MyPage from '@/pages/mypages/MyPage';
-import UserLikeVideo from '@/pages/mypages/UserLikeVideo';
+import UserLikeVideo from '@/pages/mypages/UserLikeVideoPage';
 import UserProfileEdit from '@/pages/mypages/UserProfileEdit';
 import PrivateRoute from '@/routers/PrivateRoute';
 import { PATH } from '@/routers/pathConstants';
@@ -90,6 +92,21 @@ const Router = () => {
                 },
               ],
             },
+            {
+              path: PATH.ADD_DOG,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.ACTIVE}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreateDogPage />,
+                },
+              ],
+            },
 
             /** 세경이의 테스트용 url */
             {
@@ -125,9 +142,9 @@ const Router = () => {
               element: <DogDetailPage />,
             },
             {
-              path: PATH.DONATION,
+              path: PATH.USER_DONATION,
               errorElement: <NotFoundPage />,
-              element: <DonationPage />,
+              element: <MyDonationListPage />,
             },
             {
               path: PATH.CENTER_DETAIL + '/:id',
@@ -168,6 +185,11 @@ const Router = () => {
     {
       path: PATH.LANDING,
       element: <LandingPage />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: PATH.VIDEO_DETAIL + '/:id',
+      element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },
 

@@ -4,11 +4,11 @@ import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 import { DogListDtoType } from '@/types/dog/DogListDtoType';
 import { PostRequestType } from '@/types/post/PostRequestType';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Player } from 'video-react';
 import '../../../node_modules/video-react/dist/video-react.css';
 import { createPostApi } from '@/apis/post/postApi';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '@/routers/pathConstants';
+import { Player } from 'video-react';
 
 const CreatePostPage = () => {
   const myShelterStateStore = useMyShelterDetailStore();

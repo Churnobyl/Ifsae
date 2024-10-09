@@ -9,3 +9,9 @@ export const createShelterApi = async (userInput: ShelterCreateType) => {
 export const getMyShelterApi = async () => {
   return await instance.get(ENDPOINT.GET_MY_SHELTER);
 };
+
+export const updateShelterProfileImageApi = async (image: File) => {
+  return await instance.putForm(ENDPOINT.UPDATE_SHELTER_PROFILE_IMAGE, {
+    profileImg: image,
+  });
+};

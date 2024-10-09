@@ -3,6 +3,7 @@ package com.easteregg.ifsae.domain.shelter.service;
 import com.easteregg.ifsae.domain.shelter.dto.ShelterCreateRequest;
 import com.easteregg.ifsae.domain.shelter.dto.ShelterDetailDto;
 import com.easteregg.ifsae.domain.user.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ShelterService {
 
@@ -13,4 +14,6 @@ public interface ShelterService {
     void deleteShelter(User user, long shelterId);
 
     ShelterDetailDto findShelterById(long shelterId);
+
+    String updateUserProfileImg(User user, MultipartFile profileImg);
 }
