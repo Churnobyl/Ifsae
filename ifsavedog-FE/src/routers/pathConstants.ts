@@ -38,6 +38,8 @@ export const PATH = {
 
   /** 강아지 상세 페이지 */
   DOG_DETAIL: 'dog',
+  /** 센터의 강아지 추가하기 */
+  ADD_DOG: 'dog/create',
 
   USER_PROFILE_EDIT: 'mypage/edit-profile',
   CENTER_PROFILE_EDIT: 'mypage/center/edit-profile',

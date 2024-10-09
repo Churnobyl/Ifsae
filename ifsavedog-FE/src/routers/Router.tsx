@@ -3,6 +3,7 @@ import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterDetailPage from '@/pages/CenterDetailPage';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
+import CreateDogPage from '@/pages/CreateDogPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DogDetailPage from '@/pages/DogDetailPage';
 import MyDonationListPage from '@/pages/MyDonationListPage';
@@ -88,6 +89,21 @@ const Router = () => {
                 {
                   path: '',
                   element: <CreateShelterPage />,
+                },
+              ],
+            },
+            {
+              path: PATH.ADD_DOG,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.ACTIVE}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreateDogPage />,
                 },
               ],
             },
