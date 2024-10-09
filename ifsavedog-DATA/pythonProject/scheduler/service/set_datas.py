@@ -110,6 +110,16 @@ def update_post(post):
         db_post.thumbnail_url = post.thumbnail_url        
         db.commit()
     
+def insert_user(user):
+    with get_db() as db:
+        db.add(user)
+        db.commit()
+        
+def insert_shelter_user(shelter_user):
+    with get_db() as db:
+        db.add(shelter_user)
+        db.commit()
+
 # def update_dog_species(dog, dog_species):
 #     with get_db() as db:        
 #         db_dog = db.query(Dog).filter(Dog.id == dog.id).first()
