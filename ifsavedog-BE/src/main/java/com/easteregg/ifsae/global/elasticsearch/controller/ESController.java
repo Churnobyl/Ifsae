@@ -9,84 +9,123 @@ import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
 import com.easteregg.ifsae.global.elasticsearch.service.ESDogService;
 import com.easteregg.ifsae.global.elasticsearch.service.ESPostService;
-import java.util.List;
+import com.easteregg.ifsae.global.elasticsearch.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/es/test")
 public class ESController {
-
     private final ESDogService esDogService;
+
     private final ESPostService esPostService;
 
-    // *** Dog 관련 테스트 API ***
+    private final SearchService searchService;
 
     // Dog 저장 테스트 API
     @PostMapping("/dog")
     public ResponseEntity<?> createDog() {
-        // 테스트용 Dog 객체 생성
         Dog dog = Dog.builder()
-                     .id(1L)
-                     .name("Buddy")
-                     .age(5)
-                     .gender(Gender.MALE)
-                     .dogStatus(DogStatus.NOT_ADOPTED)
-                     .species("Golden Retriever")
-                     .shelterDog(ShelterDog.builder()
-                                           .shelter(Shelter.builder()
-                                                           .id(123L)
-                                                           .name("Happy Shelter")
-                                                           .build())
-                                           .build())
-                     .build();
+                .id(1L)
+                .name("강아지")
+                .age(5)
+                .gender(Gender.MALE)
+                .dogStatus(DogStatus.NOT_ADOPTED)
+                .species("잡개")
+                .shelterDog(ShelterDog.builder()
+                        .shelter(Shelter.builder()
+                                .id(1L)
+                                .name("보호소")
+                                .build())
+                        .build())
+                .build();
 
-        // Elasticsearch에 저장
         esDogService.saveDog(dog);
+
+        Dog dog2 = Dog.builder()
+                .id(2L)
+                .name("댕댕강아지")
+                .age(5)
+                .gender(Gender.MALE)
+                .dogStatus(DogStatus.NOT_ADOPTED)
+                .species("똥개")
+                .shelterDog(ShelterDog.builder()
+                        .shelter(Shelter.builder()
+                                .id(2L)
+                                .name("진짜보호소")
+                                .build())
+                        .build())
+                .build();
+
+        esDogService.saveDog(dog2);
+
         return ResponseEntity.ok("Dog saved successfully in Elasticsearch.");
     }
 
     // Dog 삭제 테스트 API
     @DeleteMapping("/dog/{dogId}")
     public ResponseEntity<?> deleteDog(@PathVariable Long dogId) {
-        // 삭제할 Dog 객체 생성
         Dog dog = Dog.builder().id(dogId).build();
+
         esDogService.deleteDog(dog);
+
         return ResponseEntity.ok("Dog deleted successfully from Elasticsearch.");
     }
 
-    // *** Post 관련 테스트 API ***
+    // 개 검색 API
+    @GetMapping("/search/dogs")
+    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query,
+                                        @RequestParam(defaultValue = "name") String searchField) throws IOException {
+        List<Long> results = searchService.searchDogs(query, searchField);
+
+        return ResponseEntity.ok(results);
+    }
 
     // Post 저장 테스트 API
     @PostMapping("/post")
     public ResponseEntity<?> createPost() {
-        // 테스트용 Post 객체 생성
         Post post = Post.builder()
+                .id(1L)
+                .title("시고르자브종")
+                .content("냐하하하")
+                .videoUrl("https://example1.com/video")
+                .thumbnailUrl("https://example1.com/thumbnail")
+                .dogs(List.of(
+                        PostDog.builder().id(1L).build(),
+                        PostDog.builder().id(2L).build()
+                ))
+                .shelter(Shelter.builder()
                         .id(1L)
-                        .title("My Dog's Adventure")
-                        .content("Today we went hiking in the mountains.")
-                        .videoUrl("https://example.com/video")
-                        .thumbnailUrl("https://example.com/thumbnail")
-                        .dogs(List.of(
-                                PostDog.builder().id(1L).build(),
-                                PostDog.builder().id(2L).build()
-                        ))
-                        .shelter(Shelter.builder()
-                                        .id(123L)
-                                        .name("Happy Shelter")
-                                        .build())
-                        .build();
+                        .name("댕댕보호소")
+                        .build())
+                .build();
 
-        // Elasticsearch에 저장
+        Post post2 = Post.builder()
+                .id(2L)
+                .title("어반자브종")
+                .content("캬하하하")
+                .videoUrl("https://example2.com/video")
+                .thumbnailUrl("https://example2.com/thumbnail")
+                .dogs(List.of(
+                        PostDog.builder().id(1L).build(),
+                        PostDog.builder().id(2L).build()
+                ))
+                .shelter(Shelter.builder()
+                        .id(2L)
+                        .name("싸피보호소")
+                        .build())
+                .build();
+
         esPostService.savePost(post);
+        esPostService.savePost(post2);
+
         return ResponseEntity.ok("Post saved successfully in Elasticsearch.");
     }
 
@@ -94,7 +133,18 @@ public class ESController {
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Long postId) {
         Post post = Post.builder().id(postId).build();
+
         esPostService.deletePost(post);
+
         return ResponseEntity.ok("Post deleted successfully from Elasticsearch.");
+    }
+
+    // 게시글 조건 검색 API
+    @GetMapping("/search/posts")
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "") String query,
+                                         @RequestParam(defaultValue = "name") String searchField) throws IOException {
+        List<Long> results = searchService.searchPosts(query, searchField);
+
+        return ResponseEntity.ok(results);
     }
 }
