@@ -22,7 +22,9 @@ import com.easteregg.ifsae.global.exception.type.InvalidFileFormatException;
 import com.easteregg.ifsae.global.exception.type.UserException;
 import com.easteregg.ifsae.global.s3.S3ImageUploader;
 import jakarta.transaction.Transactional;
+
 import java.io.IOException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,13 +58,13 @@ public class UserServiceImpl implements UserService {
     public void saveNewUser(SignupDto.Request request) {
 
         User user = User.builder()
-                        .email(request.getEmail())
-                        .nickname(request.getNickname())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .role(Role.fromValue(request.getRole()))
-                        .userStatus(UserStatus.PENDING)
-                        .grade(Grade.BRONZE)
-                        .build();
+                .email(request.getEmail())
+                .nickname(request.getNickname())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.fromValue(request.getRole()))
+                .userStatus(UserStatus.PENDING)
+                .grade(Grade.BRONZE)
+                .build();
 
         userRepository.save(user);
     }
@@ -70,29 +72,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String userEmail) {
         return userRepository.findByEmail(userEmail)
-                             .orElseThrow(() -> new UserException(ErrorCode.INVALID_EMAIL));
+                .orElseThrow(() -> new UserException(ErrorCode.INVALID_EMAIL));
     }
 
     @Override
     public UserInfo getUserInfo(User user) {
         UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
-                                                       .orElse(UserProfile.builder().build());
+                .orElse(UserProfile.builder().build());
 
         return UserInfo.builder()
-                       .id(user.getId())
-                       .email(user.getEmail())
-                       .nickname(user.getNickname())
-                       .profileImgUrl(user.getProfileImgUrl())
-                       .grade(user.getGrade().name())
-                       .role(user.getRole().name())
-                       .userProfile(userProfile.toDto())
-                       .build();
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .profileImgUrl(user.getProfileImgUrl())
+                .grade(user.getGrade().name())
+                .role(user.getRole().name())
+                .userProfile(userProfile.toDto())
+                .build();
     }
 
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                            .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
@@ -114,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserProfileImg(User user, MultipartFile profileImg) {
+    public String updateUserProfileImg(User user, MultipartFile profileImg) {
         if (profileImg == null || profileImg.isEmpty()) {
             throw new InvalidFileFormatException(ErrorCode.INVALID_FILE_FORMAT);
         }
@@ -129,10 +131,12 @@ public class UserServiceImpl implements UserService {
             if (!newImgUrl.equals(user.getProfileImgUrl())) {
                 user.setProfileImgUrl(newImgUrl);
                 userRepository.save(user);
+                return newImgUrl;
             }
         } catch (AmazonServiceException e) {
             throw new UserException(ErrorCode.FAILED_TO_UPLOAD_PROFILE_IMG);
         }
+        return null;
     }
 
     @Override
@@ -143,19 +147,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public ShelterDetailDto getMyShelter(long userId) {
         ShelterUser shelterUser = shelterUserRepository.findByUserId(userId)
-                                                       .orElseThrow(
-                                                               () -> new UserException(ErrorCode.SHELTER_NOT_FOUND));
+                .orElseThrow(
+                        () -> new UserException(ErrorCode.SHELTER_NOT_FOUND));
 
         Shelter shelter = shelterUser.getShelter();
 
         return ShelterDetailDto.builder()
-                               .id(shelter.getId())
-                               .name(shelter.getName())
-                               .address(shelter.getAddress())
-                               .phone(shelter.getPhone())
-                               .content(shelter.getContent())
-                               .canBeDonated(shelter.isCanBeDonated())
-                               .build();
+                .id(shelter.getId())
+                .name(shelter.getName())
+                .address(shelter.getAddress())
+                .phone(shelter.getPhone())
+                .content(shelter.getContent())
+                .canBeDonated(shelter.isCanBeDonated())
+                .build();
     }
 
     private void deleteOldProfileImg(String profileImgUrl) {
@@ -174,18 +178,18 @@ public class UserServiceImpl implements UserService {
 
     private UserProfile createNewUserProfile(UserProfileDto userProfileDto, User user) {
         return UserProfile.builder()
-                          .user(user)
-                          .housingType(housingTypeRepository.findByName(userProfileDto.getHousingType())
-                                                            .orElseThrow(() -> new UserException(
-                                                                    ErrorCode.INVALID_HOUSING_TYPE)))
-                          .birth(userProfileDto.getBirth())
-                          .address(userProfileDto.getAddress())
-                          .phoneNumber(userProfileDto.getPhoneNumber())
-                          .familyCnt(userProfileDto.getFamilyCnt())
-                          .curPets(userProfileDto.getCurPets())
-                          .petExperience(userProfileDto.getPetExperience())
-                          .hasAllergy(userProfileDto.isHasAllergy())
-                          .build();
+                .user(user)
+                .housingType(housingTypeRepository.findByName(userProfileDto.getHousingType())
+                        .orElseThrow(() -> new UserException(
+                                ErrorCode.INVALID_HOUSING_TYPE)))
+                .birth(userProfileDto.getBirth())
+                .address(userProfileDto.getAddress())
+                .phoneNumber(userProfileDto.getPhoneNumber())
+                .familyCnt(userProfileDto.getFamilyCnt())
+                .curPets(userProfileDto.getCurPets())
+                .petExperience(userProfileDto.getPetExperience())
+                .hasAllergy(userProfileDto.isHasAllergy())
+                .build();
     }
 
 

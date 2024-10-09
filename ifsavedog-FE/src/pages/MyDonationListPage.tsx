@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import DonationItemList from '@/components/donation/DonationItemList';
-import { donationListApi } from '@/apis/donation/donationApi'; // API import
+import { userDonationListApi } from '@/apis/donation/donationApi';
 
 interface Donation {
   dogId: number;
@@ -40,10 +40,11 @@ const DonationPage = () => {
   const [error, setError] = useState<string | null>(null); // 에러 상태
 
   // 후원 목록을 API로부터 불러오는 함수
+  // 유저 아이디로 후원 목록 불러오기가 필요함
   useEffect(() => {
     const fetchDonationList = async () => {
       try {
-        const response = await donationListApi(); // API 호출
+        const response = await userDonationListApi(); // API 호출
         setDonationData(response.data); // 후원 데이터 상태 업데이트
       } catch (error) {
         setError('후원 목록을 불러오는 중 오류가 발생했습니다.');
@@ -72,7 +73,7 @@ const DonationPage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="px-4 py-4 bg-white shadow-md">
-        <h1 className="text-lg font-semibold text-gray-700">후원 목록</h1>
+        <h1 className="text-lg font-semibold text-gray-700">내 후원 목록</h1>
       </header>
 
       <div className="p-4 space-y-6">

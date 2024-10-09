@@ -75,7 +75,6 @@ public class DogServiceImpl implements DogService {
         shelterDogRepository.save(shelterDog);
 
         esDogService.saveDog(dog);
-
     }
 
     @Override

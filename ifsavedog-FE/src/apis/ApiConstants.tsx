@@ -7,9 +7,11 @@ export enum ENDPOINT {
 
   // Shelter
   CREATE_SHELTER = 'api/shelter',
+  UPDATE_SHELTER_PROFILE_IMAGE = 'api/shelter/profile-img',
 
   // MyPage
   GET_MY_SHELTER = 'api/user/my-shelter',
+  UPDATE_USER_PROFILE_IMAGE = 'api/user/profile-img',
 
   //
   DOG = 'api/dog',
@@ -21,10 +23,11 @@ export enum ENDPOINT {
   FOLLOW = 'api/follow',
 
   SHELTER_DONATION_LIST = 'api/donations/shelters',
+  USER_DONATION_LIST = 'api/donations/users',
 
   // Post
   POST = 'api/post',
-  LIKE_POST_LIST = 'api/post/like',
+  POST_LIKE = 'api/post/like',
 }
 
 export enum HTTP_STATUS {
