@@ -61,7 +61,11 @@ const ProfileCard = ({
         className={`w-11/12 flex flex-row justify-around bg-whiteGray m-2 p-4 rounded-lg ${isUserProfile ? 'mb-4' : ''}`}
       >
         {/* 프로필 이미지 */}
-        <div onClick={() => imageInputRef.current?.click()}>
+        <div
+          onClick={() => {
+            imageInputRef.current?.click();
+          }}
+        >
           <img
             ref={imageRef}
             src={profileImgUrl}
