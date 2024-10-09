@@ -60,6 +60,8 @@ def bbobbibbobbi(image_name, id):
 
   # 최종 동영상 저장
   video_with_audio.write_videofile(final_output, codec='libx264', audio_codec='aac')
+  
+  return final_output
 
 # 동적 효과 적용
 def jjanggoo(image_name, id):
@@ -128,6 +130,8 @@ def jjanggoo(image_name, id):
   video_with_audio.write_videofile(final_output, codec='libx264', audio_codec='aac')
 
   print(f"Video with audio saved as {final_output}")
+  
+  return final_output
 
 
 def gausian(image_name, id):
@@ -181,3 +185,5 @@ def gausian(image_name, id):
   video_with_audio.write_videofile(final_output, codec='libx264', audio_codec='aac')
 
   print(f"Video with audio saved as {final_output}")
+  
+  return final_output

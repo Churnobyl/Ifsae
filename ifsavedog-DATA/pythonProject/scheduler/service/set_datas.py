@@ -7,6 +7,7 @@ from models.rank import Rank
 import datetime
 from dateutil.relativedelta import relativedelta
 from models.dog import Dog
+from models.post import Post
 
 def insert_dog_image_vector(dog_vector_list):
     with get_mongo_db() as mongo:
@@ -88,3 +89,29 @@ def insert_shelter_dog(shelter_dog):
     with get_db() as db:
         db.add_all(shelter_dog)
         db.commit()
+        
+def insert_post(post):
+    with get_db() as db:
+        db.add(post)
+        db.commit()
+        
+def insert_post_dog(post_dog):
+    with get_db() as db:
+        db.add(post_dog)
+        db.commit()
+        
+def update_post(post):
+    with get_db() as db:        
+        db_post = db.query(Post).filter(Post.id == post.id).first()
+        db_post.title = post.title
+        db_post.content = post.content
+        db_post.shelter_id = post.shelter_id
+        db_post.video_url = post.video_url
+        db_post.thumbnail_url = post.thumbnail_url        
+        db.commit()
+    
+# def update_dog_species(dog, dog_species):
+#     with get_db() as db:        
+#         db_dog = db.query(Dog).filter(Dog.id == dog.id).first()
+#         db_dog.species = dog_species
+#         db.commit()
