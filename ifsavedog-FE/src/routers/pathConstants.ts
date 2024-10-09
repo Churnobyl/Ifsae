@@ -54,4 +54,7 @@ export const PATH = {
 
   /** 센터 글쓰기 */
   CREATE_POST: 'mypage/center/write',
+
+  /** 입양 신청 */
+  CREATE_ADOPTION: 'adoption/create-adoption',
 };
