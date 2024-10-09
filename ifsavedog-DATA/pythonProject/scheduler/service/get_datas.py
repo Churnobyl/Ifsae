@@ -6,6 +6,7 @@ from models.user import User, UserSurvey
 from models.rating import Rating
 from models.shelter import Shelter
 from models.shelter_dog import Shelter_Dog
+from models.post import Post
 
 def get_all_users():
     with get_db() as db:
@@ -115,3 +116,15 @@ def get_shelter_by_careNm(careNm):
 def get_shelter_dog_by_dog_id(dog_id):
     with get_db() as db:
         return db.query(Shelter_Dog).filter(Shelter_Dog.dog_id == dog_id).first()
+    
+def get_dog_by_id(dog_id):
+    with get_db() as db:
+        return db.query(Dog).filter(Dog.id == dog_id).first()
+    
+def get_latest_post():
+    with get_db() as db:
+        return db.query(Post).order_by(Post.created_at.desc()).first()
+
+def get_shelter_id_by_dog_id(dog_id):
+    with get_db() as db:
+        return db.query(Shelter_Dog).filter(Shelter_Dog.dog_id == dog_id).first().shelter_id
