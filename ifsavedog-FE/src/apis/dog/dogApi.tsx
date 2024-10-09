@@ -1,5 +1,18 @@
 import { ENDPOINT } from '@/apis/ApiConstants';
 import { instance } from '@/apis/axios';
+import { DogCreateDtoType } from '@/types/dog/DogCreateDtoType';
+
+export const dogCreateApi = async (
+  dogCreateRequest: DogCreateDtoType,
+  dogImage: File,
+) => {
+  return await instance.postForm(ENDPOINT.DOG, {
+    dogCreateRequest: new Blob([JSON.stringify(dogCreateRequest)], {
+      type: 'application/json',
+    }),
+    dogImage: dogImage,
+  });
+};
 
 export const dogDetailApi = async (dogId: number) => {
   return await instance.get(ENDPOINT.DOG + '/' + dogId);
