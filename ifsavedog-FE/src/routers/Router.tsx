@@ -34,6 +34,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import CreateDonationPage from '@/pages/CreateDonationPage';
+import CreateDogPage from '@/pages/CreateDogPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -89,6 +90,21 @@ const Router = () => {
                 {
                   path: '',
                   element: <CreateShelterPage />,
+                },
+              ],
+            },
+            {
+              path: PATH.ADD_DOG,
+              element: (
+                <PrivateRoute
+                  userRole={UserRoleEnum.ROLE_CENTER}
+                  userStatus={UserStatusEnum.ACTIVE}
+                />
+              ),
+              children: [
+                {
+                  path: '',
+                  element: <CreateDogPage />,
                 },
               ],
             },
