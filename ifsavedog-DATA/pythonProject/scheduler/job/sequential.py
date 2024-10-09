@@ -5,8 +5,8 @@ from service.get_datas import get_all_users
 from job.dog_image import *
 from job.depersonalization import *
 from job.image_vector_filter import rank_image_vector
-from job.input_all_dogs import input_all_dogs
-from job.input_character_score import calculate_dog_character_score
+from job.input_all_datas import input_all_dogs
+from job.recommend_by_character import calculate_dog_character_score
 from service.recommendation import recommedate
 
 today = datetime.date.today()
@@ -70,7 +70,10 @@ def sequential_recommendation(day):
 
     # 유저 별 개인화 추천 알고리즘
     # image vecctor즘rank
-    rank_image_vector(user_list=users_id)
+    print('personalization-algorithm')
+    print('rank_image_vector start')
+    rank_image_vector(user_ids_list=users_id)
+    print('rank_character start')
     calculate_dog_character_score(users_id)
 
     # 5. 최종 랭킹 mariaDB에 삽입
