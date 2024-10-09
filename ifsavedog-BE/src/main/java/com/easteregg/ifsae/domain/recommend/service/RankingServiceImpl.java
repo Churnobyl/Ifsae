@@ -4,10 +4,13 @@ import com.easteregg.ifsae.domain.post.dto.PostDto;
 import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.post.repository.PostDogRepository;
+import com.easteregg.ifsae.domain.recommend.entity.LastPage;
 import com.easteregg.ifsae.domain.recommend.entity.Ranking;
 import com.easteregg.ifsae.domain.recommend.repository.RankingRepository;
+import com.easteregg.ifsae.domain.user.entity.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,7 @@ public class RankingServiceImpl implements RankingService {
 
     private final RankingRepository rankingRepository;
     private final PostDogRepository postDogRepository;
+    private final com.easteregg.ifsae.domain.recommend.repository.lastPageRedisRepository lastPageRedisRepository;
 
     @Override
     public List<Long> findDogIdListByUserId(Long userId, int pageNum) {
@@ -27,7 +31,7 @@ public class RankingServiceImpl implements RankingService {
         int pageSize = 5;
         int fromIndex = (pageNum - 1) * pageSize;
         int toIndex = Math.min(pageNum * pageSize, rankingList.size());
-        if(fromIndex >= rankingList.size()){
+        if (fromIndex >= rankingList.size()) {
             return new ArrayList<>();
         }
 
@@ -42,12 +46,28 @@ public class RankingServiceImpl implements RankingService {
     @Override
     public List<PostDto.Response> findPostDogListByDogIds(List<Long> dogIds) {
         List<PostDog> postDogs = new ArrayList<>();
-        for(Long dogId : dogIds) {
+        for (Long dogId : dogIds) {
             postDogs.add(postDogRepository.findPostIdByDogIdOrderByIdDesc(dogId));
         }
 
         List<Post> posts = postDogs.stream().map(PostDog::getPost).toList();
 
         return posts.stream().map(Post::toResponseDto).toList();
+    }
+
+    @Override
+    public int getUserLastPage(User user) {
+        Optional<LastPage> lastPage = lastPageRedisRepository.findById(user.getId());
+
+        if (lastPage.isPresent()) {
+            return lastPage.get().getLastPage();
+        }
+
+        lastPageRedisRepository.save(LastPage.builder()
+                                             .userId(user.getId())
+                                             .lastPage(1)
+                                             .build());
+
+        return 1;
     }
 }

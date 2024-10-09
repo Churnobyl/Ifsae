@@ -3,12 +3,12 @@ package com.easteregg.ifsae.domain.recommend.controller;
 import com.easteregg.ifsae.domain.post.dto.PostDto;
 import com.easteregg.ifsae.domain.recommend.dto.UserSurveyRequest;
 import com.easteregg.ifsae.domain.recommend.service.RankingService;
-import com.easteregg.ifsae.domain.recommend.service.UserDogRatingService;
 import com.easteregg.ifsae.domain.recommend.service.UserSurveyService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,9 +46,10 @@ public class RecommendController {
         userSurveyService.updateUserSurvey(user, userSurveyRequest);
         return new ResponseEntity<CommonSuccessResponse>(CommonSuccessResponse.of("응답을 수정하였습니다."), HttpStatus.OK);
     }
+
     @GetMapping("/ranking")
-    public ResponseEntity<?> readRanking(@AuthenticationPrincipal User user, @RequestParam int pageNum){
-        if(pageNum < 1 || pageNum > 20){
+    public ResponseEntity<?> readRanking(@AuthenticationPrincipal User user, @RequestParam int pageNum) {
+        if (pageNum < 1 || pageNum > 20) {
             return ResponseEntity.badRequest().body("잘못된 pageNumber입니다.");
         }
 
@@ -58,6 +59,11 @@ public class RecommendController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/index/lastpage")
+    public ResponseEntity<?> readLastPage(@AuthenticationPrincipal User user) {
+        int lastPage = rankingService.getUserLastPage(user);
+        return new ResponseEntity<>(Map.of("lastPage", lastPage), HttpStatus.OK);
+    }
 
 
 }
