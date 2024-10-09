@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
 import { useParams, useNavigate } from 'react-router-dom';
 import CenterProfileImg from '@/assets/center-profile.png';
 import DefaultDogImg from '@/assets/rolling-cottonball.jpg';
@@ -42,6 +43,7 @@ interface PostType {
 }
 
 const VideoDetailPage = () => {
+  const { nickname } = useUserStateStore();
   const { postId } = useParams(); // URL에서 postId 가져오기
   const [postDetail, setPostDetail] = useState<PostType | null>(null); // 게시물 상태 관리
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
@@ -107,7 +109,7 @@ const VideoDetailPage = () => {
       // 성공 시, 새로운 댓글을 기존 댓글 목록에 추가
       const newCommentObj: CommentType = {
         id: postDetail!.comments.length + 1, // 고유 ID 생성 (서버에서 생성된 ID 사용 가능)
-        userNickname: '현재 유저', // 실제 유저 정보로 변경 필요
+        userNickname: nickname, // 실제 유저 정보로 변경 필요
         userProfileImg: DefaultProfileImg, // 프로필 이미지 (실제 데이터로 교체 필요)
         content: newComment,
       };
