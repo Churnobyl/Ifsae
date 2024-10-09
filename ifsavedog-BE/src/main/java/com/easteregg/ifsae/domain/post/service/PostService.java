@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
-    Slice<Post> getPostSlice(Pageable pageable);
+    Slice<Post> getPostSlice(User user, Pageable pageable);
 
     PostDto.Response read(Long postId);
 
