@@ -198,7 +198,7 @@ const Router = () => {
       errorElement: <NotFoundPage />,
     },
     {
-      path: PATH.VIDEO_DETAIL + '/:id',
+      path: PATH.VIDEO_DETAIL + '/:postId',
       element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },

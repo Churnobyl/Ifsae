@@ -30,5 +30,9 @@ export const checkPostLikeApi = async (postId: number) => {
 };
 
 export const getPostDetailApi = async (postId: number) => {
-  return await instance.get(ENDPOINT.POST + '/' + postId);
+  return await instance.get(`${ENDPOINT.POST}/${postId}`);
+};
+
+export const createCommentApi = async (postId: number, content: string) => {
+  return await instance.post(`${ENDPOINT.POST}/${postId}`, { content: content });
 };

@@ -22,8 +22,11 @@ import com.easteregg.ifsae.global.exception.type.ShelterUserException;
 import com.easteregg.ifsae.global.video.VideoUploadService;
 import com.easteregg.ifsae.global.video.entity.CompressedVideoUrlSet;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -95,6 +98,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto.Response> findPostsByIds(List<Long> postIds) {
+        List<Post> posts = postRepository.findAllById(postIds);
+
+        return posts.stream()
+                .map(Post::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PostPreview> getPostList(Long dogId) {
 
         List<PostDog> postDogList = postDogRepository.findByDogId(dogId);
@@ -102,12 +114,12 @@ public class PostServiceImpl implements PostService {
         List<Post> PostList = postRepository.findPostsByDogsIn(postDogList);
 
         return PostList.stream()
-                       .map(post -> PostDto.PostPreview.builder()
-                                                       .id(post.getId())
-                                                       .title(post.getTitle())
-                                                       .imageUrl(post.getVideoUrl())
-                                                       .build())
-                       .toList();
+                .map(post -> PostDto.PostPreview.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .imageUrl(post.getVideoUrl())
+                        .build())
+                .toList();
     }
 
     @Override
@@ -118,27 +130,33 @@ public class PostServiceImpl implements PostService {
         List<Post> postList = postRepository.findPostsByLikesIn(postLikeList);
 
         return postList.stream()
-                       .map(post -> PostDto.PostPreview.builder()
-                                                       .id(post.getId())
-                                                       .title(post.getTitle())
-                                                       .imageUrl(post.getVideoUrl())
-                                                       .build())
-                       .toList();
+                .map(post -> PostDto.PostPreview.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .imageUrl(post.getVideoUrl())
+                        .build())
+                .toList();
     }
 
     @Override
     public void createLike(User user, long postId) {
         Post post = findPostById(postId);
-
         postLikeRepository.save(new PostLike(user, post));
+
+        post.addLikeCnt();
+        postRepository.save(post);
     }
 
     @Override
     public void deleteLike(User user, long postId) {
         PostLike postLike = postLikeRepository.findByUserIdAndPostId(user.getId(), postId)
-                                              .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
 
         postLikeRepository.delete(postLike);
+
+        Post post = findPostById(postId);
+        post.removeLikeCnt();
+        postRepository.save(post);
     }
 
     @Override
@@ -151,7 +169,7 @@ public class PostServiceImpl implements PostService {
      */
     private Post findPostById(Long postId) {
         return postRepository.findPostById(postId)
-                             .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
     }
 
     /**
@@ -160,7 +178,7 @@ public class PostServiceImpl implements PostService {
     private Shelter findShelterAndCheckUser(User user, Long shelterId) {
         checkUserInShelter(user, shelterId);
         return shelterRepository.findById(shelterId)
-                                .orElseThrow(() -> new ShelterException(ErrorCode.SHELTER_NOT_FOUND));
+                .orElseThrow(() -> new ShelterException(ErrorCode.SHELTER_NOT_FOUND));
     }
 
     /**
@@ -177,11 +195,11 @@ public class PostServiceImpl implements PostService {
     private void savePostDogs(Post post, List<Long> dogIds) {
         List<Dog> dogs = dogRepository.findByIdIn(dogIds);
         List<PostDog> postDogs = dogs.stream()
-                                     .map(dog -> PostDog.builder()
-                                                        .post(post)
-                                                        .dog(dog)
-                                                        .build())
-                                     .toList();
+                .map(dog -> PostDog.builder()
+                        .post(post)
+                        .dog(dog)
+                        .build())
+                .toList();
         postDogRepository.saveAll(postDogs);
     }
 
@@ -197,8 +215,8 @@ public class PostServiceImpl implements PostService {
      */
     private void checkUserInShelter(User user, Long shelterId) {
         ShelterUser shelterUser = shelterUserRepository.findByUserId(user.getId())
-                                                       .orElseThrow(() -> new ShelterUserException(
-                                                               ErrorCode.USER_NOT_FOUND_IN_SHELTER));
+                .orElseThrow(() -> new ShelterUserException(
+                        ErrorCode.USER_NOT_FOUND_IN_SHELTER));
 
         if (!Objects.equals(shelterUser.getShelter().getId(), shelterId)) {
             throw new ShelterUserException(ErrorCode.USER_NOT_FOUND_IN_SHELTER);

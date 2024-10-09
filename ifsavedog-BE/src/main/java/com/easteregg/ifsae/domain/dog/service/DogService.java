@@ -20,6 +20,8 @@ public interface DogService {
 
     DogDetailDto findById(long dogId);
 
+    List<DogListDto> findDogsByIds(List<Long> dogIds);
+
     List<DogListDto> findDogsByShelterId(long shelterId);
 
     List<DogListDto> findDogsByFollowerId(long followerId);
