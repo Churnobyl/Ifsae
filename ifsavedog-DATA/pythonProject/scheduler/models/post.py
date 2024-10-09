@@ -11,12 +11,11 @@ class Post(Base):
     like_cnt = Column(Integer, default=0)
     view_cnt = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), default=func.now())
-    updated_at = Column(DateTime(timezone=True), default=func.now())    
+    updated_at = Column(DateTime(timezone=True), default=func.now())
+    shelter_id = Column(Integer)    
     content = Column(String)
     title = Column(String)
     video_url = Column(String)
-    thumnail_url = Column(String)
+    thumbnail_url = Column(String)
     
-    
-    shelter_id = Column(Integer, ForeignKey("shelter.id"))
-    shelter = relationship("Shelter", back_populates="post")    
+    # shelter = relationship("Shelter", back_populates="post")    
