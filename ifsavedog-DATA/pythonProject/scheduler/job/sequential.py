@@ -56,3 +56,22 @@ def sequential_job_daily(date):
 
     # 5. 최종 랭킹 mariaDB에 삽입
     recommedate(users_id)
+
+def sequential_recommendation(day):
+    users_id = [u.id for u in get_all_users()]
+    # 4. 몽고 DB에 추천 랭크 넣기
+    # 비개인화 추천 알고리즘
+    # - 최신순
+    print('rank_latest start')
+    rank_latest_dog()
+    # - 인기순
+    print('rank_liked start')
+    rank_liked_dog()
+
+    # 유저 별 개인화 추천 알고리즘
+    # image vecctor즘rank
+    rank_image_vector(user_list=users_id)
+    calculate_dog_character_score(users_id)
+
+    # 5. 최종 랭킹 mariaDB에 삽입
+    recommedate(users_id)
