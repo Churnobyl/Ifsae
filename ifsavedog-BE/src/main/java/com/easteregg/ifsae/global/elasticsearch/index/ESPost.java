@@ -2,8 +2,11 @@ package com.easteregg.ifsae.global.elasticsearch.index;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -13,9 +16,12 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(indexName = "post")
 @Mapping(mappingPath = "/index/post-mappings.json")
 @Setting(settingPath = "/index/tokenizer-settings.json")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ESPost {
     @Id
     @Field(type = FieldType.Keyword)
