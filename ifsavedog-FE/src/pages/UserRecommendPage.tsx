@@ -22,10 +22,12 @@ const UserRecommendPage = () => {
   );
 
   return (
-    <MainLayout showTopbar={false} showBottombar={false}>
-      <div>
-        <div>여러분의 선호도를 입력해주세요!</div>
-        <div className={'flex flex-col items-center'}>
+    <div className="w-full h-11/12 flex flex-col items-center overflow-auto">
+      <div className="w-11/12 flex flex-col items-center">
+        <div className="text-xl font-semibold p-2">
+          여러분의 선호도를 입력해주세요!
+        </div>
+        <div className={'w-11/12  flex flex-col p-2'}>
           {(Object.keys(userInputList) as Array<keyof UserSurveyType>).map(
             (questionName) => (
               <Question
@@ -35,10 +37,15 @@ const UserRecommendPage = () => {
               />
             ),
           )}
-          <button disabled={!isAllAnswered}>제출</button>
         </div>
+        <button
+          disabled={!isAllAnswered}
+          className="w-20 h-8 bg-main text-black rounded-lg mb-4"
+        >
+          제출
+        </button>
       </div>
-    </MainLayout>
+    </div>
   );
 };
 
