@@ -34,9 +34,9 @@ const FollowPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen">
       <header className="flex justify-between items-center px-4 py-4 bg-white shadow-md">
-        <h1 className="text-lg font-semibold text-gray-700">
+        <h1 className="text-lg font-semibold">
           팔로우한 친구 <span className="text-green-500">{dogList.length}</span>
         </h1>
       </header>
