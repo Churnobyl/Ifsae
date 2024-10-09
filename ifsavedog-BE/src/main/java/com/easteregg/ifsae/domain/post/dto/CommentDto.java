@@ -27,7 +27,8 @@ public class CommentDto {
     @Builder
     public static class Response {
         private Long id;
-        private UserDto userDto;
+        private String userNickname;
+        private String userProfileImg;
         private String content;
     }
 }

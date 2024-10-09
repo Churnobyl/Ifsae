@@ -1,18 +1,29 @@
 package com.easteregg.ifsae.domain.post.entity;
 
+import com.easteregg.ifsae.domain.dog.entity.Dog;
 import com.easteregg.ifsae.domain.post.dto.PostDto;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.global.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Builder
@@ -22,6 +33,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Post extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -64,20 +76,31 @@ public class Post extends BaseEntity {
 
     public PostDto.Response toResponseDto() {
         return PostDto.Response.builder()
-                .id(id)
-                .title(title)
-                .content(content)
-                .videoUrl(videoUrl)
-                .shelter(shelter)
-                .dogs(dogs)
-                .comments(comments)
-                .likes(likes)
-                .likeCnt(likeCnt)
-                .viewCnt(viewCnt)
-                .build();
+                               .id(id)
+                               .title(title)
+                               .content(content)
+                               .videoUrl(videoUrl)
+                               .shelter(shelter.toShelterPreviewDto())
+                               .dogs(dogs.stream().map(PostDog::getDog).map(Dog::toDogListDto).toList())
+                               .comments(comments.stream().map(Comment::toResponse).toList())
+                               .likeCnt(likeCnt)
+                               .viewCnt(viewCnt)
+                               .build();
     }
 
     public void updateDogs(List<PostDog> postDogs) {
         this.dogs = postDogs;
+    }
+
+    public void addLikeCnt() {
+        this.likeCnt++;
+    }
+
+    public void removeLikeCnt() {
+        this.likeCnt--;
+    }
+
+    public void addViewCnt() {
+        this.viewCnt++;
     }
 }
