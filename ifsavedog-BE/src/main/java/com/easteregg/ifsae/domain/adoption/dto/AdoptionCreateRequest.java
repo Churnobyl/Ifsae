@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AdoptionCreateRequest {
+
     private long dogId;
 
     private long shelterId;
@@ -13,5 +14,4 @@ public class AdoptionCreateRequest {
     private String adoptionPurpose;
 
     private String absencePlan;
-
 }

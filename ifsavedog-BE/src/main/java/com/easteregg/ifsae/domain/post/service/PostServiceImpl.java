@@ -47,7 +47,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public Slice<Post> getPostSlice(User user, Pageable pageable) {
 
-
         return postRepository.findPostsBy(pageable);
     }
 
@@ -95,6 +94,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto.Response> findPostsByIds(List<Long> postIds) {
+        List<Post> posts = postRepository.findAllById(postIds);
+
+        return posts.stream()
+                    .map(Post::toResponseDto)
+                    .toList();
+    }
+
+    @Override
     public List<PostPreview> getPostList(Long dogId) {
 
         List<PostDog> postDogList = postDogRepository.findByDogId(dogId);
@@ -139,6 +147,7 @@ public class PostServiceImpl implements PostService {
     public void deleteLike(User user, long postId) {
         PostLike postLike = postLikeRepository.findByUserIdAndPostId(user.getId(), postId)
                                               .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
+
         postLikeRepository.delete(postLike);
 
         Post post = findPostById(postId);
