@@ -11,3 +11,8 @@ router = APIRouter()
 @router.get("/dogs/desertionNo/{desertion_no}", response_model=DogResponse)
 async def retrieve_dog_by_desertion_no(desertion_no: str):    
     return await get_dog_by_desertion_no(desertion_no)
+
+@router.post("/api/recommendation")
+async def recommendation(user_id: int, db: Session = Depends(get_db)):
+    user = get_user_by_id(db, user_id)
+    return await get_dog_by_desertion_no(user.desertion_no)
