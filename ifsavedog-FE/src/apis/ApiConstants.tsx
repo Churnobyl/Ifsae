@@ -7,9 +7,11 @@ export enum ENDPOINT {
 
   // Shelter
   CREATE_SHELTER = 'api/shelter',
+  UPDATE_SHELTER_PROFILE_IMAGE = 'api/shelter/profile-img',
 
   // MyPage
   GET_MY_SHELTER = 'api/user/my-shelter',
+  UPDATE_USER_PROFILE_IMAGE = 'api/user/profile-img',
 
   //
   DOG = 'api/dog',
