@@ -22,7 +22,7 @@ export const PATH = {
   /** 팔로우 목록 페이지 */
   FOLLOW: 'follow',
   /** 내 후원 목록 페이지 */
-  USER_DONATION: 'donation',
+  USER_DONATION: 'mypage/donation',
   /** 유저 선호도 페이지 */
   USER_RECOMMEND: 'recommend/user-recommend',
   /** 센터 생성 페이지 */

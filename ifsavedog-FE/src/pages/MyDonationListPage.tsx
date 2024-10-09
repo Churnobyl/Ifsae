@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import DonationItemList from '@/components/donation/DonationItemList';
-import { donationListApi } from '@/apis/donation/donationApi';
+import { userDonationListApi } from '@/apis/donation/donationApi';
 
 interface Donation {
   dogId: number;
@@ -44,7 +44,7 @@ const DonationPage = () => {
   useEffect(() => {
     const fetchDonationList = async () => {
       try {
-        const response = await donationListApi(); // API 호출
+        const response = await userDonationListApi(); // API 호출
         setDonationData(response.data); // 후원 데이터 상태 업데이트
       } catch (error) {
         setError('후원 목록을 불러오는 중 오류가 발생했습니다.');

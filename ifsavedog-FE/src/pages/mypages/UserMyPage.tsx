@@ -29,6 +29,11 @@ const UserMyPage = () => {
     navigate('/follow'); // 버튼 클릭 시 이동
   };
 
+  // 후원 목록 클릭 핸들러
+  const handleDonationListClick = () => {
+    navigate('/mypage/donation'); // 버튼 클릭 시 이동
+  };
+
   return (
     <div className="flex flex-col items-center justify-center text-black">
       <ProfileCard
@@ -89,8 +94,17 @@ const UserMyPage = () => {
           <p className="text-lg font-semibold">입양 신청 목록</p>
         </div>
         <div className="flex items-center mb-4">
-          <FaHandHoldingHeart size={24} className="mr-2" />
-          <p className="text-lg font-semibold">후원 현황 목록</p>
+          <FaHandHoldingHeart
+            size={24}
+            className="mr-2"
+            onClick={handleDonationListClick}
+          />
+          <p
+            className="text-lg font-semibold"
+            onClick={handleDonationListClick}
+          >
+            후원 현황 목록
+          </p>
         </div>
       </div>
     </div>
