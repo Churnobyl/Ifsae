@@ -14,4 +14,12 @@ public class LastPage {
     private Long userId;
 
     private int lastPage;
+
+    public void updateLastPage() {
+        lastPage++;
+    }
+
+    public void initLastPage() {
+        lastPage = 1;
+    }
 }
