@@ -29,12 +29,15 @@ export const useMyShelterDetailStore = create<
     phone: '',
     content: '',
     canBeDonated: true,
+    shelterProfileImg: '',
     setId: (id: number) => set(() => ({ id })),
     setName: (name: string) => set(() => ({ name })),
     setAddress: (address: string) => set(() => ({ address })),
     setPhone: (phone: string) => set(() => ({ phone })),
     setContent: (content: string) => set(() => ({ content })),
     setCanBeDonated: (canBeDonated: boolean) => set(() => ({ canBeDonated })),
+    setShelterProfileImg: (shelterProfileImg: string) =>
+      set(() => ({ shelterProfileImg })),
     setShelterState: (shelterState: ShelterDetailType) => {
       const { ...rest } = shelterState;
 
