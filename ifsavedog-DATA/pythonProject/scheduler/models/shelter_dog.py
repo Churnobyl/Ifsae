@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
+from models.base import Base
 
-Base = declarative_base()
+# Base = declarative_base()
 
 class Shelter_Dog(Base):
     __tablename__ = "shelter_dog"
