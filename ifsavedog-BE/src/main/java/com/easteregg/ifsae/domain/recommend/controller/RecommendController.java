@@ -31,8 +31,6 @@ public class RecommendController {
 
     private final RankingService rankingService;
 
-    private final UserDogRatingService userDogRatingService;
-
     private final UserSurveyService userSurveyService;
 
     @PostMapping("/survey")
