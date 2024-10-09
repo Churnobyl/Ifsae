@@ -33,6 +33,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import CreateDonationPage from '@/pages/CreateDonationPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -96,6 +97,10 @@ const Router = () => {
             {
               path: PATH.USER_LIKE_VIDEO,
               element: <UserLikeVideo />,
+            },
+            {
+              path: PATH.CREATE_DONATION,
+              element: <CreateDonationPage />,
             },
             {
               path: PATH.USER_PROFILE_EDIT,
