@@ -1,74 +1,30 @@
 import ProfileCard from '@/components/common/ProfileCard';
 import CenterProfileImg from '@/assets/center-profile.png';
 import { ShelterDetailType } from '@/types/shelter/ShelterDetailType';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DogType } from '@/types/dog/DogType';
-import testImage from '@/assets/rolling-cottonball.jpg';
 import DogPreview from '@/components/common/DogPreviewBox';
 import LeftArrow from '@/assets/icon/leftarrow.svg';
 import RightArrow from '@/assets/icon/rightarrow.svg';
 import VideoCard from '@/components/video/VideoCard';
+import { getShelterDetailApi } from '@/apis/shelter/shelterApi'; // API import
+import { shelterDogListApi } from '@/apis/dog/dogApi';
+import { shelterPostListApi } from '@/apis/post/postApi';
+import { PostPreviewType } from '@/types/post/PostPreviewType';
 
 const CenterDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>(); // URL에서 shelter ID 파라미터를 가져옴
   const [shelterDetail, setShelterDetail] = useState<ShelterDetailType | null>(
     null,
-  );
-  const [loading, setLoading] = useState(true);
-
-  const dogList = [
-    {
-      id: 1,
-      name: '루루',
-      age: 1,
-      gender: 'FEMALE',
-      species: '포메라니안',
-      image: testImage,
-    },
-    {
-      id: 2,
-      name: '코코',
-      age: 1,
-      gender: 'MALE',
-      species: '푸들',
-      image: testImage,
-    },
-    {
-      id: 3,
-      name: '보리',
-      age: 2,
-      gender: 'FEMALE',
-      species: '믹스',
-      image: testImage,
-    },
-  ] as DogType[];
-
-  // 예시 영상 리스트
-  const videoList = [
-    {
-      videoId: 1,
-      thumbnailUrl: null,
-      title: '구조된 강아지 이야기',
-      type: 'shelterVideo',
-    },
-    {
-      videoId: 2,
-      thumbnailUrl: null,
-      title: '강아지와의 산책',
-      type: 'shelterVideo',
-    },
-    {
-      videoId: 3,
-      thumbnailUrl: null,
-      title: '센터 소개',
-      type: 'shelterVideo',
-    },
-  ];
-
-  const dogRef = useRef<HTMLDivElement | null>(null);
-  const videoRef = useRef<HTMLDivElement | null>(null);
+  ); // 센터 상세 정보
+  const [dogList, setDogList] = useState<DogType[]>([]); // 강아지 목록 정보
+  const [videoList, setVideoList] = useState<PostPreviewType[]>([]); // 영상 리스트 정보
+  const [loadingShelter, setLoadingShelter] = useState(true); // 센터 상세 정보 로딩 상태
+  const [loadingDogs, setLoadingDogs] = useState(true); // 강아지 목록 로딩 상태
+  const [loadingVideos, setLoadingVideos] = useState(true); // 영상 목록 로딩 상태
+  const dogRef = useRef<HTMLDivElement | null>(null); // 강아지 목록 Ref
+  const videoRef = useRef<HTMLDivElement | null>(null); // 비디오 목록 Ref
 
   const [isDogScrollable, setIsDogScrollable] = useState({
     left: false,
@@ -94,24 +50,60 @@ const CenterDetailPage = () => {
     }
   };
 
+  // 센터 상세 정보 가져오기
   useEffect(() => {
-    const getShelterDetail = async () => {
-      setLoading(true);
-
+    const fetchShelterDetail = async () => {
+      setLoadingShelter(true);
       try {
-        const response = await axios.get<ShelterDetailType>(
-          `/api/shelters/${id}`,
-        );
-        setShelterDetail(response.data);
+        const shelterResponse = await getShelterDetailApi(Number(id));
+        setShelterDetail(shelterResponse.data);
       } catch (error) {
         console.error('Failed to fetch shelter details:', error);
       } finally {
-        setLoading(false);
+        setLoadingShelter(false);
       }
     };
 
     if (id) {
-      getShelterDetail();
+      fetchShelterDetail();
+    }
+  }, [id]);
+
+  // 강아지 목록 가져오기
+  useEffect(() => {
+    const fetchDogList = async () => {
+      setLoadingDogs(true);
+      try {
+        const dogResponse = await shelterDogListApi(Number(id));
+        setDogList(dogResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch dog list:', error);
+      } finally {
+        setLoadingDogs(false);
+      }
+    };
+
+    if (id) {
+      fetchDogList();
+    }
+  }, [id]);
+
+  // 영상 리스트 가져오기
+  useEffect(() => {
+    const fetchVideoList = async () => {
+      setLoadingVideos(true);
+      try {
+        const videoResponse = await shelterPostListApi(Number(id));
+        setVideoList(videoResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch video list:', error);
+      } finally {
+        setLoadingVideos(false);
+      }
+    };
+
+    if (id) {
+      fetchVideoList();
     }
   }, [id]);
 
@@ -129,7 +121,6 @@ const CenterDetailPage = () => {
     }
 
     handleCheckScrollability();
-
     window.addEventListener('resize', handleCheckScrollability);
 
     return () => {
@@ -146,8 +137,8 @@ const CenterDetailPage = () => {
     };
   }, [shelterDetail]);
 
-  if (loading) {
-    return <div>로딩 중...</div>;
+  if (loadingShelter) {
+    return <div>센터 정보를 불러오는 중...</div>;
   }
 
   if (!shelterDetail) {
@@ -158,10 +149,10 @@ const CenterDetailPage = () => {
     <div className="w-full flex flex-col items-center justify-center">
       <ProfileCard
         profileImgUrl={shelterDetail.shelterProfileImg || CenterProfileImg}
-        name={shelterDetail.name || '테스트용 텍스트'}
-        address={shelterDetail.address || '테스트용 텍스트'}
-        phone={shelterDetail.phone || '테스트용 텍스트'}
-        content={shelterDetail.content || '테스트용 텍스트'}
+        name={shelterDetail.name}
+        address={shelterDetail.address}
+        phone={shelterDetail.phone}
+        content={shelterDetail.content}
       />
 
       <div className="w-11/12 relative">
@@ -177,16 +168,20 @@ const CenterDetailPage = () => {
 
           <div ref={videoRef} className="mt-1 overflow-x-auto scrollbar-hide">
             <div className="flex space-x-2">
-              {videoList.map((video) => (
-                <div className="flex-none" key={video.videoId}>
-                  <VideoCard
-                    videoId={video.videoId}
-                    thumbnailUrl={video.thumbnailUrl}
-                    title={video.title}
-                    type="shelterVideo"
-                  />
-                </div>
-              ))}
+              {loadingVideos ? (
+                <div>영상을 불러오는 중...</div>
+              ) : (
+                videoList.map((video) => (
+                  <div className="flex-none" key={video.id}>
+                    <VideoCard
+                      videoId={video.id}
+                      thumbnailUrl={video.imageUrl}
+                      title={video.title}
+                      type="shelterVideo"
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -215,18 +210,22 @@ const CenterDetailPage = () => {
             className="mt-1 overflow-x-auto scrollbar-hide relative"
           >
             <div className="flex space-x-2">
-              {dogList.map((dog) => (
-                <div className="flex-none" key={dog.id}>
-                  <DogPreview
-                    id={dog.id}
-                    name={dog.name}
-                    age={dog.age}
-                    image={dog.image}
-                    gender={'FEMALE'}
-                    species={''}
-                  />
-                </div>
-              ))}
+              {loadingDogs ? (
+                <div>강아지 목록을 불러오는 중...</div>
+              ) : (
+                dogList.map((dog) => (
+                  <div className="flex-none" key={dog.id}>
+                    <DogPreview
+                      id={dog.id}
+                      name={dog.name}
+                      age={dog.age}
+                      image={dog.image}
+                      gender={dog.gender}
+                      species={dog.species}
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

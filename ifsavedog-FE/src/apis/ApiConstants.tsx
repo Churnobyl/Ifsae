@@ -6,7 +6,7 @@ export enum ENDPOINT {
   VERIFY_EMAIL_CODE = 'api/auth/verify-emailcode',
 
   // Shelter
-  CREATE_SHELTER = 'api/shelter',
+  SHELTER = 'api/shelter',
   UPDATE_SHELTER_PROFILE_IMAGE = 'api/shelter/profile-img',
 
   // MyPage
@@ -31,6 +31,7 @@ export enum ENDPOINT {
   // Post
   POST = 'api/post',
   POST_LIKE = 'api/post/like',
+  POST_SHELTER = 'api/post/shelter',
 }
 
 export enum HTTP_STATUS {

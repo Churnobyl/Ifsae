@@ -10,12 +10,12 @@ interface AdoptionPrevCardProps {
 }
 
 const AdoptionPrevCard = ({
-  id,
+  // id,
   name,
   profileImgUrl,
   adoptionStatus,
   shelterName,
-  type,
+  // type,
 }: AdoptionPrevCardProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
