@@ -23,9 +23,11 @@ import com.easteregg.ifsae.global.exception.type.DogException;
 import com.easteregg.ifsae.global.exception.type.ShelterException;
 import com.easteregg.ifsae.global.s3.S3ImageUploader;
 import jakarta.transaction.Transactional;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,25 +50,25 @@ public class DogServiceImpl implements DogService {
     @Override
     public void createDog(User user, DogCreateRequest dogCreateRequest, MultipartFile dogImage) throws IOException {
         Shelter shelter = shelterUserRepository.findByUserId(user.getId())
-                                               .orElseThrow(() -> new ShelterException(SHELTER_NOT_FOUND))
-                                               .getShelter();
+                .orElseThrow(() -> new ShelterException(SHELTER_NOT_FOUND))
+                .getShelter();
 
         Dog dog = Dog.builder()
-                     .name(dogCreateRequest.getName())
-                     .age(dogCreateRequest.getAge())
-                     .gender(Gender.valueOf(dogCreateRequest.getGender()))
-                     .dogStatus(DogStatus.valueOf(dogCreateRequest.getDogStatus()))
-                     .species(dogCreateRequest.getSpecies())
-                     .info(dogCreateRequest.getInfo())
-                     .build();
+                .name(dogCreateRequest.getName())
+                .age(dogCreateRequest.getAge())
+                .gender(Gender.valueOf(dogCreateRequest.getGender()))
+                .dogStatus(DogStatus.valueOf(dogCreateRequest.getDogStatus()))
+                .species(dogCreateRequest.getSpecies())
+                .info(dogCreateRequest.getInfo())
+                .build();
 
         String imageUrl = s3ImageUploader.upload(dogImage);
         dog.updateDogProfileImage(imageUrl);
 
         ShelterDog shelterDog = ShelterDog.builder()
-                                          .shelter(shelter)
-                                          .dog(dog)
-                                          .build();
+                .shelter(shelter)
+                .dog(dog)
+                .build();
 
         dog.updateShelterDog(shelterDog);
 
@@ -87,7 +89,7 @@ public class DogServiceImpl implements DogService {
     @Override
     public void updateDog(long dogId, DogCreateRequest dogCreateRequest) {
         Dog dog = dogRepository.findById(dogId)
-                               .orElseThrow(() -> new DogException(DOG_NOT_FOUND));
+                .orElseThrow(() -> new DogException(DOG_NOT_FOUND));
 
         dog.updateDogInfo(dogCreateRequest);
 
@@ -97,26 +99,35 @@ public class DogServiceImpl implements DogService {
     @Override
     public DogDetailDto findById(long dogId) {
         Dog dog = dogRepository.findById(dogId)
-                               .orElseThrow(() -> new DogException(DOG_NOT_FOUND));
+                .orElseThrow(() -> new DogException(DOG_NOT_FOUND));
 
         ShelterDog shelterDog = shelterDogRepository.findShelterDogsByDogId(dogId)
-                                                    .orElseThrow(() -> new DogException(DOG_NOT_FOUND_IN_SHELTER));
+                .orElseThrow(() -> new DogException(DOG_NOT_FOUND_IN_SHELTER));
 
         Shelter shelter = shelterDog.getShelter();
 
         return DogDetailDto.builder()
-                           .id(dog.getId())
-                           .name(dog.getName())
-                           .age(dog.getAge())
-                           .gender(dog.getGender())
-                           .dogStatus(dog.getDogStatus())
-                           .species(dog.getSpecies())
-                           .info(dog.getInfo())
-                           .image(dog.getImage())
-                           .shelterId(shelter.getId())
-                           .shelterName(shelter.getName())
-                           .followerCnt(dog.getFollows().size())
-                           .build();
+                .id(dog.getId())
+                .name(dog.getName())
+                .age(dog.getAge())
+                .gender(dog.getGender())
+                .dogStatus(dog.getDogStatus())
+                .species(dog.getSpecies())
+                .info(dog.getInfo())
+                .image(dog.getImage())
+                .shelterId(shelter.getId())
+                .shelterName(shelter.getName())
+                .followerCnt(dog.getFollows().size())
+                .build();
+    }
+
+    @Override
+    public List<DogListDto> findDogsByIds(List<Long> dogIds) {
+        List<Dog> dogs = dogRepository.findAllById(dogIds);
+
+        return dogs.stream()
+                .map(Dog::toDogListDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -126,7 +137,7 @@ public class DogServiceImpl implements DogService {
         List<Dog> dogs = dogRepository.findDogsByShelterDogIn(shelterDogs);
 
         return dogs.stream()
-                   .map(Dog::toDogListDto).collect(Collectors.toList());
+                .map(Dog::toDogListDto).collect(Collectors.toList());
     }
 
     @Override
@@ -134,7 +145,7 @@ public class DogServiceImpl implements DogService {
         List<Follow> followList = followRepository.findFollowsByUserId(followerId);
 
         List<Dog> dogs = followList.stream()
-                                   .map(Follow::getDog).toList();
+                .map(Follow::getDog).toList();
 
         return dogs.stream().map(Dog::toDogListDto).collect(Collectors.toList());
     }

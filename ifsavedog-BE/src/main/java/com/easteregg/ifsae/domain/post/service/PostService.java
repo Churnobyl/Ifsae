@@ -5,7 +5,9 @@ import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.user.entity.User;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,8 @@ public interface PostService {
     void update(User user, Long postId, PostDto.UpdateRequest request);
 
     void delete(User user, Long postId);
+
+    List<PostDto.Response> findPostsByIds(List<Long> postIds);
 
     List<PostPreview> getPostList(Long dogId);
 
