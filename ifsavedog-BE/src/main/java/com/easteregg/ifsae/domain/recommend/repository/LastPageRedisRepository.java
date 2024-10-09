@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface lastPageRedisRepository extends CrudRepository<LastPage, Long> {
+public interface LastPageRedisRepository extends CrudRepository<LastPage, Long> {
 
 }
