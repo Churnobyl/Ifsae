@@ -24,6 +24,7 @@ export enum ENDPOINT {
 
   SHELTER_DONATION_LIST = 'api/donations/shelters',
   USER_DONATION_LIST = 'api/donations/users',
+  DONATION = 'api/donations/dogs',
 
   // Post
   POST = 'api/post',
