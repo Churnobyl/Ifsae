@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
     private final PostDogRepository postDogRepository;
     private final ShelterRepository shelterRepository;
@@ -140,8 +141,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void createLike(User user, long postId) {
         Post post = findPostById(postId);
-
         postLikeRepository.save(new PostLike(user, post));
+
+        post.addLikeCnt();
+        postRepository.save(post);
     }
 
     @Override
@@ -150,6 +153,10 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
 
         postLikeRepository.delete(postLike);
+
+        Post post = findPostById(postId);
+        post.removeLikeCnt();
+        postRepository.save(post);
     }
 
     @Override

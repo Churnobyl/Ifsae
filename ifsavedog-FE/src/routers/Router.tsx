@@ -3,7 +3,6 @@ import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterDetailPage from '@/pages/CenterDetailPage';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
-import CreateDogPage from '@/pages/CreateDogPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DogDetailPage from '@/pages/DogDetailPage';
 import MyDonationListPage from '@/pages/MyDonationListPage';
@@ -34,6 +33,8 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import CreateDonationPage from '@/pages/CreateDonationPage';
+import CreateDogPage from '@/pages/CreateDogPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -114,6 +115,10 @@ const Router = () => {
               element: <UserLikeVideo />,
             },
             {
+              path: PATH.CREATE_DONATION,
+              element: <CreateDonationPage />,
+            },
+            {
               path: PATH.USER_PROFILE_EDIT,
               element: <UserProfileEdit />,
             },
@@ -188,7 +193,7 @@ const Router = () => {
       errorElement: <NotFoundPage />,
     },
     {
-      path: PATH.VIDEO_DETAIL + '/:id',
+      path: PATH.VIDEO_DETAIL + '/:postId',
       element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },

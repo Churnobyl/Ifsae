@@ -1,6 +1,7 @@
 package com.easteregg.ifsae.domain.shelter.entity;
 
 import com.easteregg.ifsae.domain.shelter.dto.ShelterCreateRequest;
+import com.easteregg.ifsae.domain.shelter.dto.ShelterPreviewDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,8 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -49,6 +53,14 @@ public class Shelter {
         this.phone = shelterCreateRequest.getPhone();
         this.content = shelterCreateRequest.getContent();
         this.canBeDonated = shelterCreateRequest.isCanBeDonated();
+    }
+
+    public ShelterPreviewDto toShelterPreviewDto() {
+        return ShelterPreviewDto.builder()
+                                .id(id)
+                                .name(name)
+                                .profileImgUrl(profileImgUrl)
+                                .build();
     }
 }
 
