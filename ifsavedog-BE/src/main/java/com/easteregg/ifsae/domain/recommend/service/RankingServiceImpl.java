@@ -6,10 +6,12 @@ import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.post.repository.PostDogRepository;
 import com.easteregg.ifsae.domain.recommend.entity.LastPage;
 import com.easteregg.ifsae.domain.recommend.entity.Ranking;
+import com.easteregg.ifsae.domain.recommend.repository.LastPageRedisRepository;
 import com.easteregg.ifsae.domain.recommend.repository.RankingRepository;
 import com.easteregg.ifsae.domain.user.entity.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RankingServiceImpl implements RankingService {
 
+    private final long DEFAULT_RANK_USER_ID = 100;
+
     private final RankingRepository rankingRepository;
     private final PostDogRepository postDogRepository;
-    private final com.easteregg.ifsae.domain.recommend.repository.lastPageRedisRepository lastPageRedisRepository;
+    private final LastPageRedisRepository lastPageRedisRepository;
 
     @Override
     public List<Long> findDogIdListByUserId(Long userId, int pageNum) {
 
         List<Ranking> rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(userId);
+
+        if (rankingList.isEmpty()) {
+            rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(DEFAULT_RANK_USER_ID);
+        }
+
         List<Long> dogIds = new ArrayList<>();
 
         int pageSize = 5;
@@ -38,8 +47,12 @@ public class RankingServiceImpl implements RankingService {
         List<Ranking> subList = rankingList.subList(fromIndex, toIndex);
         for (Ranking ranking : subList) {
             dogIds.add(ranking.getDog().getId());
-
         }
+
+        LastPage lastPage = lastPageRedisRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        lastPage.updateLastPage();
+        lastPageRedisRepository.save(lastPage);
+
         return dogIds;
     }
 
