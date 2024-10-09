@@ -5,7 +5,7 @@ import CenterDetailPage from '@/pages/CenterDetailPage';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DogDetailPage from '@/pages/DogDetailPage';
-import DonationPage from '@/pages/DonationPage';
+import MyDonationListPage from '@/pages/MyDonationListPage';
 import FollowPage from '@/pages/FollowPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -126,9 +126,9 @@ const Router = () => {
               element: <DogDetailPage />,
             },
             {
-              path: PATH.DONATION,
+              path: PATH.USER_DONATION,
               errorElement: <NotFoundPage />,
-              element: <DonationPage />,
+              element: <MyDonationListPage />,
             },
             {
               path: PATH.CENTER_DETAIL + '/:id',
