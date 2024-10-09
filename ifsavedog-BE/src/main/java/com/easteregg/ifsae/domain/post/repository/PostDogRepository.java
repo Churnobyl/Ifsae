@@ -11,4 +11,6 @@ public interface PostDogRepository extends JpaRepository<PostDog, Long> {
     List<PostDog> findByIdIn(List<Long> dogIds);
 
     List<PostDog> findByDogId(Long dogId);
+
+    PostDog findPostIdByDogIdOrderByIdDesc(Long dogId);
 }
