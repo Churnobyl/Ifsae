@@ -16,6 +16,7 @@ public class ESDogService {
         ESDog esDog = ESDog.builder()
                 .id(Long.toString(dog.getId()))
                 .name(dog.getName())
+                .species(dog.getSpecies())
                 .shelter(ESShelter.builder()
                         .shelterId(dog.getShelterDog().getShelter().getId().toString())
                         .name(dog.getShelterDog().getShelter().getName())

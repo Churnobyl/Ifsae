@@ -15,7 +15,7 @@
       "type": "keyword"
     },
     "shelter": {
-      "type": "object",
+      "type": "nested",
       "properties": {
         "shelterId": {
           "type": "keyword"

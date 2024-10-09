@@ -26,4 +26,10 @@ public interface PostService {
     List<PostPreview> getPostList(Long dogId);
 
     List<PostPreview> getPostListByLike(Long userId);
+
+    void createLike(User user, long postId);
+
+    void deleteLike(User user, long postId);
+
+    boolean checkPostLike(User user, long postId);
 }
