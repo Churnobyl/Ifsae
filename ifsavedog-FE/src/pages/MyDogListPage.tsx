@@ -3,11 +3,11 @@ import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import SearchComponent from '@/components/common/Search';
 import { shelterDogListApi } from '@/apis/dog/dogApi';
 import { DogType } from '@/types/dog/DogType';
+import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 
 const MyDogListPage = () => {
-  // [TODO]
-  // - 로그인 유저 정보를 통해 shelterId를 찾아와서 사용
-  const shelterId = 1;
+  const myShelterDetailStore = useMyShelterDetailStore();
+  const { id } = myShelterDetailStore;
   const [searchQuery, setSearchQuery] = useState('');
   const [dogList, setDogList] = useState<DogType[]>([]); // 강아지 목록 상태
   const [filteredDogList, setFilteredDogList] = useState<DogType[]>([]); // 검색어로 필터링된 목록 상태
@@ -18,7 +18,7 @@ const MyDogListPage = () => {
   useEffect(() => {
     const fetchDogList = async () => {
       try {
-        const response = await shelterDogListApi(shelterId); // shelterId를 이용해 API 호출
+        const response = await shelterDogListApi(id); // id를 이용해 API 호출
         setDogList(response.data); // API로부터 받은 강아지 목록 상태 업데이트
         setFilteredDogList(response.data); // 처음엔 전체 리스트로 필터링 초기화
       } catch (error) {
@@ -30,7 +30,7 @@ const MyDogListPage = () => {
     };
 
     fetchDogList(); // 컴포넌트 렌더링 시 API 호출
-  }, [shelterId]);
+  }, [id]);
 
   // 검색어가 변경될 때마다 강아지 목록을 필터링
   useEffect(() => {

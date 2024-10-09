@@ -28,3 +28,7 @@ export const deletePostLikeApi = async (postId: number) => {
 export const checkPostLikeApi = async (postId: number) => {
   return await instance.get(ENDPOINT.POST_LIKE + '/' + postId);
 };
+
+export const getPostDetailApi = async (postId: number) => {
+  return await instance.get(ENDPOINT.POST + '/' + postId);
+};
