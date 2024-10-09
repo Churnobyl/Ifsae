@@ -170,48 +170,46 @@ const CenterDetailPage = () => {
           <div className="text-lg font-semibold">😀 영상 더보기</div>
 
           {isVideoScrollable.left && (
-            <div className="absolute left-0 flex items-center justify-center">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
               <img src={LeftArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
 
-          <div
-            ref={videoRef}
-            className="flex space-x-2 overflow-x-auto flex-grow"
-          >
-            {videoList.map((video) => (
-              <div className="flex-none" key={video.videoId}>
-                <VideoCard
-                  videoId={video.videoId}
-                  thumbnailUrl={video.thumbnailUrl}
-                  title={video.title}
-                  type="shelterVideo"
-                />
-              </div>
-            ))}
+          <div ref={videoRef} className="mt-1 overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-2">
+              {videoList.map((video) => (
+                <div className="flex-none" key={video.videoId}>
+                  <VideoCard
+                    videoId={video.videoId}
+                    thumbnailUrl={video.thumbnailUrl}
+                    title={video.title}
+                    type="shelterVideo"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {isVideoScrollable.right && (
-            <div className="absolute right-0 flex items-center justify-center rounded-full">
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 rounded-full">
               <img src={RightArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
         </div>
+      </div>
 
+      <div className="w-11/12 relative">
         <div>
           <div className="text-lg font-semibold list-title">
             😀 강아지 더보기
           </div>
+
           {isDogScrollable.left && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full z-10 cursor-pointer">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
               <img src={LeftArrow} className="w-6 h-6 opacity-50" />
             </div>
           )}
-          {isDogScrollable.right && (
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full z-10 cursor-pointer">
-              <img src={RightArrow} className="w-6 h-6 opacity-50" />
-            </div>
-          )}
+
           <div
             ref={dogRef}
             className="mt-1 overflow-x-auto scrollbar-hide relative"
@@ -231,6 +229,12 @@ const CenterDetailPage = () => {
               ))}
             </div>
           </div>
+
+          {isDogScrollable.right && (
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2  rounded-full">
+              <img src={RightArrow} className="w-6 h-6 opacity-50" />
+            </div>
+          )}
         </div>
       </div>
     </div>

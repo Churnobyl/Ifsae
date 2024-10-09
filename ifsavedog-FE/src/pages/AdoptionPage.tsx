@@ -171,7 +171,7 @@ const AdoptionPage = () => {
           😀 당신을 기다려요
         </div>
         {isRecommenedScrollable.left && (
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
@@ -195,7 +195,7 @@ const AdoptionPage = () => {
           </div>
         </div>
         {isRecommenedScrollable.right && (
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={RightArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
@@ -206,7 +206,7 @@ const AdoptionPage = () => {
           😀 내가 팔로우 하는 강아지
         </div>
         {isFollowScrollable.left && (
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
@@ -231,7 +231,7 @@ const AdoptionPage = () => {
           </div>
         </div>
         {isFollowScrollable.right && (
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={RightArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
