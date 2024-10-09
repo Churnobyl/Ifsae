@@ -6,9 +6,27 @@ from models.shelter import *
 from models.shelter_dog import *
 import pandas as pd
 
+# def input_dog_species():
+#   dogs_mongo = get_api_data_from_mongo()
+#   dogs_db = get_all_dogs()
+  
+#   dogs_mongo_df = pd.DataFrame(dogs_mongo)
+#   species_list = []
+#   for index, dog_mongo in dogs_mongo_df.iterrows():
+#     desertion_no = dog_mongo['desertionNo']
+#     # print(desertion_no)
+#     for dog_db in dogs_db:
+#       if desertion_no == dog_db.desertion_no:
+#         print(dog_db.id)
+#         dog_species = dog_mongo['breed']
+#         species_list.append(dog_species)  
+#         update_dog_species(dog_db, dog_species)      
+#         break
+#   print(species_list)
+
 def input_all_dogs(start_date, end_date):
-  # 3년 이상 데이터 삭제
-  delete_old_data()
+  # # 3년 이상 데이터 삭제
+  # delete_old_data()
   # API를 통해 데이터 가져온 후 전처리
   df = preprocess_data(get_API_data(start_date, end_date))
   
@@ -47,7 +65,7 @@ def input_all_shelters():
     print(shelter.name)
   insert_shelter(shelter_list)    
   
-def match_shelter_dog():
+def match_shelter_dog(last_id):
   row_data = get_api_data_from_mongo()
   dog_data = get_all_dogs()
   shelter_data = get_all_shelters()
@@ -85,7 +103,7 @@ def match_shelter_dog():
         print(dog_id, shelter_id)
           
       # break
-    if row.id == 2000 : break
+    if row.id == last_id : break
   # print(final_input_data_list)
   insert_shelter_dog(final_input_data_list)
 

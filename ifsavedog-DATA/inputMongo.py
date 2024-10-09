@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 
 # MongoDB 클라이언트 생성ong
-client = MongoClient('modb+srv://S11P21A508:10PbELNEKa@ssafy.ngivl.mongodb.net/S11P21A508?authSource=admin')
+client = MongoClient('mongodb+srv://S11P21A508:10PbELNEKa@ssafy.ngivl.mongodb.net/S11P21A508?authSource=admin')
 
 # 데이터베이스와 컬렉션 선택
 db = client['S11P21A508']
@@ -25,8 +25,8 @@ three_years_ago = today - datetime.timedelta(days=365*3)
 collection.delete_many({'happenDt': {'$lt': three_years_ago.strftime('%Y%m%d')}})
 
 qp = {
-    "bgnde": today.strftime('%Y%m%d'),
-    "endde": today.strftime('%Y%m%d'),
+    "bgnde": '20241004',
+    "endde": '20241004',
     "pageNo": 1,
     "state" : "protect",
     "numOfRows": "1000",    
@@ -63,7 +63,7 @@ try:
     df['koreanAge'] = datetime.datetime.now().year-df['birth'].astype(int)+1
     df['weightFloat'] = df['weight'].str.extract(r'(\d+\.?\d*)').astype(float)
 
-    print(client.server_info())
+    # print(client.server_info())
     
     # 데이터 삽입
     for _, row in df.iterrows():
