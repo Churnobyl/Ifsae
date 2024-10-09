@@ -78,4 +78,13 @@ def update_dog(dog):
     with get_db() as db:
         db.bulk_update_mappings(Dog, dog)
         db.commit()
-        
+
+def insert_shelter(shelter):
+    with get_db() as db:
+        db.add_all(shelter)
+        db.commit()
+
+def insert_shelter_dog(shelter_dog):
+    with get_db() as db:
+        db.add_all(shelter_dog)
+        db.commit()

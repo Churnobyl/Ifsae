@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -10,8 +10,7 @@ class Dog(Base):
     id = Column(Integer, primary_key=True)
     age = Column(Integer)
     dog_status = Column(Integer)
-    gender = Column(Integer)
-    species_id = Column(Integer, ForeignKey("species.id"))
+    gender = Column(Integer)    
     desertion_no = Column(String, unique=True)
     happen_dt = Column(String)
     image = Column(String)
@@ -20,13 +19,4 @@ class Dog(Base):
     name = Column(String)
     species_name = Column(String)
     
-    species = relationship("Species", back_populates="dog")
-
-class Species(Base):
-    __tablename__ = "species"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    dog = relationship("Dog", back_populates="species")  
-        
-        
+    

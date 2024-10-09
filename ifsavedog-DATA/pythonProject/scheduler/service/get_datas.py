@@ -4,6 +4,8 @@ from db.maria import get_db
 from models.dog import Dog
 from models.user import User, UserSurvey
 from models.rating import Rating
+from models.shelter import Shelter
+from models.shelter_dog import Shelter_Dog
 
 def get_all_users():
     with get_db() as db:
@@ -93,3 +95,23 @@ def get_dog_character_by_id(id):
 def get_dog_data_by_desertion_no(desertion_no):
     with get_db() as db:
         return db.query(Dog).filter(Dog.desertion_no == desertion_no).first()
+
+def get_api_data_from_mongo():
+    with get_mongo_db() as mongo:
+        return mongo.test.find().to_list()
+    
+def get_all_shelters():
+    with get_db() as db:
+        return db.query(Shelter).all()
+    
+def get_all_dogs():
+    with get_db() as db:
+        return db.query(Dog).all()  
+    
+def get_shelter_by_careNm(careNm):
+    with get_db() as db:
+        return db.query(Shelter).filter(Shelter.name == careNm).first()
+
+def get_shelter_dog_by_dog_id(dog_id):
+    with get_db() as db:
+        return db.query(Shelter_Dog).filter(Shelter_Dog.dog_id == dog_id).first()
