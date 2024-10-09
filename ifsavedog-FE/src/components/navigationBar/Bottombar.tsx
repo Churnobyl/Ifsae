@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const menus = [
-  { name: '메인', path: PATH.MAIN },
-  { name: '멍츠', path: PATH.MUNGTSU },
-  { name: '입양', path: PATH.ADOPTION },
-  { name: '검색', path: PATH.SEARCH },
-  { name: '마이페이지', path: PATH.MYPAGE },
+  { name: '메인', path: '/' + PATH.MAIN },
+  { name: '멍츠', path: '/' + PATH.MUNGTSU },
+  { name: '입양', path: '/' + PATH.ADOPTION },
+  { name: '검색', path: '/' + PATH.SEARCH },
+  { name: '마이페이지', path: '/' + PATH.MYPAGE },
 ];
 
 const Bottombar = () => {
