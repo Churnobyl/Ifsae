@@ -46,7 +46,12 @@ const DogDetailPage = () => {
     <div className="overflow-x-hidden overflow-y-auto">
       <div className="max-w-xl mx-auto p-6 pt-2">
         <DogDetail dog={dog} />
-        <DogDetailButtonList dogStatus={dog.dogStatus} dogId={dog.id} />
+        <DogDetailButtonList
+          dogStatus={dog.dogStatus}
+          dogId={dog.id}
+          dog={dog}
+        />{' '}
+        {/* dog 정보 전달 */}
       </div>
       <div className="w-full px-0 mx-0">
         <PostPreviewBoxList posts={posts} />

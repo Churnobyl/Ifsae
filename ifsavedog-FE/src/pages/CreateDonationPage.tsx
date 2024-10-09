@@ -1,35 +1,24 @@
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DogDetail from '@/components/dog/DogDetail';
 import { DogDetailType } from '@/types/dog/DogDetailType';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-const dummyDogData: DogDetailType = {
-  id: 1,
-  name: 'Lucky',
-  age: 3,
-  gender: 'MALE',
-  dogStatus: 'NOT_ADOPTED',
-  species: 'Shih Tzu',
-  info: '사람을 좋아하고 잘 따르는 강아지입니다. 중성화가 되어 있으며, 다른 동물들과도 잘 지냅니다.',
-  image: 'https://example.com/dog.jpg', // 강아지 이미지 URL
-  shelterId: 101,
-  shelterName: 'Happy Shelter',
-  followCnt: 124,
-};
+import { createDonationApi } from '@/apis/donation/donationApi'; // createDonationApi 호출
 
 const CreateDonationPage = () => {
   const [donationAmount, setDonationAmount] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // 후원 요청 중 상태
   const navigate = useNavigate();
+  const location = useLocation();
+  const { dog } = location.state as { dog: DogDetailType }; // 전달된 dog 정보 받아오기
 
   const handleDonationAmountChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = e.target.value;
-
     setDonationAmount(value);
   };
 
-  const handleDonationSubmit = () => {
+  const handleDonationSubmit = async () => {
     // 기부 금액이 없거나 0 이하일 때
     if (!donationAmount || Number(donationAmount) <= 0) {
       alert('기부 금액을 입력해주세요.');
@@ -42,9 +31,18 @@ const CreateDonationPage = () => {
       return;
     }
 
-    // 기부 금액이 정상일 때만 후원 완료 메시지 표시
-    alert(`후원 신청이 완료되었습니다. 후원 금액: ${donationAmount}원`);
-    navigate(-1);
+    try {
+      setIsSubmitting(true); // 후원 요청 시작
+      // API를 통해 후원 데이터 전송
+      await createDonationApi(dog.id, Number(donationAmount));
+      alert(`후원 신청이 완료되었습니다. 후원 금액: ${donationAmount}원`);
+      navigate(-1); // 후원 완료 후 이전 페이지로 이동
+    } catch (error) {
+      console.error('후원 신청 중 오류 발생:', error);
+      alert('후원 신청에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsSubmitting(false); // 후원 요청 완료
+    }
   };
 
   return (
@@ -52,7 +50,8 @@ const CreateDonationPage = () => {
       <div className="w-11/12 flex flex-col ">
         <div className="text-2xl font-semibold p-2">후원 신청하기</div>
 
-        <DogDetail dog={dummyDogData} />
+        {/* 전달받은 dog 정보를 DogDetail 컴포넌트에 전달 */}
+        <DogDetail dog={dog} />
 
         <div className="w-full flex flex-col items-center">
           <div className="w-11/12 flex flex-col my-3">
@@ -117,8 +116,9 @@ const CreateDonationPage = () => {
           <button
             onClick={handleDonationSubmit}
             className="flex justify-center items-center m-4 w-24 h-9 bg-main text-black py-3 rounded-xl hover:bg-hoverGreen focus:outline-none"
+            disabled={isSubmitting} // 후원 요청 중일 때 버튼 비활성화
           >
-            후원하기
+            {isSubmitting ? '처리 중...' : '후원하기'}
           </button>
         </div>
       </div>
