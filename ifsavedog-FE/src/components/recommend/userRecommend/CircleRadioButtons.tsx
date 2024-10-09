@@ -21,10 +21,10 @@ const CircleRadioButtons = ({
   const [questionText, leftTrait, rightTrait] = userSurveyMapper[questionName];
 
   return (
-    <div className="mb-4">
-      <div className={'text-lg'}>{questionText}</div>
-      <div className="flex justify-between items-center mt-2">
-        <div className="flex gap-8">
+    <div className="w-full mb-4">
+      <div className={'text-lg font-semibold'}>{questionText}</div>
+      <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center">
           {[1, 2, 3, 4, 5].map((value) => (
             <label key={value} className="items-center cursor-pointer text-lg">
               <input
