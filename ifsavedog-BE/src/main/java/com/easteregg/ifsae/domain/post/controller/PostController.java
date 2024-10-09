@@ -5,8 +5,12 @@ import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.service.PostService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import com.easteregg.ifsae.global.elasticsearch.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -31,8 +35,24 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
-
     private final PostService postService;
+    private final SearchService searchService;
+
+    /**
+     * ES 게시물 조회
+     * @param query 검색어
+     * @param searchField 검색조건 (title, content, dogName, shelterName, userNickname)
+     * @return List<PostDto.Response> 게시물 목록
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPosts(@RequestParam String query,
+                                         @RequestParam(defaultValue = "title") String searchField) throws IOException {
+        List<Long> postIds = searchService.searchPosts(query, searchField);
+
+        List<PostDto.Response> posts = postService.findPostsByIds(postIds);
+
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
 
     /**
      * 게시글 상세 조회
@@ -108,6 +128,4 @@ public class PostController {
         boolean isLiked = postService.checkPostLike(user, postId);
         return new ResponseEntity<>(Map.of("isLiked", isLiked), HttpStatus.OK);
     }
-
-
 }
