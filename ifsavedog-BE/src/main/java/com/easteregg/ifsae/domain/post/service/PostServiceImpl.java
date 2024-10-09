@@ -129,16 +129,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public void createLike(User user, long postId) {
         Post post = findPostById(postId);
-
         postLikeRepository.save(new PostLike(user, post));
+
+        post.addLikeCnt();
+        postRepository.save(post);
     }
 
     @Override
     public void deleteLike(User user, long postId) {
         PostLike postLike = postLikeRepository.findByUserIdAndPostId(user.getId(), postId)
                                               .orElseThrow(() -> new PostException(ErrorCode.INVALID_PAGE_REQUEST));
-
         postLikeRepository.delete(postLike);
+
+        Post post = findPostById(postId);
+        post.removeLikeCnt();
+        postRepository.save(post);
     }
 
     @Override
