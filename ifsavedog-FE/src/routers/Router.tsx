@@ -3,7 +3,6 @@ import config from '@/constants/Environments';
 import AdoptionPage from '@/pages/AdoptionPage';
 import CenterDetailPage from '@/pages/CenterDetailPage';
 import CenterDonationListPage from '@/pages/CenterDonationListPage';
-import CreateDogPage from '@/pages/CreateDogPage';
 import CreateShelterPage from '@/pages/CreateShelterPage';
 import DogDetailPage from '@/pages/DogDetailPage';
 import MyDonationListPage from '@/pages/MyDonationListPage';
@@ -34,6 +33,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+import CreateDonationPage from '@/pages/CreateDonationPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -92,26 +92,15 @@ const Router = () => {
                 },
               ],
             },
-            {
-              path: PATH.ADD_DOG,
-              element: (
-                <PrivateRoute
-                  userRole={UserRoleEnum.ROLE_CENTER}
-                  userStatus={UserStatusEnum.ACTIVE}
-                />
-              ),
-              children: [
-                {
-                  path: '',
-                  element: <CreateDogPage />,
-                },
-              ],
-            },
 
             /** 세경이의 테스트용 url */
             {
               path: PATH.USER_LIKE_VIDEO,
               element: <UserLikeVideo />,
+            },
+            {
+              path: PATH.CREATE_DONATION,
+              element: <CreateDonationPage />,
             },
             {
               path: PATH.USER_PROFILE_EDIT,

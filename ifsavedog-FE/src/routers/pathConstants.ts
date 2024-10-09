@@ -21,10 +21,16 @@ export const PATH = {
   SIGNUP_RESULT: 'signup-result',
   /** 팔로우 목록 페이지 */
   FOLLOW: 'follow',
+
   /** 내 후원 목록 페이지 */
   USER_DONATION: 'mypage/donation',
+
+  /** 후원 신청 */
+  CREATE_DONATION: 'donation/create-donation',
+
   /** 유저 선호도 페이지 */
   USER_RECOMMEND: 'recommend/user-recommend',
+
   /** 센터 생성 페이지 */
   CREATE_CENTER: 'center/create-center',
 
@@ -32,14 +38,12 @@ export const PATH = {
   CENTER_DOG_LIST: 'center/dog',
   CENTER_DONATION_LIST: 'center/donation',
 
-  /** 비디오 미리보기 카드 */
+  /** 내가 좋아요 한 영상 리스트 */
   USER_LIKE_VIDEO: 'mypage/like-video',
   VIDEO_DETAIL: 'post',
 
   /** 강아지 상세 페이지 */
   DOG_DETAIL: 'dog',
-  /** 센터의 강아지 추가하기 */
-  ADD_DOG: 'dog/create',
 
   USER_PROFILE_EDIT: 'mypage/edit-profile',
   CENTER_PROFILE_EDIT: 'mypage/center/edit-profile',
