@@ -57,8 +57,8 @@ def preprocess_data(df) :
     df_dog.loc[df['sexCd'] == 'M', 'gender'] = 0    
     df_dog.loc[~df['sexCd'].isin(['F', 'M']), 'gender'] = None
     # 'kindCd'에서 'species_name' 추출하여 공백 제거
-    df_dog['species_name'] = df['kindCd'].str.extract(r'\](.*)')
-    df_dog['species_name'] = df_dog['species_name'].str.strip()
+    df_dog['species'] = df['kindCd'].str.extract(r'\](.*)')
+    df_dog['species'] = df_dog['species'].str.strip()
     
     df_dog['desertion_no'] = df['desertionNo']
     df_dog['happen_dt'] = df['happenDt']
@@ -77,7 +77,7 @@ def preprocess_data(df) :
             '하리', '한별', '호야', '노아', '노을', '노리', '다롱', '누비', '나리', '숭이',
             '라라', '로로', '미리', '예삐', '감자', '공주', '까미', '나나', '이슬', '자두',
             '햇님', '슈미', '샛별', '로미'})
-    df_dog['name'] = [random.choice(name) for i in range(len(df))]
+    # df_dog['name'] = [random.choice(name) for i in range(len(df))]
     df_dog = df_dog.dropna()    
     return df_dog
 ## 데이터 전처리 함수 끝 ##
