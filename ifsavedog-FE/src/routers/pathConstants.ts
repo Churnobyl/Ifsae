@@ -57,4 +57,6 @@ export const PATH = {
 
   /** 입양 신청 */
   CREATE_ADOPTION: 'adoption/create-adoption',
+
+  MY_ADOPTION_LIST: 'mypage/adoption',
 };
