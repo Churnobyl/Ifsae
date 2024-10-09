@@ -175,11 +175,6 @@ const AdoptionPage = () => {
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
-        {isRecommenedScrollable.right && (
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
-            <img src={RightArrow} className="w-6 h-6 opacity-50" />
-          </div>
-        )}
         <div
           ref={recommenedRef}
           className="mt-1 overflow-x-auto scrollbar-hide"
@@ -199,6 +194,11 @@ const AdoptionPage = () => {
             ))}
           </div>
         </div>
+        {isRecommenedScrollable.right && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
+            <img src={RightArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
       </div>
 
       <div className="w-11/12 relative">
@@ -208,11 +208,6 @@ const AdoptionPage = () => {
         {isFollowScrollable.left && (
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
-          </div>
-        )}
-        {isFollowScrollable.right && (
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
-            <img src={RightArrow} className="w-6 h-6 opacity-50" />
           </div>
         )}
         <div ref={followRef} className="mt-1 overflow-x-auto scrollbar-hide">
@@ -235,6 +230,11 @@ const AdoptionPage = () => {
             )}
           </div>
         </div>
+        {isFollowScrollable.right && (
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full">
+            <img src={RightArrow} className="w-6 h-6 opacity-50" />
+          </div>
+        )}
       </div>
     </div>
   );
