@@ -7,12 +7,9 @@
       "type": "text",
       "analyzer": "my_custom_analyzer"
     },
-    "breed": {
+    "species": {
       "type": "text",
       "analyzer": "my_custom_analyzer"
-    },
-    "imgUrl": {
-      "type": "keyword"
     },
     "shelter": {
       "type": "nested",
@@ -20,7 +17,7 @@
         "shelterId": {
           "type": "keyword"
         },
-        "shelterName": {
+        "name": {
           "type": "text",
           "analyzer": "my_custom_analyzer"
         }
