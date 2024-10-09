@@ -37,6 +37,7 @@ import CreateDonationPage from '@/pages/CreateDonationPage';
 import CreateDogPage from '@/pages/CreateDogPage';
 import CreateAdoptionPage from '@/pages/CreateAdoptionPage';
 import MyAdoptionListPage from '@/pages/mypages/MyAdoptionListPage';
+import CenterVideoListPage from '@/pages/CenterVideoListPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -116,6 +117,7 @@ const Router = () => {
               path: PATH.USER_LIKE_VIDEO,
               element: <UserLikeVideo />,
             },
+            { path: PATH.CENTER_VIDEO_LIST, element: <CenterVideoListPage /> },
             {
               path: PATH.MY_ADOPTION_LIST,
               element: <MyAdoptionListPage />,
