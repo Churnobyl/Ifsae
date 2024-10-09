@@ -8,7 +8,7 @@ import { DogDetailType } from '@/types/dog/DogDetailType';
 interface DogDetailButtonListProps {
   dogStatus: 'ADOPTED' | 'NOT_ADOPTED' | 'DEAD'; // dogStatus는 ADOPTED와 NOT_ADOPTED로 타입 지정
   dogId: number; // 강아지 ID를 받아옴
-  dog: DogDetailType; // dog 정보를 받아옴 (타입은 실제 데이터에 맞게 수정 필요)
+  dog: DogDetailType; // dog 정보를 받아옴
 }
 
 const DogDetailButtonList = ({
@@ -60,6 +60,11 @@ const DogDetailButtonList = ({
     navigate('/donation/create-donation', { state: { dog } }); // dog 정보를 상태로 전달하며 후원 페이지로 이동
   };
 
+  // 입양하기 버튼 클릭 시 후원 페이지로 이동
+  const handleAdoptClick = () => {
+    navigate('/adoption/create-adoption', { state: { dog } }); // dog 정보를 상태로 전달하며 후원 페이지로 이동
+  };
+
   return (
     <div className="flex justify-between mt-4 space-x-4 max-w-xl mx-auto">
       {/* 후원하기 버튼 */}
@@ -88,7 +93,7 @@ const DogDetailButtonList = ({
       <SquareButton
         label={canAdopt ? '입양하기' : '입양종료'}
         icon={<FaPaw className="w-6 h-6 text-black" />}
-        onClick={() => alert('입양하기 클릭됨')}
+        onClick={handleAdoptClick} // 후원하기 클릭 시 페이지 이동
         disabled={!canAdopt} // 입양된 경우 비활성화
       />
     </div>

@@ -13,7 +13,6 @@ const PostPreviewBox = ({ id, title, imageUrl }: PostPreviewBoxProps) => {
   const handlePostClick = () => {
     navigate(`/post/${id}`); // 게시글 ID를 경로에 포함하여 이동
   };
-  console.log(imageUrl);
 
   return (
     <div
