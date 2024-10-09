@@ -38,7 +38,9 @@ const CenterDonationListPage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="px-4 py-4 bg-white shadow-md flex justify-between items-center">
-        <h1 className="text-lg font-semibold text-gray-700">후원자 목록</h1>
+        <h1 className="text-lg font-semibold text-gray-700">
+          센터 후원자 목록
+        </h1>
       </header>
 
       {/* 월 선택 input 필드 */}
@@ -49,7 +51,7 @@ const CenterDonationListPage = () => {
           id="month-select"
           value={selectedMonth}
           onChange={handleMonthChange}
-          className="p-1 border border-gray-300 rounded-md"
+          className="p-1 rounded-md"
         />
       </div>
 
