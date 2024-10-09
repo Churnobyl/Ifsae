@@ -20,15 +20,15 @@ html {
 
 .logo {
     width: 108px;
-    height: 108px;
-    background-image: url("./assets/logo.webp");
+    height: 72px;
+    background-image: url("./assets/logo.svg");
     background-repeat: no-repeat;
     background-size: contain;
 }
 
 .logo-sm {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 40px;
 }
 
 @layer components {

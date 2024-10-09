@@ -6,7 +6,7 @@ import ProfileCard from '@/components/common/ProfileCard';
 import { PATH } from '@/routers/pathConstants';
 import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
 import { FaHandHoldingHeart } from 'react-icons/fa';
-import { FaPencil } from 'react-icons/fa6';
+import { FaDog, FaPencil } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 const CenterMyPage = () => {
@@ -25,6 +25,7 @@ const CenterMyPage = () => {
           address={address ? address : '정보 불러오기 실패'}
           phone={phone ? phone : '010-0000-0000'}
           content={content ? content : '                     '}
+          isUserProfile={false}
         />
 
         <div className="w-11/12 flex items-center justify-center border-t border-b border-lightGray py-4 px-2 mb-6">
@@ -59,6 +60,12 @@ const CenterMyPage = () => {
             <FaHandHoldingHeart size={24} className="mr-2" />
             <p className="text-lg font-semibold">후원자 관리</p>
           </div>
+          <Link to={'/' + PATH.ADD_DOG}>
+            <div className="flex items-center mb-4 cursor-pointer">
+              <FaDog size={24} className="mr-2" />
+              <p className="text-lg font-semibold">강아지 등록하기</p>
+            </div>
+          </Link>
           <Link to={'/' + PATH.CREATE_POST}>
             <div className="flex items-center mb-4 cursor-pointer">
               <FaPencil size={24} className="mr-2" />

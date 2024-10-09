@@ -53,11 +53,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     log.info("[doFilterInternal] : refreshToken이 만료되었습니다.");
-                    throw new CustomSecurityException(ErrorCode.EXPIRED_TOKEN);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("RefreshTokenExpired");
+                    return;
                 }
             } else {
                 log.info("[doFilterInternal] : refreshToken이 만료되었습니다.");
-                throw new CustomSecurityException(ErrorCode.EXPIRED_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("RefreshTokenNotFound");
+                return;
             }
         }
         filterChain.doFilter(request, response);

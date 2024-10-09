@@ -62,6 +62,13 @@ instance.interceptors.response.use(
       location.href = '/login';
     }
 
+    const message = err.code;
+
+    if (message === 'ERR_NETWORK') {
+      localStorage.removeItem('accessToken');
+      location.href = '/login';
+    }
+
     return Promise.reject(err);
   },
 );
