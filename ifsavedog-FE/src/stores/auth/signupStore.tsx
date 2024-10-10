@@ -20,7 +20,7 @@ type Setters = {
 const useSignupStore = create<State & Setters>()(
   middlewares((set) => ({
     userInput: {
-      step: Step.기타정보,
+      step: Step.이메일,
       email: '',
       password: '',
       nickname: '',

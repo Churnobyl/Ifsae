@@ -1,4 +1,3 @@
-import { HTTP_STATUS } from '@/apis/ApiConstants';
 import config from '@/constants/Environments';
 import { useTokenStore } from '@/stores/auth/tokenStore';
 import axios, { InternalAxiosRequestConfig } from 'axios';
@@ -58,9 +57,7 @@ instance.interceptors.response.use(
     return response;
   },
   async (err) => {
-    console.log(err);
     const message = err.code;
-    console.log(message);
 
     if (message === 'ERR_NETWORK') {
       localStorage.removeItem('accessToken');
