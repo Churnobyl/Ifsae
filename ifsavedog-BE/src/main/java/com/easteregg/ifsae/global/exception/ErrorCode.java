@@ -49,7 +49,8 @@ public enum ErrorCode {
     SHELTER_NOT_FOUND("센터를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 센터 - 유저 관련 에러
-    USER_NOT_FOUND_IN_SHELTER("해당 쉘터에 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+    SHELTER_PERMISSION_DENIED("해당 쉘터에 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+    SHELTER_NOT_FOUND_IN_USER("소속된 쉘터를 찾을 수 없습니다.", HttpStatus.UNAUTHORIZED),
 
     // 센터 - 개 관련 에러
     DOG_NOT_FOUND_IN_SHELTER("강아지가 소속된 쉘터를 찾을 수 없습니다.", HttpStatus.UNAUTHORIZED),

@@ -4,6 +4,8 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.easteregg.ifsae.domain.shelter.repository.ShelterUserRepository;
+import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.elasticsearch.index.ESDog;
 import com.easteregg.ifsae.global.elasticsearch.index.ESPost;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SearchServiceImpl implements SearchService {
     private final ElasticsearchClient elasticsearchClient;
+    private final ShelterUserRepository shelterUserRepository;
 
     @Override
-    public List<Long> searchDogs(String query) throws IOException {
+    public List<Long> searchDogs(String query, User user) throws IOException {
+        // 사용자의 쉼터 ID 가져오기
+        Long shelterId = shelterUserRepository.findByUserId(user.getId())
+                .map(shelterUser -> shelterUser.getShelter().getId())
+                .orElseThrow(() -> new RuntimeException("No Shelter associated with this user"));
+
     /*
     개 검색 조건
         - name
@@ -32,7 +40,13 @@ public class SearchServiceImpl implements SearchService {
             b.should(s -> s.multiMatch(m -> m
                     .query(query)
                     .fields("name", "species", "shelter.name")));
+
+            b.filter(f -> f.nested(n -> n
+                    .path("shelter")
+                    .query(q -> q.term(t -> t.field("shelter.shelterId").value(shelterId)))));
+
             b.minimumShouldMatch("1");
+
             return b;
         })._toQuery();
 

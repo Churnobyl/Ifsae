@@ -36,6 +36,7 @@ export enum ENDPOINT {
   SEARCH_POST = 'api/post/search',
 
   SURVEY = 'api/recommend/survey',
+  RECOMMENDED_DOG_LIST = 'api/recommend/dogs'
 }
 
 export enum HTTP_STATUS {

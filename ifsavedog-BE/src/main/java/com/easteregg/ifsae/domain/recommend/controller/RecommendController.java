@@ -65,5 +65,9 @@ public class RecommendController {
         return new ResponseEntity<>(Map.of("lastPage", lastPage), HttpStatus.OK);
     }
 
+    @GetMapping("/dogs")
+    public ResponseEntity<?> getRecommendDogs(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(rankingService.getRecommendDogList(user), HttpStatus.OK);
+    }
 
 }
