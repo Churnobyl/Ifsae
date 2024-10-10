@@ -1,5 +1,7 @@
 import DogFaces from '@/components/mungtsu/selectPanel/DogFaces';
 import SelectIcon from '@/components/mungtsu/selectPanel/SelectIcon';
+import config from '@/constants/Environments';
+import { MungtsuResponseType } from '@/types/post/MungtsuResponseType';
 import { useEffect, useRef, useState } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { FaShareAlt } from 'react-icons/fa';
@@ -9,24 +11,18 @@ import {
   FaRegCirclePlay,
 } from 'react-icons/fa6';
 
-const sampleUrl =
-  'https://www.shutterstock.com/shutterstock/videos/1107237865/preview/stock-footage-portraits-of-happy-people-looking-at-camera-in-one-footage-beautiful-faces-of-young-women-and.mp4';
-
 interface DogFace {
   dogId: number; // 강아지 ID
   imgUrl: string; // 강아지 이미지 URL
 }
 
-const dogFaces: DogFace[] = [
-  { dogId: 1, imgUrl: '/src/assets/dogFace/1.jfif' },
-  { dogId: 2, imgUrl: '/src/assets/dogFace/2.jfif' },
-  { dogId: 3, imgUrl: '/src/assets/dogFace/3.jfif' },
-  { dogId: 4, imgUrl: '/src/assets/dogFace/4.jfif' },
-  { dogId: 5, imgUrl: '/src/assets/dogFace/5.jpg' },
-  { dogId: 6, imgUrl: '/src/assets/dogFace/6.jpg' },
-];
+const MungtsuBox = ({ slide }: { slide: MungtsuResponseType }) => {
+  const { title, videoUrl, shelter, dogs, comments, likeCnt } = slide;
+  const dogFaces: DogFace[] = dogs.map((dog) => ({
+    dogId: dog.id,
+    imgUrl: dog.image,
+  }));
 
-const MungtsuBox = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -153,7 +149,7 @@ const MungtsuBox = () => {
         style={{ zIndex: 20 }}
       >
         <video ref={videoRef} className="w-full h-full" muted loop>
-          <source src={sampleUrl} />
+          <source src={config.s3VideoUrl + videoUrl} />
         </video>
         <button
           className={`absolute text-white text-2xl transition-opacity duration-300 ${
@@ -187,20 +183,23 @@ const MungtsuBox = () => {
           <div className={'flex flex-row text-white items-center'}>
             <div className="w-8">
               <img
-                src={'/src/assets/center-profile.png'}
+                src={shelter.profileImgUrl}
                 className={'w-full h-full object-cover rounded-full'}
                 alt=""
               />
             </div>
-            <div>아이조아보육원</div>
+            <div>{shelter.name}</div>
           </div>
-          <div className={'text-white overflow-hidden'}>
-            밥먹고 똥싸는 강아지 모음
-          </div>
+          <div className={'text-white overflow-hidden'}>{title}</div>
         </div>
         <div className={'flex flex-col items-end p-4 gap-4'}>
-          <SelectIcon label={'50'} icon={AiOutlineLike} /> {/** 좋아요 */}
-          <SelectIcon label={'40'} icon={FaCommentDots} /> {/** 댓글 */}
+          <SelectIcon label={String(likeCnt)} icon={AiOutlineLike} />{' '}
+          {/** 좋아요 */}
+          <SelectIcon
+            label={String(comments.length)}
+            icon={FaCommentDots}
+          />{' '}
+          {/** 댓글 */}
           <SelectIcon label={'공유'} icon={FaShareAlt} /> {/** 공유 */}
           <DogFaces direction={'RIGHT'} dogs={dogFaces} />
         </div>
