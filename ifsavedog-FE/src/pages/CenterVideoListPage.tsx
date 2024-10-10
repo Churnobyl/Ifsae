@@ -86,7 +86,7 @@ const CenterVideoListPage = () => {
     observer.observe(loader.current);
 
     return () => {
-      if (loader.current) observer.unobserve(loader.current);
+      if (loader!.current) observer.unobserve(loader!.current);
     };
   }, [loading, hasError, hasMore]);
 

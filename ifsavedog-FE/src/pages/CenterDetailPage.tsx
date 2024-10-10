@@ -125,11 +125,11 @@ const CenterDetailPage = () => {
 
     return () => {
       window.removeEventListener('resize', handleCheckScrollability);
-      if (dogRef.current) {
-        dogRef.current.removeEventListener('scroll', handleCheckScrollability);
+      if (dogRef!.current) {
+        dogRef!.current.removeEventListener('scroll', handleCheckScrollability);
       }
-      if (videoRef.current) {
-        videoRef.current.removeEventListener(
+      if (videoRef!.current) {
+        videoRef!.current.removeEventListener(
           'scroll',
           handleCheckScrollability,
         );
