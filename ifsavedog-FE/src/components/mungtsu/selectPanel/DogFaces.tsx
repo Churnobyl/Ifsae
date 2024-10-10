@@ -1,23 +1,42 @@
-const dogFaces = [
-  '/src/assets/dogFace/1.jfif',
-  '/src/assets/dogFace/2.jfif',
-  '/src/assets/dogFace/3.jfif',
-  '/src/assets/dogFace/4.jfif',
-];
+import { useState } from 'react';
 
-const DogFaces = () => {
+interface DogProps {
+  dogId: number;
+  imgUrl: string;
+}
+
+interface DogFacesProps {
+  dogs: DogProps[];
+}
+
+const DogFaces = ({ dogs }: DogFacesProps) => {
+  const [collapsed, setCollapsed] = useState(true);
+
   return (
-    <div className="flex w-18">
-      {dogFaces.map((dogface, index) => (
+    <div
+      className={`flex w-full items-center cursor-pointer transition-all duration-300 ease-in-out ${
+        collapsed ? 'ml-8' : ''
+      }`}
+      onClick={() => setCollapsed(!collapsed)}
+    >
+      {dogs.map((dog, index) => (
         <div
           key={index}
-          className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center z-10 -ml-4"
-          style={{ zIndex: 10 - index }}
+          className={`w-10 h-10 rounded-full flex overflow-x-auto scrollbar-hide justify-center items-center transition-all duration-300 ease-in-out transform ${
+            // 첫 4개의 이미지에는 애니메이션 적용 안 함
+            index < 4
+              ? `${collapsed ? '-ml-6' : 'ml-2'}`
+              : `${collapsed ? 'opacity-0 scale-75' : 'opacity-100 scale-100 ml-2'}`
+          }`}
+          style={{
+            zIndex: collapsed ? 10 - index : 'auto',
+            transitionDelay: index >= 4 ? `${(index - 4) * 50}ms` : '0ms',
+          }}
         >
           <img
-            src={dogface}
-            className={'w-full h-full object-cover rounded-full'}
-            alt=""
+            src={dog.imgUrl}
+            className="w-full h-full object-cover rounded-full"
+            alt={`dog ${index + 1}`}
           />
         </div>
       ))}
