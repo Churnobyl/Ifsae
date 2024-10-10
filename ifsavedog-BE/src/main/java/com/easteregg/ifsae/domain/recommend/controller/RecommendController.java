@@ -50,7 +50,7 @@ public class RecommendController {
     @GetMapping("/ranking")
     public ResponseEntity<?> readRanking(@AuthenticationPrincipal User user, @RequestParam int pageNum) {
         if (pageNum < 1 || pageNum > 20) {
-            return ResponseEntity.badRequest().body("잘못된 pageNumber입니다.");
+            pageNum = 1;
         }
 
         long userId = user.getId();
@@ -62,6 +62,7 @@ public class RecommendController {
     @GetMapping("/index/lastpage")
     public ResponseEntity<?> readLastPage(@AuthenticationPrincipal User user) {
         int lastPage = rankingService.getUserLastPage(user);
+        System.out.println("-------------------" + lastPage + "-------------------");
         return new ResponseEntity<>(Map.of("lastPage", lastPage), HttpStatus.OK);
     }
 

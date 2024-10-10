@@ -35,8 +35,9 @@ export enum ENDPOINT {
   POST_SHELTER = 'api/post/shelter',
   SEARCH_POST = 'api/post/search',
 
+  RECOMMEND = 'api/recommend',
   SURVEY = 'api/recommend/survey',
-  RECOMMENDED_DOG_LIST = 'api/recommend/dogs'
+  RECOMMENDED_DOG_LIST = 'api/recommend/dogs',
 }
 
 export enum HTTP_STATUS {
