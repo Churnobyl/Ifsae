@@ -41,3 +41,11 @@ export const followDogListApi = async () => {
 export const shelterDogListApi = async (shelterId: number) => {
   return await instance.get(ENDPOINT.SHELTER_DOG_LIST + '/' + shelterId);
 };
+
+export const searchDogApi = async (query: string) => {
+  return await instance.get(ENDPOINT.SEARCH_DOG, {
+    params: {
+      query,
+    },
+  });
+};

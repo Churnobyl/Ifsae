@@ -58,11 +58,9 @@ instance.interceptors.response.use(
     return response;
   },
   async (err) => {
-    if (err.response.status === HTTP_STATUS.UNAUTHORIZED) {
-      location.href = '/login';
-    }
-
+    console.log(err);
     const message = err.code;
+    console.log(message);
 
     if (message === 'ERR_NETWORK') {
       localStorage.removeItem('accessToken');
