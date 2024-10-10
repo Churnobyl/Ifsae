@@ -1,13 +1,5 @@
-import { DogType } from '@/types/dog/DogType';
+import { MainPrevVideoInterface } from '@/types/post/MainPrevVideoInterface';
 import DogFaces from '../mungtsu/selectPanel/DogFaces';
-
-interface MainPrevVideoProps {
-  id: number;
-  thumbnailUrl: string;
-  like: number;
-  title: string;
-  dogs: DogType[];
-}
 
 const MainPrevVideo = ({
   //   id,
@@ -15,7 +7,7 @@ const MainPrevVideo = ({
   like,
   title,
   dogs,
-}: MainPrevVideoProps) => {
+}: MainPrevVideoInterface) => {
   const dogNames = dogs.map((dog) => dog.name).join(' • ');
   const truncatedDogNames =
     dogNames.length > 20 ? `${dogNames.slice(0, 17)}...` : dogNames;

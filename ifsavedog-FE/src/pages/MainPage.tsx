@@ -2,16 +2,15 @@ import {
   getLastPageNumApi,
   getRecommendListApi,
 } from '@/apis/recommend/recommendApi';
-import MainPrevVideo, {
-  MainPrevVideoProps,
-} from '@/components/video/MainPrevVideo';
+import MainPrevVideo from '@/components/video/MainPrevVideo';
 import { DogType } from '@/types/dog/DogType';
+import { MainPrevVideoInterface } from '@/types/post/MainPrevVideoInterface';
 import { useEffect, useRef, useState } from 'react';
 
 const MainPage = () => {
   // const [count, setCount] = useState<number>();
   const [lastPage, setLastPage] = useState<number | null>(null);
-  const [postList, setPostList] = useState<MainPrevVideoProps[]>([]);
+  const [postList, setPostList] = useState<MainPrevVideoInterface[]>([]);
   const [hasError, setHasError] = useState(false); // 에러 상태 관리 변수
   const observerRef = useRef<HTMLDivElement | null>(null);
 
