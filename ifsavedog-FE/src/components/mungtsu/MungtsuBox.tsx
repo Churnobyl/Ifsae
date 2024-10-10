@@ -15,6 +15,8 @@ import {
   createPostLikeApi,
   deletePostLikeApi,
 } from '@/apis/post/postApi';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/routers/pathConstants';
 
 interface DogFace {
   dogId: number;
@@ -23,7 +25,7 @@ interface DogFace {
 
 const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
   ({ slide }, ref) => {
-    const { title, videoUrl, shelter, dogs, comments, likeCnt } = slide;
+    const { id, title, videoUrl, shelter, dogs, comments, likeCnt } = slide;
     const dogFaces: DogFace[] = dogs.map((dog) => ({
       dogId: dog.id,
       imgUrl: dog.image,
@@ -36,6 +38,7 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
     const [progress, setProgress] = useState(0);
     const [liked, setLiked] = useState(false); // 좋아요 상태 관리
     const [likeCount, setLikeCount] = useState<number>(likeCnt);
+    const navigate = useNavigate();
 
     const handlePlayPause = () => {
       if (videoRef.current) {
@@ -220,7 +223,12 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
           style={{ zIndex: 50 }}
         >
           <div className="flex flex-col p-4 w-full justify-stretch">
-            <div className={'flex flex-row text-white items-center'}>
+            <div
+              className={'flex flex-row text-white items-center z-50'}
+              onClick={() => {
+                navigate('/' + PATH.CENTER_DETAIL + '/' + shelter.id);
+              }}
+            >
               <div className="w-8">
                 <img
                   src={shelter.profileImgUrl}
@@ -230,10 +238,18 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
               </div>
               <div>{shelter.name}</div>
             </div>
-            <div className={'text-white overflow-hidden'}>{title}</div>
-          </div>
-          <div className={'flex flex-col items-end p-4 gap-4'}>
             <div
+              className={'text-white overflow-hidden z-50'}
+              onClick={() => {
+                navigate('/' + PATH.VIDEO_DETAIL + '/' + id);
+              }}
+            >
+              {title}
+            </div>
+          </div>
+          <div className={'flex flex-col items-end p-4 gap-4 z-50'}>
+            <div
+              className={'z-50'}
               onClick={(event) => {
                 event.stopPropagation();
                 likeHandler();
@@ -245,16 +261,25 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
                 color={liked ? 'blue' : 'white'}
               />
             </div>
-            <div onClick={(event) => event.stopPropagation()}>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
               <SelectIcon
                 label={String(comments.length)}
                 icon={FaCommentDots}
               />
             </div>
-            <div onClick={(event) => event.stopPropagation()}>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
               <SelectIcon label={'공유'} icon={FaShareAlt} />
             </div>
-            <div onClick={(event) => event.stopPropagation()}>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
               <DogFaces direction={'RIGHT'} dogs={dogFaces} />
             </div>
           </div>
