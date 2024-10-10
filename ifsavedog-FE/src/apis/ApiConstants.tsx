@@ -17,6 +17,7 @@ export enum ENDPOINT {
   DOG = 'api/dog',
   FOLLOW_DOG_LIST = 'api/dog/follow',
   SHELTER_DOG_LIST = 'api/dog/shelter',
+  SEARCH_DOG = 'api/dog/search',
 
   POSTLIST_DOG = 'api/post/dog',
 
@@ -32,6 +33,7 @@ export enum ENDPOINT {
   POST = 'api/post',
   POST_LIKE = 'api/post/like',
   POST_SHELTER = 'api/post/shelter',
+  SEARCH_POST = 'api/post/search',
 
   SURVEY = 'api/recommend/survey',
 }

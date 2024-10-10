@@ -1,4 +1,3 @@
-import { HTTP_STATUS } from '@/apis/ApiConstants';
 import config from '@/constants/Environments';
 import { useTokenStore } from '@/stores/auth/tokenStore';
 import axios, { InternalAxiosRequestConfig } from 'axios';
@@ -58,10 +57,6 @@ instance.interceptors.response.use(
     return response;
   },
   async (err) => {
-    if (err.response.status === HTTP_STATUS.UNAUTHORIZED) {
-      location.href = '/login';
-    }
-
     const message = err.code;
 
     if (message === 'ERR_NETWORK') {

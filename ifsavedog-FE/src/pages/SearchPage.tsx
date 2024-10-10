@@ -1,53 +1,23 @@
+import { searchPostApi } from '@/apis/post/postApi';
 import { Input } from '@/components/common/Input/Input';
-import { ChangeEvent, useState } from 'react';
+import { PostPreviewType } from '@/types/post/PostPreviewType';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-
-interface Video {
-  id: number;
-  thumbnailImg: string;
-  title: string;
-}
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-
-  const videoData: Video[] = [
-    {
-      id: 1,
-      thumbnailImg: 'https://via.placeholder.com/150',
-      title: 'JavaScript Tutorial',
-    },
-    {
-      id: 2,
-      thumbnailImg: 'https://via.placeholder.com/150',
-      title: 'React Crash Course',
-    },
-    {
-      id: 3,
-      thumbnailImg: 'https://via.placeholder.com/150',
-      title: 'Understanding TypeScript',
-    },
-    {
-      id: 4,
-      thumbnailImg: 'https://via.placeholder.com/150',
-      title: 'CSS Flexbox Guide',
-    },
-    {
-      id: 5,
-      thumbnailImg: 'https://via.placeholder.com/150',
-      title: 'Next.js Introduction',
-    },
-  ];
-
-  // 검색어에 따른 필터링된 비디오 데이터
-  const filteredVideos = videoData.filter((video) =>
-    video.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const [videoData, setVideoData] = useState<PostPreviewType[]>([]);
 
   // 검색어 변경 시 상태 업데이트
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+  const handleChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      await searchPostApi(event.target.value).then((response) => {
+        setVideoData(response.data);
+      });
+    },
+    [],
+  );
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -63,14 +33,14 @@ const SearchPage = () => {
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
-          {filteredVideos.length > 0 ? (
-            filteredVideos.map((video) => (
+          {videoData.length > 0 ? (
+            videoData.map((video) => (
               <div
                 key={video.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
                 <img
-                  src={video.thumbnailImg}
+                  src={video.imageUrl}
                   alt={video.title}
                   className="w-full h-48 object-cover"
                 />
