@@ -39,7 +39,7 @@ spring:
           min-idle: 2
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT}
 
 frontend:
   url: ${PROD_FRONTEND_URL}
