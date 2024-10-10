@@ -12,10 +12,9 @@ interface DogFacesProps {
   direction: 'LEFT' | 'RIGHT';
 }
 
-const DogFaces = ({ dogs, direction }: DogFacesProps) => {
+const DogFaces = ({ dogs }: DogFacesProps) => {
   const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate();
-  console.log(direction);
 
   return (
     <div
