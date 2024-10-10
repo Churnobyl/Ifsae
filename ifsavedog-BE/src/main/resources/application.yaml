@@ -14,7 +14,7 @@ spring:
     active: ${PROFILE}
 
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
+    host: ${MAIL_HOST}
     port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
@@ -38,7 +38,7 @@ spring:
       max-request-size: 15MB
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT}
 
 jwt:
   secret:
