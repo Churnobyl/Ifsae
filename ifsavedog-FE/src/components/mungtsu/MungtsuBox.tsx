@@ -140,7 +140,7 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
         className="w-full h-full mb-4 group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{ zIndex: 10 }}
+        style={{ zIndex: 10, position: 'relative' }}
         ref={ref}
       >
         <div
