@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import DogFaces from '@/components/mungtsu/selectPanel/DogFaces';
 import SelectIcon from '@/components/mungtsu/selectPanel/SelectIcon';
 import config from '@/constants/Environments';
@@ -10,6 +10,11 @@ import {
   FaRegCirclePause,
   FaRegCirclePlay,
 } from 'react-icons/fa6';
+import {
+  checkPostLikeApi,
+  createPostLikeApi,
+  deletePostLikeApi,
+} from '@/apis/post/postApi';
 
 interface DogFace {
   dogId: number;
@@ -29,6 +34,8 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
     const [isHovered, setIsHovered] = useState(false);
     const [showButton, setShowButton] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [liked, setLiked] = useState(false); // 좋아요 상태 관리
+    const [likeCount, setLikeCount] = useState<number>(likeCnt);
 
     const handlePlayPause = () => {
       if (videoRef.current) {
@@ -38,6 +45,40 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
           videoRef.current.play();
         }
         setIsPlaying(!isPlaying);
+      }
+    };
+
+    // 좋아요 상태 확인 함수
+    const fetchLikeStatus = useCallback(async () => {
+      try {
+        const likeStatus = await checkPostLikeApi(slide.id); // 좋아요 상태 확인 API 호출
+        setLiked(likeStatus.data.isLiked); // 좋아요 상태 저장 (true/false)
+      } catch (error) {
+        console.error('좋아요 상태 확인 중 오류 발생:', error);
+      }
+    }, [slide.id]);
+
+    // 페이지가 로드될 때 게시물 정보와 좋아요 상태 불러오기
+    useEffect(() => {
+      if (slide.id) {
+        fetchLikeStatus(); // 좋아요 상태 확인
+      }
+    }, [fetchLikeStatus, slide.id]);
+
+    // 좋아요 상태 변경 핸들러
+    const likeHandler = async () => {
+      try {
+        if (liked) {
+          await deletePostLikeApi(slide.id); // 좋아요 취소 API 호출
+          setLiked(false); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount - 1); // 좋아요 수 감소
+        } else {
+          await createPostLikeApi(slide.id); // 좋아요 추가 API 호출
+          setLiked(true); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount + 1); // 좋아요 수 증가
+        }
+      } catch (error) {
+        console.error('좋아요 상태 변경 중 오류 발생:', error);
       }
     };
 
@@ -192,10 +233,30 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
             <div className={'text-white overflow-hidden'}>{title}</div>
           </div>
           <div className={'flex flex-col items-end p-4 gap-4'}>
-            <SelectIcon label={String(likeCnt)} icon={AiOutlineLike} />{' '}
-            <SelectIcon label={String(comments.length)} icon={FaCommentDots} />{' '}
-            <SelectIcon label={'공유'} icon={FaShareAlt} />
-            <DogFaces direction={'RIGHT'} dogs={dogFaces} />
+            <div
+              onClick={(event) => {
+                event.stopPropagation();
+                likeHandler();
+              }}
+            >
+              <SelectIcon
+                label={String(likeCount)}
+                icon={AiOutlineLike}
+                color={liked ? 'blue' : 'white'}
+              />
+            </div>
+            <div onClick={(event) => event.stopPropagation()}>
+              <SelectIcon
+                label={String(comments.length)}
+                icon={FaCommentDots}
+              />
+            </div>
+            <div onClick={(event) => event.stopPropagation()}>
+              <SelectIcon label={'공유'} icon={FaShareAlt} />
+            </div>
+            <div onClick={(event) => event.stopPropagation()}>
+              <DogFaces direction={'RIGHT'} dogs={dogFaces} />
+            </div>
           </div>
         </div>
       </div>
