@@ -7,6 +7,7 @@ import RightArrow from '@/assets/icon/rightarrow.svg';
 import { DogType } from '@/types/dog/DogType';
 import { followDogListApi } from '@/apis/dog/dogApi'; // API import
 import { getRecommendDogListApi } from '@/apis/recommend/recommendApi';
+import { useNavigate } from 'react-router-dom';
 
 interface DonationInfo {
   id: number;
@@ -32,6 +33,7 @@ const AdoptionPage = () => {
     },
   ];
 
+  const navigate = useNavigate();
   const [recommenedList, setRecommenedList] = useState<DogType[]>([]);
   const [followList, setFollowList] = useState<DogType[]>([]); // 팔로우 강아지 목록 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -47,6 +49,14 @@ const AdoptionPage = () => {
     left: false,
     right: false,
   });
+
+  const handleRecommendListClick = () => {
+    navigate('/recommend/dogs');
+  };
+
+  const handleFollowListClick = () => {
+    navigate('/follow');
+  };
 
   const checkScrollable = (
     ref: React.RefObject<HTMLDivElement>,
@@ -159,8 +169,16 @@ const AdoptionPage = () => {
       </div>
 
       <div className="w-11/12 relative">
-        <div className="text-lg font-semibold list-title">
-          😀 당신을 기다려요
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-semibold list-title">
+            😀 당신을 기다려요
+          </div>
+          <button
+            onClick={handleRecommendListClick}
+            className="text-s bg-base text-black font-semibold mr-4"
+          >
+            전체 보기
+          </button>
         </div>
         {isRecommenedScrollable.left && (
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
@@ -194,9 +212,18 @@ const AdoptionPage = () => {
       </div>
 
       <div className="w-11/12 relative">
-        <div className=" text-lg font-semibold list-title">
-          😀 내가 팔로우 하는 강아지
+        <div className="flex items-center justify-between">
+          <div className=" text-lg font-semibold list-title">
+            😀 내가 팔로우 하는 강아지
+          </div>
+          <button
+            onClick={handleFollowListClick}
+            className="text-s bg-base text-black font-semibold mr-4"
+          >
+            전체 보기
+          </button>
         </div>
+
         {isFollowScrollable.left && (
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
