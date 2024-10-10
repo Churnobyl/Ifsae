@@ -40,7 +40,7 @@ const RecommendListPage = () => {
     if (hasMore && !loading) {
       fetchRecommendDogList(page);
     }
-  }, [page]); // 페이지 상태가 변경될 때마다 호출
+  }, [hasMore, loading, page]); // 페이지 상태가 변경될 때마다 호출
 
   // 마지막에서 4번째 강아지가 화면에 들어올 때 다음 페이지 호출
   const lastDogElementRef = useCallback(
