@@ -2,7 +2,6 @@ package com.easteregg.ifsae.domain.dog.controller;
 
 import com.easteregg.ifsae.domain.dog.dto.DogCreateRequest;
 import com.easteregg.ifsae.domain.dog.dto.DogListDto;
-import com.easteregg.ifsae.domain.dog.entity.Dog;
 import com.easteregg.ifsae.domain.dog.service.DogService;
 import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.dto.CommonSuccessResponse;
@@ -44,8 +43,9 @@ public class DogController {
      * @param query 검색어
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query) throws IOException {
-        List<Long> dogIds = searchService.searchDogs(query);
+    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query,
+                                        @AuthenticationPrincipal User user) throws IOException {
+        List<Long> dogIds = searchService.searchDogs(query, user);
 
         List<DogListDto> dogs = dogService.findDogsByIds(dogIds);
 
