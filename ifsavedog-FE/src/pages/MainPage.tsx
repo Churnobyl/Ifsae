@@ -12,7 +12,6 @@ const MainPage = () => {
   const lastSlideRef = useRef<HTMLDivElement | null>(null);
   const [postList, setPostList] = useState<MainPrevVideoInterface[]>([]);
   const [hasError, setHasError] = useState(false); // 에러 상태 관리 변수
-  const observerRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const MainPage = () => {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-11/12 flex flex-col items-center">
-        {postList.map((video) => (
+        {postList.map((video, index) => (
           <MainPrevVideo
             key={video.id}
             id={video.id}
@@ -80,7 +79,7 @@ const MainPage = () => {
             like={video.like}
             title={video.title}
             dogs={video.dogs as DogType[]}
-            ref={observerRef}
+            ref={index === postList.length - 1 ? lastSlideRef : null}
           />
         ))}
       </div>

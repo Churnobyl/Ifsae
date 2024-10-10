@@ -144,9 +144,8 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
         ref={ref}
       >
         <div
-          className="video w-full h-full flex justify-center items-center bg-veryBlack"
+          className="video w-full h-full flex justify-center items-center bg-veryBlack z-20"
           onClick={handlePlayPause}
-          style={{ zIndex: 20 }}
         >
           <video ref={videoRef} className="w-full h-full" muted loop>
             <source src={config.s3VideoUrl + videoUrl} />
@@ -177,7 +176,7 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
 
         <div
           className="select-panel absolute w-full h-full flex items-end justify-center pointer-events-none"
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 50 }}
         >
           <div className="flex flex-col p-4 w-full justify-stretch">
             <div className={'flex flex-row text-white items-center'}>

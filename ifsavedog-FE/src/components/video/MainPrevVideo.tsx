@@ -1,9 +1,12 @@
 import { MainPrevVideoInterface } from '@/types/post/MainPrevVideoInterface';
 import DogFaces from '../mungtsu/selectPanel/DogFaces';
 import { forwardRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/routers/pathConstants';
 
 const MainPrevVideo = forwardRef<HTMLDivElement, MainPrevVideoInterface>(
-  ({ thumbnailUrl, like, title, dogs }: MainPrevVideoInterface, ref) => {
+  ({ id, thumbnailUrl, like, title, dogs }: MainPrevVideoInterface, ref) => {
+    const navigate = useNavigate();
     const dogNames = dogs.map((dog) => dog.name).join(' • ');
     const truncatedDogNames =
       dogNames.length > 20 ? `${dogNames.slice(0, 17)}...` : dogNames;
@@ -17,7 +20,12 @@ const MainPrevVideo = forwardRef<HTMLDivElement, MainPrevVideoInterface>(
       <div ref={ref} className="w-full bg-lightGray rounded-md m-4 shadow-lg">
         <div>
           {/* 비디오 썸네일 */}
-          <div className="w-full h-64 overflow-hidden rounded-md mb-2">
+          <div
+            className="w-full h-64 overflow-hidden rounded-md mb-2"
+            onClick={() => {
+              navigate('/' + PATH.DOG_DETAIL + '/' + id);
+            }}
+          >
             <img
               src={thumbnailUrl}
               alt={title}
