@@ -34,14 +34,14 @@ const FollowPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="flex justify-between items-center px-4 py-4 bg-white shadow-md">
-        <h1 className="text-lg font-semibold text-gray-700">
-          팔로우한 친구 <span className="text-green-500">{dogList.length}</span>
+    <div className="w-full min-h-screen text-black flex flex-col items-center">
+      <header className="w-11/12 flex justify-between items-center py-4 bg-white">
+        <h1 className="text-xl font-semibold">
+          팔로우한 친구 <span>{dogList.length}</span>
         </h1>
       </header>
 
-      <div className="p-4">
+      <div className="w-11/12">
         {dogList.length > 0 ? (
           <DogPreviewCardList dogList={dogList} /> // 강아지 목록 표시
         ) : (

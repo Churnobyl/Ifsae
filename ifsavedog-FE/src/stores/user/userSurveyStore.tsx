@@ -18,7 +18,7 @@ type Setters = {
 const useUserSurveyStore = create<State & Setters>()(
   middlewares((set) => ({
     userInput: {
-      exerciseScore: -1,
+      exerciseTime: -1,
       barkingTolerance: -1,
       groomingEffort: -1,
       preferredSize: -1,
@@ -40,7 +40,7 @@ const useUserSurveyStore = create<State & Setters>()(
  * 서베이 질문 매핑
  */
 const userSurveyMapper = {
-  exerciseScore: ['운동 시간', '30분 이하', '2시간 이상'],
+  exerciseTime: ['운동 시간', '30분 이하', '2시간 이상'],
   barkingTolerance: ['짖는 정도', '조용해야함', '상관없음'],
   groomingEffort: ['털 관리', '관리가 쉬운 털', '관리가 어려운 털'],
   preferredSize: ['선호하는 크기', '소형', '대형'],

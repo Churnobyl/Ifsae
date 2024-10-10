@@ -26,7 +26,7 @@ const DogPreviewCard = ({ dog }: DogProps) => {
   };
 
   return (
-    <div className="relative p-4 rounded-lg shadow-md flex items-center space-x-4 bg-base">
+    <div className="relative p-4 rounded-lg shadow-md flex items-center space-x-4 bg-base justify-center">
       <img
         src={dog.image}
         alt={dog.name}
@@ -40,14 +40,13 @@ const DogPreviewCard = ({ dog }: DogProps) => {
         </p>
       </div>
 
-      <div className="mt-auto rounded-md bg-darkbase">
         <button
           onClick={handleViewProfile}
-          className="px-3 py-1 text-sm-bold text-white rounded-md self-end"
+          className="w-20 text-sm h-mt-auto bg-darkbase px-3 py-1 text-sm-bold text-white rounded-md self-end"
         >
           상세보기
         </button>
-      </div>
+
     </div>
   );
 };

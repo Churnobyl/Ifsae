@@ -52,6 +52,13 @@ export const PATH = {
 
   CENTER_DETAIL: 'center',
 
+  CENTER_VIDEO_LIST: 'mypage/center/video',
+
   /** 센터 글쓰기 */
   CREATE_POST: 'mypage/center/write',
+
+  /** 입양 신청 */
+  CREATE_ADOPTION: 'adoption/create-adoption',
+
+  MY_ADOPTION_LIST: 'mypage/adoption',
 };

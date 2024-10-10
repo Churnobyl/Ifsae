@@ -116,9 +116,11 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
             toggleMenu();
           }}
         >
-          <div>
-            <img src={DotMenu} alt="menu" className="w-2 h-4" />
-          </div>
+          {type !== 'shelterVideo' && (
+            <div>
+              <img src={DotMenu} alt="menu" className="w-2 h-4" />
+            </div>
+          )}
         </button>
       </div>
 

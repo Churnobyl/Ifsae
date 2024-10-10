@@ -34,5 +34,19 @@ export const getPostDetailApi = async (postId: number) => {
 };
 
 export const createCommentApi = async (postId: number, content: string) => {
-  return await instance.post(`${ENDPOINT.POST}/${postId}`, { content: content });
+  return await instance.post(`${ENDPOINT.POST}/${postId}`, {
+    content: content,
+  });
+};
+
+export const shelterPostListApi = async (shelterId: number) => {
+  return await instance.get(`${ENDPOINT.POST_SHELTER}/${shelterId}`);
+};
+
+export const searchPostApi = async (query: string) => {
+  return await instance.get(ENDPOINT.SEARCH_POST, {
+    params: {
+      query,
+    },
+  });
 };
