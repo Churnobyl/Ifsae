@@ -1,34 +1,25 @@
-import { useNavigate } from 'react-router-dom';
+import PostPreviewBox from '@/components/dog/PostPreviewBox';
 
 interface PostPreviewBoxListProps {
-  posts: Array<{ id: number; title: string; content: string }>; // 게시글 목록 데이터 타입
+  posts: Array<{ id: number; title: string; imageUrl: string }>; // 게시글 목록 데이터 타입
 }
 
 const PostPreviewBoxList = ({ posts }: PostPreviewBoxListProps) => {
-  const navigate = useNavigate();
-
-  // 게시글 클릭 시 게시글 상세 페이지로 이동
-  const handlePostClick = (id: number) => {
-    navigate(`/post/${id}`); // 게시글 ID를 경로에 포함하여 이동
-  };
-
   return (
-    <div className="post-preview-box-list">
+    <div
+      className="post-preview-box-list"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)', // 가로 3개씩
+      }}
+    >
       {posts.map((post) => (
-        <div
+        <PostPreviewBox
           key={post.id}
-          className="post-preview-box"
-          onClick={() => handlePostClick(post.id)} // 게시글 클릭 이벤트 처리
-          style={{
-            cursor: 'pointer',
-            marginBottom: '10px',
-            padding: '10px',
-            border: '1px solid #ccc',
-          }}
-        >
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-        </div>
+          id={post.id}
+          title={post.title}
+          imageUrl={post.imageUrl}
+        />
       ))}
     </div>
   );

@@ -58,8 +58,6 @@ const VideoDetailPage = () => {
       const response = await getPostDetailApi(postId);
       setPostDetail(response.data); // 받은 데이터 상태에 저장
       setLikeCount(response.data.likeCnt); // 좋아요 수 저장
-      console.log(response.data);
-      console.log(response.data.likeCnt);
     } catch (error) {
       console.error('게시물 데이터를 가져오는 중 오류 발생:', error);
     } finally {
