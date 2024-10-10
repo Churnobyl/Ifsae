@@ -30,7 +30,7 @@ const UserRecommendPage = () => {
       await createSurveyApi(userInputList);
 
       alert('응답이 성공적으로 제출되었습니다!');
-      navigate('/main');
+      navigate('main');
     } catch (error) {
       // 요청이 실패하면 에러 메시지 업데이트
       alert('제출 실패');

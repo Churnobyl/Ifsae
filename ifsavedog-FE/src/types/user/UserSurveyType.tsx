@@ -1,5 +1,5 @@
 export type UserSurveyType = {
-  exerciseScore: number; // 1. 운동 시간
+  exerciseTime: number; // 1. 운동 시간
   barkingTolerance: number; // 2. 짖는 정도
   groomingEffort: number; // 3. 털 관리
   preferredSize: number; // 4. 선호하는 크기
