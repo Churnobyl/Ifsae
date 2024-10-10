@@ -5,3 +5,7 @@ import { AdoptionRequestType } from '@/types/adoption/AdoptionRequestType';
 export const createAdoptionApi = async (userInput: AdoptionRequestType) => {
   return await instance.post(ENDPOINT.ADOPTION, userInput);
 };
+
+export const userAdoptionListApi = async () => {
+  return await instance.get(ENDPOINT.USER_ADOPTION_LIST);
+};
