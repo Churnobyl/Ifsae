@@ -38,6 +38,7 @@ import CreateDogPage from '@/pages/CreateDogPage';
 import CreateAdoptionPage from '@/pages/CreateAdoptionPage';
 import MyAdoptionListPage from '@/pages/mypages/MyAdoptionListPage';
 import CenterVideoListPage from '@/pages/CenterVideoListPage';
+import RecommendListPage from '@/pages/RecommendListPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -142,6 +143,11 @@ const Router = () => {
               path: PATH.FOLLOW,
               errorElement: <NotFoundPage />,
               element: <FollowPage />,
+            },
+            {
+              path: PATH.RECOMMEND_LIST,
+              element: <RecommendListPage />,
+              errorElement: <NotFoundPage />,
             },
             {
               path: PATH.CENTER_DOG_LIST,

@@ -39,14 +39,12 @@ public class PostController {
     /**
      * ES 게시물 조회
      *
-     * @param query       검색어
-     * @param searchField 검색조건 (title, content, dogName, shelterName, userNickname)
+     * @param query 검색어
      * @return List<PostDto.Response> 게시물 목록
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchPosts(@RequestParam String query,
-                                         @RequestParam(defaultValue = "title") String searchField) throws IOException {
-        List<Long> postIds = searchService.searchPosts(query, searchField);
+    public ResponseEntity<?> searchPosts(@RequestParam String query) throws IOException {
+        List<Long> postIds = searchService.searchPosts(query);
 
         List<PostDto.Response> posts = postService.findPostsByIds(postIds);
 
@@ -96,7 +94,7 @@ public class PostController {
 
     @GetMapping("/dog/{dogId}")
     public ResponseEntity<?> getPostListByDogId(@PathVariable Long dogId) {
-        List<PostPreview> postList = postService.getPostList(dogId);
+        List<PostPreview> postList = postService.getPostListByDogId(dogId);
 
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
@@ -130,7 +128,7 @@ public class PostController {
 
     @GetMapping("/shelter/{shelterId}")
     public ResponseEntity<?> getPostListByShelterId(@PathVariable Long shelterId) {
-        List<PostPreview> postList = postService.getPostList(shelterId);
+        List<PostPreview> postList = postService.getPostListByShelterId(shelterId);
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 }

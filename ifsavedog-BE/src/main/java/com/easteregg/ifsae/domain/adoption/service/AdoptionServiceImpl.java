@@ -227,7 +227,7 @@ public class AdoptionServiceImpl implements AdoptionService {
 
                     // 입양 신청서 대상 쉘터와 관리자의 소속 쉘터가 다를 경우 에러
                     if (!shelter.getId().equals(foundAdoption.getShelter().getId())) {
-                        throw new AdoptionException(USER_NOT_FOUND_IN_SHELTER);
+                        throw new AdoptionException(SHELTER_PERMISSION_DENIED);
                     }
 
                     return foundAdoption;

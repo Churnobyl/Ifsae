@@ -1,109 +1,52 @@
-import VideoCard from '@/components/video/VideoCard';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { shelterPostListApi } from '@/apis/post/postApi';
+import { useMyShelterDetailStore } from '@/stores/shelter/myShelterDetailStore';
+import VideoCard from '@/components/video/VideoCard'; // VideoCard import
 
 const CenterVideoListPage = () => {
-  const [videos, setVideos] = useState<
-    Array<{ videoId: number; thumbnailUrl: string | null; title: string }>
-  >([
-    {
-      videoId: 1,
-      thumbnailUrl: 'https://via.placeholder.com/150',
-      title: 'Video 1',
-    },
-    {
-      videoId: 2,
-      thumbnailUrl: 'https://via.placeholder.com/150',
-      title: 'Video 2',
-    },
-    {
-      videoId: 3,
-      thumbnailUrl: 'https://via.placeholder.com/150',
-      title: 'Video 3',
-    },
-    {
-      videoId: 4,
-      thumbnailUrl: 'https://via.placeholder.com/150',
-      title: 'Video 4',
-    },
-    {
-      videoId: 5,
-      thumbnailUrl: 'https://via.placeholder.com/150',
-      title: 'Video 5',
-    },
-  ]);
+  const myShelterDetailStore = useMyShelterDetailStore();
+  const { id } = myShelterDetailStore;
 
-  const [page, setPage] = useState(0);
+  const [allVideos, setAllVideos] = useState<
+    Array<{ id: number; imageUrl: string | null; title: string }>
+  >([]); // 전체 비디오 데이터를 저장
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
 
-  const loader = useRef<HTMLDivElement | null>(null);
-
-  // 페이지가 변경될 때마다 새로운 비디오 목록을 가져옴
+  // 처음 한 번 API를 통해 전체 비디오 목록을 받아옴
   useEffect(() => {
-    if (hasError || !hasMore) return; // 오류 또는 더 이상 데이터가 없으면 중지
-
     const fetchVideos = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `https://api.example.com/videos?page=${page}&limit=10`,
-        );
-
-        const data = await response.json();
-
-        // 받아온 데이터가 비어 있는지 확인
-        if (data.videos.length === 0) {
-          setHasMore(false); // 데이터가 더 이상 없으면 hasMore를 false로 설정
-        } else {
-          setVideos((prev) => [...prev, ...data.videos]);
-        }
+        const response = await shelterPostListApi(id); // API 호출
+        const data = response.data; // 전체 데이터를 한 번에 받아옴
+        setAllVideos(data); // 전체 데이터를 상태에 저장
       } catch (error) {
         console.error('데이터를 불러오는 중 오류가 발생했습니다:', error);
-        setHasError(true); // 오류 발생 시 상태를 true로 설정하여 추가 요청 방지
+        setHasError(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchVideos();
-  }, [page, hasError, hasMore]);
-
-  // 무한 스크롤 감지
-  useEffect(() => {
-    if (!loader.current || hasError || !hasMore) return; // 오류 또는 데이터가 더 이상 없으면 observer 중지
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const target = entries[0];
-        if (target.isIntersecting && !loading) {
-          setPage((prev) => prev + 1); // 다음 페이지로 이동
-        }
-      },
-      { threshold: 0.5 },
-    );
-
-    observer.observe(loader.current);
-
-    return () => {
-      if (loader!.current) observer.unobserve(loader!.current);
-    };
-  }, [loading, hasError, hasMore]);
+  }, [id]);
 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-11/12">
-        <div className="text-2xl font-semibold mb-4">
-          센터가 보는 비디오 리스트 페이지
-        </div>
+        <header className="w-11/12 flex justify-between items-center py-4 bg-white">
+          <h1 className="text-xl font-semibold">
+            내 영상 목록 <span>{allVideos.length}</span>
+          </h1>
+        </header>
 
         <div className="grid grid-cols-2">
-          {videos.map((video) => (
-            <div className="flex items-center justify-center">
+          {allVideos.map((video) => (
+            <div key={video.id} className="flex items-center justify-center">
               <VideoCard
-                key={video.videoId}
-                videoId={video.videoId}
-                thumbnailUrl={video.thumbnailUrl}
+                videoId={video.id}
+                thumbnailUrl={video.imageUrl}
                 title={video.title}
                 type="myVideo"
               />
@@ -120,16 +63,6 @@ const CenterVideoListPage = () => {
             데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.
           </div>
         )}
-
-        {/* 더 이상 로드할 데이터가 없는 경우 메시지 표시 */}
-        {!hasMore && (
-          <div className="text-center py-4">
-            더 이상 불러올 데이터가 없습니다.
-          </div>
-        )}
-
-        {/* 로딩 요소 (스크롤 끝에 위치) */}
-        <div ref={loader} className="h-10"></div>
       </div>
     </div>
   );

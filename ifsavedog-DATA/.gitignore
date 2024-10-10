@@ -22,3 +22,4 @@ venv
 docs.zip
 archive.zip
 Dockerfile
+pythonProject/scheduler/image

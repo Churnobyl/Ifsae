@@ -7,12 +7,14 @@ import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
 import com.easteregg.ifsae.domain.shelter.entity.Shelter;
 import com.easteregg.ifsae.domain.shelter.entity.ShelterDog;
+import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.global.elasticsearch.service.ESDogService;
 import com.easteregg.ifsae.global.elasticsearch.service.ESPostService;
 import com.easteregg.ifsae.global.elasticsearch.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -82,8 +84,8 @@ public class ESController {
     // 개 검색 API
     @GetMapping("/search/dogs")
     public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query,
-                                        @RequestParam(defaultValue = "name") String searchField) throws IOException {
-        List<Long> results = searchService.searchDogs(query, searchField);
+                                        @AuthenticationPrincipal User user) throws IOException {
+        List<Long> results = searchService.searchDogs(query, user);
 
         return ResponseEntity.ok(results);
     }
@@ -141,9 +143,8 @@ public class ESController {
 
     // 게시글 조건 검색 API
     @GetMapping("/search/posts")
-    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "") String query,
-                                         @RequestParam(defaultValue = "name") String searchField) throws IOException {
-        List<Long> results = searchService.searchPosts(query, searchField);
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "") String query) throws IOException {
+        List<Long> results = searchService.searchPosts(query);
 
         return ResponseEntity.ok(results);
     }

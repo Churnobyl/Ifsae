@@ -6,6 +6,8 @@ import LeftArrow from '@/assets/icon/leftarrow.svg';
 import RightArrow from '@/assets/icon/rightarrow.svg';
 import { DogType } from '@/types/dog/DogType';
 import { followDogListApi } from '@/apis/dog/dogApi'; // API import
+import { getRecommendDogListApi } from '@/apis/recommend/recommendApi';
+import { useNavigate } from 'react-router-dom';
 
 interface DonationInfo {
   id: number;
@@ -31,33 +33,8 @@ const AdoptionPage = () => {
     },
   ];
 
-  const recommenedList = [
-    {
-      id: 1,
-      name: '루루',
-      age: 1,
-      gender: 'FEMALE',
-      species: '포메라니안',
-      image: testImage,
-    },
-    {
-      id: 2,
-      name: '코코',
-      age: 1,
-      gender: 'MALE',
-      species: '푸들',
-      image: testImage,
-    },
-    {
-      id: 3,
-      name: '보리',
-      age: 2,
-      gender: 'FEMALE',
-      species: '믹스',
-      image: testImage,
-    },
-  ] as DogType[];
-
+  const navigate = useNavigate();
+  const [recommenedList, setRecommenedList] = useState<DogType[]>([]);
   const [followList, setFollowList] = useState<DogType[]>([]); // 팔로우 강아지 목록 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
@@ -72,6 +49,14 @@ const AdoptionPage = () => {
     left: false,
     right: false,
   });
+
+  const handleRecommendListClick = () => {
+    navigate('/recommend/dogs');
+  };
+
+  const handleFollowListClick = () => {
+    navigate('/follow');
+  };
 
   const checkScrollable = (
     ref: React.RefObject<HTMLDivElement>,
@@ -124,6 +109,23 @@ const AdoptionPage = () => {
     };
   }, []);
 
+  // API로 추천 강아지 목록을 가져오는 함수
+  useEffect(() => {
+    const fetchRecommenedList = async () => {
+      try {
+        const response = await getRecommendDogListApi(); // API 호출
+        setRecommenedList(response.data); // 받아온 강아지 목록 상태 업데이트
+      } catch (error) {
+        setError('추천 강아지 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching recommened list:', error);
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+
+    fetchRecommenedList(); // 컴포넌트 렌더링 시 API 호출
+  }, []);
+
   // API로 팔로우 목록을 가져오는 함수
   useEffect(() => {
     const fetchFollowList = async () => {
@@ -167,8 +169,16 @@ const AdoptionPage = () => {
       </div>
 
       <div className="w-11/12 relative">
-        <div className="text-lg font-semibold list-title">
-          😀 당신을 기다려요
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-semibold list-title">
+            😀 당신을 기다려요
+          </div>
+          <button
+            onClick={handleRecommendListClick}
+            className="text-s bg-base text-black font-semibold mr-4"
+          >
+            전체 보기
+          </button>
         </div>
         {isRecommenedScrollable.left && (
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
@@ -202,9 +212,18 @@ const AdoptionPage = () => {
       </div>
 
       <div className="w-11/12 relative">
-        <div className=" text-lg font-semibold list-title">
-          😀 내가 팔로우 하는 강아지
+        <div className="flex items-center justify-between">
+          <div className=" text-lg font-semibold list-title">
+            😀 내가 팔로우 하는 강아지
+          </div>
+          <button
+            onClick={handleFollowListClick}
+            className="text-s bg-base text-black font-semibold mr-4"
+          >
+            전체 보기
+          </button>
         </div>
+
         {isFollowScrollable.left && (
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full">
             <img src={LeftArrow} className="w-6 h-6 opacity-50" />
@@ -226,7 +245,7 @@ const AdoptionPage = () => {
                 </div>
               ))
             ) : (
-              <div>팔로우한 강아지가 없습니다.</div>
+              <div></div>
             )}
           </div>
         </div>
