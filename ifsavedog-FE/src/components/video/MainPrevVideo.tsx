@@ -10,7 +10,7 @@ interface MainPrevVideoProps {
 }
 
 const MainPrevVideo = ({
-  id,
+  //   id,
   thumbnailUrl,
   like,
   title,
