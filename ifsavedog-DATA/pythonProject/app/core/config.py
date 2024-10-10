@@ -19,3 +19,11 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 settings = Settings()
+
+
+CORS_CONFIG = {
+    "allow_origins": ["*"],  # 모든 도메인을 허용합니다. 특정 도메인만 허용하려면 예: ["http://example.com"]
+    "allow_credentials": True,
+    "allow_methods": ["*"],  # 모든 HTTP 메서드를 허용합니다.
+    "allow_headers": ["*"],  # 모든 헤더를 허용합니다.
+}
