@@ -67,8 +67,11 @@ public class RecommendController {
     }
 
     @GetMapping("/dogs")
-    public ResponseEntity<?> getRecommendDogs(@AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(rankingService.getRecommendDogList(user), HttpStatus.OK);
+    public ResponseEntity<?> getRecommendDogs(@AuthenticationPrincipal User user, @RequestParam int pageNum) {
+        if (pageNum < 1 || pageNum > 25) {
+            return ResponseEntity.badRequest().body("잘못된 pageNumber입니다.");
+        }
+        return new ResponseEntity<>(rankingService.getRecommendDogList(user, pageNum), HttpStatus.OK);
     }
 
 }
