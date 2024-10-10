@@ -5,7 +5,7 @@ import { DogType } from '@/types/dog/DogType';
 
 const RecommendListPage = () => {
   const [dogList, setDogList] = useState<DogType[]>([]); // 강아지 목록 상태
-  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [loading, setLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
   const [page, setPage] = useState(1); // 현재 페이지 상태
   const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
@@ -13,12 +13,13 @@ const RecommendListPage = () => {
 
   // 입양 추천 강아지 목록을 불러오는 함수
   const fetchRecommendDogList = async (pageNum: number) => {
+    setLoading(true); // 로딩 시작
     try {
       const response = await getRecommendDogListApi(pageNum); // 페이지 번호만 전달
       const newDogs = response.data; // API 응답에서 강아지 목록 가져오기
 
-      if (pageNum >= maxPage || newDogs.length === 0) {
-        setHasMore(false); // 마지막 페이지이거나 더 이상 데이터가 없으면 종료
+      if (newDogs.length === 0 || pageNum >= maxPage) {
+        setHasMore(false); // 더 이상 데이터가 없거나 마지막 페이지에 도달하면
       }
 
       setDogList((prevDogs) => [...prevDogs, ...newDogs]); // 기존 강아지 목록에 새 목록 추가
@@ -30,10 +31,9 @@ const RecommendListPage = () => {
     }
   };
 
-  // 페이지 변경 또는 컴포넌트 마운트 시 API 호출
+  // 페이지 변경될 때마다 API 호출
   useEffect(() => {
-    if (hasMore) {
-      setLoading(true);
+    if (page === 1 || !loading) {
       fetchRecommendDogList(page);
     }
   }, [hasMore, page]);
@@ -46,7 +46,7 @@ const RecommendListPage = () => {
   };
 
   // 첫 페이지 로딩 처리
-  if (loading && page === 1) {
+  if (loading && page === 1 && dogList.length === 0) {
     return <div>Loading...</div>; // 첫 페이지 로딩 중일 때
   }
 
@@ -65,7 +65,7 @@ const RecommendListPage = () => {
         {dogList.length > 0 ? (
           <>
             <DogPreviewCardList dogList={dogList} /> {/* 강아지 목록 표시 */}
-            {hasMore && (
+            {hasMore && !loading && (
               <button
                 className="mt-4 p-2 bg-blue-500 text-white rounded"
                 onClick={handleLoadMore}
@@ -73,6 +73,7 @@ const RecommendListPage = () => {
                 더 보기
               </button>
             )}
+            {loading && <div>Loading more...</div>} {/* 추가 로딩 표시 */}
           </>
         ) : (
           <div>추천 강아지가 없습니다.</div> // 강아지 목록이 없을 때
