@@ -103,7 +103,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostPreview> getPostList(Long dogId) {
+    public List<PostPreview> getPostListByDogId(Long dogId) {
 
         List<PostDog> postDogList = postDogRepository.findByDogId(dogId);
 
@@ -158,6 +158,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean checkPostLike(User user, long postId) {
         return postLikeRepository.findByUserIdAndPostId(user.getId(), postId).isPresent();
+    }
+
+    @Override
+    public List<PostPreview> getPostListByShelterId(Long shelterId) {
+
+        return postRepository.findPostsByShelterId(shelterId).stream()
+                             .map(post -> PostDto.PostPreview.builder()
+                                                             .id(post.getId())
+                                                             .title(post.getTitle())
+                                                             .imageUrl(post.getThumbnailUrl())
+                                                             .build())
+                             .toList();
     }
 
     /**
