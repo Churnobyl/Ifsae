@@ -21,5 +21,7 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/env.sh ./env.sh
 
+RUN chmod +x ./env.sh
+
 EXPOSE 3000
 CMD ["sh", "-c", "./env.sh && serve -s dist -l 3000"]
