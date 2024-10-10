@@ -76,6 +76,13 @@ def insert_recommendation_rank(user_id, index=0,image_vector_rank_=None):
     # print(result_list)
     upsert_user_recommendation_rank(user_id=user_id, rank_list=result_list)
 
+
+def random_rank(user_id):
+    result_list = [{"dog_id": i.id, "desertion_no": i.desertion_no} for i in get_random_n_dogs(100)]
+
+    upsert_user_recommendation_rank(user_id, result_list)
+
+
 def recommedate(user_id_list):
     for user_id in user_id_list:
         insert_recommendation_rank(user_id=user_id)
