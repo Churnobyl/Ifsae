@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -93,13 +96,22 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public List<DogListDto> getRecommendDogList(User user) {
-        List<Ranking> rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(user.getId());
+    public List<DogListDto> getRecommendDogList(User user, int pageNum) {
+        int pageSize = 4;  // 페이지당 데이터 수 설정
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);  // 페이지 정보 생성
 
-        if (rankingList.isEmpty()) {
-            rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(DEFAULT_RANK_USER_ID);
+        // 페이지네이션을 적용하여 랭킹 데이터 가져오기
+        Page<Ranking> rankingPage = rankingRepository.findRankingsByUserIdOrderByRankingAsc(user.getId(), pageable);
+
+        // 기본 유저의 랭킹 목록을 가져오는 로직 (유저의 랭킹이 비어있는 경우)
+        if (rankingPage.isEmpty()) {
+            rankingPage = rankingRepository.findRankingsByUserIdOrderByRankingAsc(DEFAULT_RANK_USER_ID, pageable);
         }
 
-        return rankingList.stream().map(Ranking::getDog).map(Dog::toDogListDto).toList();
+        // Page에서 실제 데이터 리스트를 추출하여 변환
+        return rankingPage.getContent().stream()
+                          .map(Ranking::getDog)
+                          .map(Dog::toDogListDto)
+                          .toList();
     }
 }
