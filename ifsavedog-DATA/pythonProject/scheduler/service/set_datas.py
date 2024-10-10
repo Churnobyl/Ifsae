@@ -52,7 +52,6 @@ def upsert_user_recommendation_rank(user_id, rank_list):
                 {"ranking": i+1, "user_id": user_id, "dog_id": rank['dog_id']}
                 for i, rank in enumerate(rank_list)
             ]
-            print(values)
             db.bulk_insert_mappings(Rank, values)
         
         db.commit()

@@ -1,4 +1,6 @@
-from job.sequential import sequential_job_daily
+from service.recommendation import insert_recommendation_rank
+# from service.get_datas import *
 
-sequential_job_daily(date=1)
+insert_recommendation_rank(29)
 
+# print(get_image_vector_rank(29))

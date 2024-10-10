@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    PYTHONPATH: str
     DATABASE_URL: str ## mariadB
     SECRET_KEY: str ## mariaDB
     ALGORITHM: str = "HS256"
