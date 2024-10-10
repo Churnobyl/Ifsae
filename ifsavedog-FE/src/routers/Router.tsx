@@ -117,7 +117,9 @@ const Router = () => {
               path: PATH.USER_LIKE_VIDEO,
               element: <UserLikeVideo />,
             },
-            { path: PATH.CENTER_VIDEO_LIST, element: <CenterVideoListPage /> },
+            { path: PATH.CENTER_VIDEO_LIST,
+              element: <CenterVideoListPage />,
+            },
             {
               path: PATH.MY_ADOPTION_LIST,
               element: <MyAdoptionListPage />,

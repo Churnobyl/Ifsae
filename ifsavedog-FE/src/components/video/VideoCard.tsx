@@ -52,13 +52,9 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
     };
   }, []);
 
-  // 수정하기 버튼을 눌렀을 때 수정 페이지로 이동
-  const handleEdit = () => {
-    navigate(`/edit/${videoId}`); // 수정 페이지로 이동
-  };
-
   // 삭제하기 버튼을 눌렀을 때 삭제 API 호출
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
     if (confirmDelete) {
       try {
@@ -138,12 +134,6 @@ const VideoCard = ({ videoId, thumbnailUrl, title, type }: VideoCardProps) => {
           <div>
             {type === 'myVideo' && (
               <>
-                <button
-                  className="w-full px-2 py-1 hover:bg-main rounded-t-lg"
-                  onClick={handleEdit}
-                >
-                  수정하기
-                </button>
                 <button
                   className="w-full px-2 py-1 hover:bg-main rounded-b-lg"
                   onClick={handleDelete}

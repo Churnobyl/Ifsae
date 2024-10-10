@@ -17,7 +17,7 @@ const CenterMyPage = () => {
 
   // 센터 영상 관리 버튼 클릭 핸들러
   const handleManageVideoClick = () => {
-    navigate('/mypage/video'); // 버튼 클릭 시 이동
+    navigate('/mypage/center/video'); // 버튼 클릭 시 이동
   };
 
   // 프로필 수정 버튼 클릭 핸들러

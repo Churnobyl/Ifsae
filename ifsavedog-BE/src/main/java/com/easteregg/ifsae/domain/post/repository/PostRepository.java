@@ -31,4 +31,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findPostsByLikesIn(List<PostLike> postLikes);
 
+    List<Post> findPostsByShelterId(Long shelterId);
+
 }

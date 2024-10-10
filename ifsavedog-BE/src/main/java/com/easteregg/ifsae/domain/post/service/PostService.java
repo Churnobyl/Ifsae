@@ -5,9 +5,7 @@ import com.easteregg.ifsae.domain.post.dto.PostDto.PostPreview;
 import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.user.entity.User;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +25,7 @@ public interface PostService {
 
     List<PostDto.Response> findPostsByIds(List<Long> postIds);
 
-    List<PostPreview> getPostList(Long dogId);
+    List<PostPreview> getPostListByDogId(Long dogId);
 
     List<PostPreview> getPostListByLike(Long userId);
 
@@ -36,4 +34,6 @@ public interface PostService {
     void deleteLike(User user, long postId);
 
     boolean checkPostLike(User user, long postId);
+
+    List<PostPreview> getPostListByShelterId(Long shelterId);
 }
