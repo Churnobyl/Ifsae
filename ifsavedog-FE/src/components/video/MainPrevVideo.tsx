@@ -23,7 +23,7 @@ const MainPrevVideo = forwardRef<HTMLDivElement, MainPrevVideoInterface>(
           <div
             className="w-full h-64 overflow-hidden rounded-md mb-2"
             onClick={() => {
-              navigate('/' + PATH.DOG_DETAIL + '/' + id);
+              navigate('/' + PATH.VIDEO_DETAIL + '/' + id);
             }}
           >
             <img

@@ -137,14 +137,14 @@ const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
 
     return (
       <div
-        className="w-full h-full mb-4 group"
+        className="relative w-full h-full mb-4 group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{ zIndex: 10, position: 'relative' }}
+        style={{ zIndex: 10 }}
         ref={ref}
       >
         <div
-          className="video w-full h-full flex justify-center items-center bg-veryBlack z-20"
+          className="absolute video w-full h-full flex justify-center items-center bg-veryBlack z-20"
           onClick={handlePlayPause}
         >
           <video ref={videoRef} className="w-full h-full" muted loop>

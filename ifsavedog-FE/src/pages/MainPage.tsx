@@ -66,7 +66,7 @@ const MainPage = () => {
         observer.unobserve(lastSlideRef!.current);
       }
     };
-  }, [isLoading, lastPage, lastSlideRef]);
+  }, [isLoading, lastPage, lastSlideRef, postList]);
 
   return (
     <div className="w-full flex flex-col items-center">
