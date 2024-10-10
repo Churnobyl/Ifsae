@@ -100,9 +100,10 @@ const MungtsuPage = () => {
             key={slide.id}
             className="flex items-center justify-center h-full"
           >
-            <div ref={index === slides.length - 1 ? lastSlideRef : null}>
-              <MungtsuBox slide={slide} />
-            </div>
+            <MungtsuBox
+              ref={index === slides.length - 1 ? lastSlideRef : null}
+              slide={slide}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
