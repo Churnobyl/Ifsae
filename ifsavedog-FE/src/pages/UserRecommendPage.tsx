@@ -4,8 +4,11 @@ import Question from '@/components/recommend/userRecommend/Question';
 import { UserSurveyType } from '@/types/user/UserSurveyType';
 import { createSurveyApi } from '@/apis/user/userApi';
 import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/routers/pathConstants';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
 
 const UserRecommendPage = () => {
+  const userStateStore = useUserStateStore();
   const userSurveyStore = useUserSurveyStore();
   const userInputList = userSurveyStore.userInput;
   const navigate = useNavigate();
@@ -28,9 +31,9 @@ const UserRecommendPage = () => {
     try {
       // userInputList를 createSurveyApi에 전달하여 POST 요청 전송
       await createSurveyApi(userInputList);
-
+      userStateStore.setUserStatus('ACTIVE');
       alert('응답이 성공적으로 제출되었습니다!');
-      navigate('main');
+      navigate('/' + PATH.MAIN);
     } catch (error) {
       // 요청이 실패하면 에러 메시지 업데이트
       alert('제출 실패');
