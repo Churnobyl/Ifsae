@@ -61,4 +61,6 @@ export const PATH = {
   CREATE_ADOPTION: 'adoption/create-adoption',
 
   MY_ADOPTION_LIST: 'mypage/adoption',
+
+  RECOMMEND_LIST: 'recommend/dogs',
 };
