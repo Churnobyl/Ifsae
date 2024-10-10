@@ -7,14 +7,7 @@ import com.easteregg.ifsae.domain.user.entity.User;
 import com.easteregg.ifsae.domain.user.repository.UserRepository;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.protocol.HTTP;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpHeaders;
 
 @Service
 @RequiredArgsConstructor
