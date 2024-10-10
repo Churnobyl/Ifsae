@@ -175,6 +175,11 @@ const Router = () => {
               element: <CenterDetailPage />,
             },
             {
+              path: PATH.VIDEO_DETAIL + '/:postId',
+              element: <VideoDetailPage />,
+              errorElement: <NotFoundPage />,
+            },
+            {
               path: PATH.CREATE_POST,
               errorElement: <NotFoundPage />,
               element: (
@@ -208,11 +213,6 @@ const Router = () => {
     {
       path: PATH.LANDING,
       element: <LandingPage />,
-      errorElement: <NotFoundPage />,
-    },
-    {
-      path: PATH.VIDEO_DETAIL + '/:postId',
-      element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },
 
