@@ -17,6 +17,7 @@ const MungtsuPage = () => {
   const [lastPage, setLastPage] = useState<number | null>(null);
   const [hasError, setHasError] = useState(false);
   const lastSlideRef = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -34,7 +35,10 @@ const MungtsuPage = () => {
     const fetchLastPage = async () => {
       try {
         const response = await getLastPageNumApi();
-        setLastPage(response.data.lastPage > 20 ? 1 : response.data.lastPage);
+        const newLastPage =
+          response.data.lastPage > 20 ? 1 : response.data.lastPage;
+        setLastPage(newLastPage);
+        setIsLoading(false);
       } catch (error) {
         console.error('Failed to fetch last page:', error);
         setHasError(true);
@@ -50,9 +54,11 @@ const MungtsuPage = () => {
         try {
           const response = await getRecommendListApi(lastPage);
           setSlides((prevSlides) => [...prevSlides, ...response.data]);
+          setIsLoading(false);
         } catch (error) {
           console.error('Failed to fetch post list:', error);
           setHasError(true);
+          setIsLoading(false);
         }
       }
     };
@@ -62,8 +68,8 @@ const MungtsuPage = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        // 마지막 슬라이드가 화면에 들어오면 다음 페이지 요청
+      if (entries[0].isIntersecting && !isLoading && lastPage !== null) {
+        setIsLoading(true);
         setLastPage((prevPage) => (prevPage ? prevPage + 1 : null));
       }
     });
@@ -77,7 +83,7 @@ const MungtsuPage = () => {
         observer.unobserve(lastSlideRef!.current);
       }
     };
-  }, [lastSlideRef, slides]);
+  }, [isLoading, lastPage, lastSlideRef, slides]);
 
   return (
     <div className="w-screen h-screen">
