@@ -11,6 +11,9 @@ const config = {
   cookieMaxAge: window._env_
     ? window._env_.VITE_COOKIE_MAX_AGE
     : import.meta.env.VITE_COOKIE_MAX_AGE,
+  s3VideoUrl: window._env_
+  ? window._env_.VITE_S3_VIDEO_URL
+  : import.meta.env.VITE_S3_VIDEO_URL,
 };
 
 export default config;
