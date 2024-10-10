@@ -45,7 +45,7 @@ const CenterMyPage = () => {
           name={name ? name : '정보 불러오기 실패'}
           address={address ? address : '정보 불러오기 실패'}
           phone={phone ? phone : '010-0000-0000'}
-          content={content ? content : '                     '}
+          content={content}
           isUserProfile={false}
         />
 

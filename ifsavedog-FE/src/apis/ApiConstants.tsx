@@ -32,6 +32,8 @@ export enum ENDPOINT {
   POST = 'api/post',
   POST_LIKE = 'api/post/like',
   POST_SHELTER = 'api/post/shelter',
+
+  SURVEY = 'api/recommend/survey',
 }
 
 export enum HTTP_STATUS {
