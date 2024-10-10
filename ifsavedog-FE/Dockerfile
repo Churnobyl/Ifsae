@@ -21,6 +21,8 @@ COPY --from=builder /app/dist ./dist
 
 COPY --from=builder /app/env.sh ./env.sh
 
+COPY --from=builder /app/env-config.js ./env-config.js
+
 RUN chmod +x ./env.sh
 
 EXPOSE 3000
