@@ -81,9 +81,8 @@ public class ESController {
 
     // 개 검색 API
     @GetMapping("/search/dogs")
-    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query,
-                                        @RequestParam(defaultValue = "name") String searchField) throws IOException {
-        List<Long> results = searchService.searchDogs(query, searchField);
+    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query) throws IOException {
+        List<Long> results = searchService.searchDogs(query);
 
         return ResponseEntity.ok(results);
     }
@@ -141,9 +140,8 @@ public class ESController {
 
     // 게시글 조건 검색 API
     @GetMapping("/search/posts")
-    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "") String query,
-                                         @RequestParam(defaultValue = "name") String searchField) throws IOException {
-        List<Long> results = searchService.searchPosts(query, searchField);
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "") String query) throws IOException {
+        List<Long> results = searchService.searchPosts(query);
 
         return ResponseEntity.ok(results);
     }

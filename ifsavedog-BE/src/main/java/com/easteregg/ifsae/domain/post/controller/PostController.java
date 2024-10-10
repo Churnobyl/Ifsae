@@ -39,14 +39,12 @@ public class PostController {
     /**
      * ES 게시물 조회
      *
-     * @param query       검색어
-     * @param searchField 검색조건 (title, content, dogName, shelterName, userNickname)
+     * @param query 검색어
      * @return List<PostDto.Response> 게시물 목록
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchPosts(@RequestParam String query,
-                                         @RequestParam(defaultValue = "title") String searchField) throws IOException {
-        List<Long> postIds = searchService.searchPosts(query, searchField);
+    public ResponseEntity<?> searchPosts(@RequestParam String query) throws IOException {
+        List<Long> postIds = searchService.searchPosts(query);
 
         List<PostDto.Response> posts = postService.findPostsByIds(postIds);
 
