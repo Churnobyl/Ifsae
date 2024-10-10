@@ -216,10 +216,10 @@ public class PostServiceImpl implements PostService {
     private void checkUserInShelter(User user, Long shelterId) {
         ShelterUser shelterUser = shelterUserRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new ShelterUserException(
-                        ErrorCode.USER_NOT_FOUND_IN_SHELTER));
+                        ErrorCode.SHELTER_PERMISSION_DENIED));
 
         if (!Objects.equals(shelterUser.getShelter().getId(), shelterId)) {
-            throw new ShelterUserException(ErrorCode.USER_NOT_FOUND_IN_SHELTER);
+            throw new ShelterUserException(ErrorCode.SHELTER_PERMISSION_DENIED);
         }
     }
 }
