@@ -38,6 +38,7 @@ import CreateDogPage from '@/pages/CreateDogPage';
 import CreateAdoptionPage from '@/pages/CreateAdoptionPage';
 import MyAdoptionListPage from '@/pages/mypages/MyAdoptionListPage';
 import CenterVideoListPage from '@/pages/CenterVideoListPage';
+import RecommendListPage from '@/pages/RecommendListPage';
 
 const Router = () => {
   const [cookies, setCookie] = useCookies();
@@ -144,6 +145,11 @@ const Router = () => {
               element: <FollowPage />,
             },
             {
+              path: PATH.RECOMMEND_LIST,
+              element: <RecommendListPage />,
+              errorElement: <NotFoundPage />,
+            },
+            {
               path: PATH.CENTER_DOG_LIST,
               errorElement: <NotFoundPage />,
               element: <MyDogListPage />,
@@ -167,6 +173,11 @@ const Router = () => {
               path: PATH.CENTER_DETAIL + '/:id',
               errorElement: <NotFoundPage />,
               element: <CenterDetailPage />,
+            },
+            {
+              path: PATH.VIDEO_DETAIL + '/:postId',
+              element: <VideoDetailPage />,
+              errorElement: <NotFoundPage />,
             },
             {
               path: PATH.CREATE_POST,
@@ -202,11 +213,6 @@ const Router = () => {
     {
       path: PATH.LANDING,
       element: <LandingPage />,
-      errorElement: <NotFoundPage />,
-    },
-    {
-      path: PATH.VIDEO_DETAIL + '/:postId',
-      element: <VideoDetailPage />,
       errorElement: <NotFoundPage />,
     },
 

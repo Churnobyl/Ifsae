@@ -13,8 +13,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,16 +78,17 @@ public class Post extends BaseEntity {
 
     public PostDto.Response toResponseDto() {
         return PostDto.Response.builder()
-                               .id(id)
-                               .title(title)
-                               .content(content)
-                               .videoUrl(videoUrl)
-                               .shelter(shelter.toShelterPreviewDto())
-                               .dogs(dogs.stream().map(PostDog::getDog).map(Dog::toDogListDto).toList())
-                               .comments(comments.stream().map(Comment::toResponse).toList())
-                               .likeCnt(likeCnt)
-                               .viewCnt(viewCnt)
-                               .build();
+                .id(id)
+                .title(title)
+                .content(content)
+                .videoUrl(videoUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .shelter(shelter.toShelterPreviewDto())
+                .dogs(dogs.stream().map(PostDog::getDog).map(Dog::toDogListDto).toList())
+                .comments(comments.stream().map(Comment::toResponse).toList())
+                .likeCnt(likeCnt)
+                .viewCnt(viewCnt)
+                .build();
     }
 
     public void updateDogs(List<PostDog> postDogs) {

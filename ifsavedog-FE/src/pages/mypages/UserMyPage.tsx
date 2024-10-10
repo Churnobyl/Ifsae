@@ -29,6 +29,11 @@ const UserMyPage = () => {
     navigate('/follow'); // 버튼 클릭 시 이동
   };
 
+  // 입양 신청 목록 클릭 핸들러
+  const handleAdoptionClick = () => {
+    navigate('/mypage/adoption'); // 버튼 클릭 시 이동
+  };
+
   // 후원 목록 클릭 핸들러
   const handleDonationListClick = () => {
     navigate('/mypage/donation'); // 버튼 클릭 시 이동
@@ -90,8 +95,10 @@ const UserMyPage = () => {
           </p>
         </div>
         <div className="flex items-center mb-4">
-          <FaRegEdit size={24} className="mr-2" />
-          <p className="text-lg font-semibold">입양 신청 목록</p>
+          <FaRegEdit size={24} className="mr-2" onClick={handleAdoptionClick} />
+          <p className="text-lg font-semibold" onClick={handleAdoptionClick}>
+            입양 신청 목록
+          </p>
         </div>
         <div className="flex items-center mb-4">
           <FaHandHoldingHeart

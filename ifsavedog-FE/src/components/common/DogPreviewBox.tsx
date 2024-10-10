@@ -16,7 +16,7 @@ const DogPreviewBox = ({ id, name, age, image }: DogType) => {
     >
       <img src={image} alt={name} className="w-full h-2/3 object-cover" />
       <p className="font-semibold text-black px-1">
-        {name} · {age}
+        {name} · {age}살
       </p>
     </div>
   );

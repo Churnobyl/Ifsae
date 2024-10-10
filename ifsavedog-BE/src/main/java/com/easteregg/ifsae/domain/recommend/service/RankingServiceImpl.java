@@ -1,5 +1,7 @@
 package com.easteregg.ifsae.domain.recommend.service;
 
+import com.easteregg.ifsae.domain.dog.dto.DogListDto;
+import com.easteregg.ifsae.domain.dog.entity.Dog;
 import com.easteregg.ifsae.domain.post.dto.PostDto;
 import com.easteregg.ifsae.domain.post.entity.Post;
 import com.easteregg.ifsae.domain.post.entity.PostDog;
@@ -51,7 +53,7 @@ public class RankingServiceImpl implements RankingService {
 
         LastPage lastPage = lastPageRedisRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
-        if (pageNum == 20) {
+        if (pageNum >= 20) {
             lastPage.initLastPage();
         } else {
             lastPage.updateLastPage();
@@ -88,5 +90,16 @@ public class RankingServiceImpl implements RankingService {
                                              .build());
 
         return 1;
+    }
+
+    @Override
+    public List<DogListDto> getRecommendDogList(User user) {
+        List<Ranking> rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(user.getId());
+
+        if (rankingList.isEmpty()) {
+            rankingList = rankingRepository.findRankingsByUserIdOrderByRankingAsc(DEFAULT_RANK_USER_ID);
+        }
+
+        return rankingList.stream().map(Ranking::getDog).map(Dog::toDogListDto).toList();
     }
 }

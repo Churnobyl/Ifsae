@@ -13,7 +13,7 @@ const DogMiniProfile = ({ profileImgUrl, name }: DogMiniProfileProps) => {
         className="rounded-full w-11 h-11 mx-2"
       />
       <div className="text-xs flex justify-center overflow-hidden text-ellipsis">
-        강아지 이름
+        {name}
       </div>
     </div>
   );

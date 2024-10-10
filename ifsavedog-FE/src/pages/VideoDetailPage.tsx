@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useUserStateStore } from '@/stores/auth/userStateStore';
-import { useParams, useNavigate } from 'react-router-dom';
+import {
+  checkPostLikeApi,
+  createCommentApi,
+  createPostLikeApi,
+  deletePostLikeApi,
+  getPostDetailApi,
+} from '@/apis/post/postApi'; // API 불러오기
 import CenterProfileImg from '@/assets/center-profile.png';
+import DefaultProfileImg from '@/assets/icon/profile.svg';
 import DefaultDogImg from '@/assets/rolling-cottonball.jpg';
 import Comment from '@/components/Comment';
 import DogMiniProfile from '@/components/common/DogMiniProfile';
-import MainLayout from '@/layouts/MainLayout';
-import { FiThumbsUp, FiThumbsUp as FilledThumbsUp } from 'react-icons/fi'; // 좋아요 아이콘 추가
-import DefaultProfileImg from '@/assets/icon/profile.svg';
-import {
-  getPostDetailApi,
-  checkPostLikeApi,
-  deletePostLikeApi,
-  createPostLikeApi,
-  createCommentApi,
-} from '@/apis/post/postApi'; // API 불러오기
+import config from '@/constants/Environments';
+import { useUserStateStore } from '@/stores/auth/userStateStore';
 import { DogType } from '@/types/dog/DogType';
+import { useEffect, useState } from 'react';
+import { FiThumbsUp, FiThumbsUp as FilledThumbsUp } from 'react-icons/fi'; // 좋아요 아이콘 추가
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface CommentType {
   id: number;
@@ -151,125 +151,125 @@ const VideoDetailPage = () => {
   }
 
   return (
-    <MainLayout showTopbar={true} showBottombar={true}>
-      <div className="w-full h-full text-black flex justify-center">
-        <div className="w-11/12 flex flex-col">
-          <div className="text-2xl font-bold p-2 mb-2">{postDetail.title}</div>
+    <div className="w-full h-full text-black flex justify-center">
+      <div className="w-11/12 flex flex-col">
+        <div className="text-2xl font-bold p-2 mb-2">{postDetail.title}</div>
 
-          {/* 센터 정보 */}
-          <div className="flex flex-row items-center my-2">
-            <img
-              src={postDetail.shelter.porofileImgUrl || CenterProfileImg}
-              alt="center"
-              className="rounded-full w-7 h-7 mx-2"
-              onClick={() => handleShelterClick(postDetail.shelter.id)}
-            />
-            <div onClick={() => handleShelterClick(postDetail.shelter.id)}>
-              {postDetail.shelter.name}
-            </div>
+        {/* 센터 정보 */}
+        <div className="flex flex-row items-center my-2">
+          <img
+            src={postDetail.shelter.porofileImgUrl || CenterProfileImg}
+            alt="center"
+            className="rounded-full w-7 h-7 mx-2"
+            onClick={() => handleShelterClick(postDetail.shelter.id)}
+          />
+          <div onClick={() => handleShelterClick(postDetail.shelter.id)}>
+            {postDetail.shelter.name}
           </div>
+        </div>
 
-          {/* 관련된 강아지 */}
-          <div className="w-full bg-lightGray rounded-md flex justify-center mb-4">
-            <div className="w-11/12 flex flex-row overflow-x-auto py-2">
-              <div className="inline-flex max-w-full">
-                {postDetail.dogs.map((dog) => (
-                  <div
-                    key={dog.id}
-                    className="w-18 h-18 shrink-0 flex justify-center overflow-hidden"
-                    onClick={() => handleDogClick(dog.id)}
-                  >
-                    <DogMiniProfile
-                      profileImgUrl={dog.image || DefaultDogImg}
-                      name={dog.name}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* 영상 보여주는 곳 */}
-          <div className="mb-4">
-            {/* 비디오 URL이 있는 경우 */}
-            {postDetail.videoUrl ? (
-              <video controls className="w-full">
-                <source src={postDetail.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            ) : (
-              '영상이 없습니다.'
-            )}
-          </div>
-
-          {/* 영상 설명 */}
-          <div className="w-full bg-lightGray rounded-md text-sm p-4 mb-4">
-            {postDetail.content}
-          </div>
-
-          {/* 좋아요 수 */}
-          <div className="w-full flex justify-center mb-4">
-            <div className="w-32 h-20 bg-lightGray rounded-3xl flex justify-center items-center flex-col p-2">
-              <div onClick={likeHandler} className="cursor-pointer">
-                {/* 좋아요 여부에 따라 아이콘 변경 */}
-                {liked ? (
-                  <FilledThumbsUp
-                    className="w-9 h-9"
-                    style={{ fill: 'black', stroke: 'black' }}
-                  />
-                ) : (
-                  <FiThumbsUp
-                    className="w-9 h-9"
-                    style={{ fill: 'none', stroke: 'black' }}
-                  />
-                )}
-              </div>
-              <div>{likeCount}</div>
-            </div>
-          </div>
-
-          {/* 댓글 섹션 */}
-          <div className="flex flex-col w-full mb-4">
-            <div className="text-lg font-bold mb-1 px-2">
-              댓글 {postDetail.comments.length}
-            </div>
-
-            {/* 댓글 입력 폼 */}
-            <div className="flex items-center bg-lightGray rounded-md p-2">
-              <input
-                type="text"
-                placeholder="작성할 댓글을 입력해주세요."
-                className="flex-grow bg-whiteGray placeholder:text-sm rounded-md p-2 focus:outline-none"
-                value={newComment} // 입력된 댓글 값
-                onChange={(e) => setNewComment(e.target.value)} // 댓글 입력 상태 업데이트
-              />
-              <button
-                className="ml-2 bg-lightGray text-sm rounded-md px-4 py-2 hover:bg-baseGreen"
-                onClick={handleCommentSubmit}
-              >
-                등록
-              </button>
-            </div>
-
-            {/* 댓글 리스트 */}
-            <div className="flex flex-col w-full mt-4">
-              {postDetail.comments.map((comment) => (
+        {/* 관련된 강아지 */}
+        <div className="w-full bg-lightGray rounded-md flex justify-center mb-4">
+          <div className="w-11/12 flex flex-row overflow-x-auto py-2">
+            <div className="inline-flex max-w-full">
+              {postDetail.dogs.map((dog) => (
                 <div
-                  key={comment.id}
-                  className="bg-white rounded-md p-2 mb-2 flex items-center"
+                  key={dog.id}
+                  className="w-18 h-18 shrink-0 flex justify-center overflow-hidden"
+                  onClick={() => handleDogClick(dog.id)}
                 >
-                  <Comment
-                    userNickname={comment.userNickname}
-                    userProfileImg={comment.userProfileImg || DefaultProfileImg}
-                    content={comment.content}
+                  <DogMiniProfile
+                    profileImgUrl={dog.image || DefaultDogImg}
+                    name={dog.name}
                   />
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* 영상 보여주는 곳 */}
+        <div className="mb-4">
+          {/* 비디오 URL이 있는 경우 */}
+          {postDetail.videoUrl ? (
+            <video controls autoPlay muted className="w-full">
+              <source
+                src={config.s3VideoUrl + postDetail.videoUrl}
+                type="video/mp4"
+              />
+            </video>
+          ) : (
+            '영상이 없습니다.'
+          )}
+        </div>
+
+        {/* 영상 설명 */}
+        <div className="w-full bg-lightGray rounded-md text-sm p-4 mb-4">
+          {postDetail.content}
+        </div>
+
+        {/* 좋아요 수 */}
+        <div className="w-full flex justify-center mb-4">
+          <div className="w-32 h-20 bg-lightGray rounded-3xl flex justify-center items-center flex-col p-2">
+            <div onClick={likeHandler} className="cursor-pointer">
+              {/* 좋아요 여부에 따라 아이콘 변경 */}
+              {liked ? (
+                <FilledThumbsUp
+                  className="w-9 h-9"
+                  style={{ fill: 'black', stroke: 'black' }}
+                />
+              ) : (
+                <FiThumbsUp
+                  className="w-9 h-9"
+                  style={{ fill: 'none', stroke: 'black' }}
+                />
+              )}
+            </div>
+            <div>{likeCount}</div>
+          </div>
+        </div>
+
+        {/* 댓글 섹션 */}
+        <div className="flex flex-col w-full mb-4">
+          <div className="text-lg font-bold mb-1 px-2">
+            댓글 {postDetail.comments.length}
+          </div>
+
+          {/* 댓글 입력 폼 */}
+          <div className="flex items-center bg-lightGray rounded-md p-2">
+            <input
+              type="text"
+              placeholder="작성할 댓글을 입력해주세요."
+              className="flex-grow bg-whiteGray placeholder:text-sm rounded-md p-2 focus:outline-none"
+              value={newComment} // 입력된 댓글 값
+              onChange={(e) => setNewComment(e.target.value)} // 댓글 입력 상태 업데이트
+            />
+            <button
+              className="ml-2 bg-lightGray text-sm rounded-md px-4 py-2 hover:bg-baseGreen"
+              onClick={handleCommentSubmit}
+            >
+              등록
+            </button>
+          </div>
+
+          {/* 댓글 리스트 */}
+          <div className="flex flex-col w-full mt-4">
+            {postDetail.comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="bg-white rounded-md p-2 mb-2 flex items-center"
+              >
+                <Comment
+                  userNickname={comment.userNickname}
+                  userProfileImg={comment.userProfileImg || DefaultProfileImg}
+                  content={comment.content}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </MainLayout>
+    </div>
   );
 };
 

@@ -103,7 +103,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostPreview> getPostList(Long dogId) {
+    public List<PostPreview> getPostListByDogId(Long dogId) {
 
         List<PostDog> postDogList = postDogRepository.findByDogId(dogId);
 
@@ -160,6 +160,18 @@ public class PostServiceImpl implements PostService {
         return postLikeRepository.findByUserIdAndPostId(user.getId(), postId).isPresent();
     }
 
+    @Override
+    public List<PostPreview> getPostListByShelterId(Long shelterId) {
+
+        return postRepository.findPostsByShelterId(shelterId).stream()
+                             .map(post -> PostDto.PostPreview.builder()
+                                                             .id(post.getId())
+                                                             .title(post.getTitle())
+                                                             .imageUrl(post.getThumbnailUrl())
+                                                             .build())
+                             .toList();
+    }
+
     /**
      * Post를 ID로 조회하는 헬퍼 메서드
      */
@@ -211,11 +223,11 @@ public class PostServiceImpl implements PostService {
      */
     private void checkUserInShelter(User user, Long shelterId) {
         ShelterUser shelterUser = shelterUserRepository.findByUserId(user.getId())
-                                                       .orElseThrow(() -> new ShelterUserException(
-                                                               ErrorCode.USER_NOT_FOUND_IN_SHELTER));
+                .orElseThrow(() -> new ShelterUserException(
+                        ErrorCode.SHELTER_PERMISSION_DENIED));
 
         if (!Objects.equals(shelterUser.getShelter().getId(), shelterId)) {
-            throw new ShelterUserException(ErrorCode.USER_NOT_FOUND_IN_SHELTER);
+            throw new ShelterUserException(ErrorCode.SHELTER_PERMISSION_DENIED);
         }
     }
 }

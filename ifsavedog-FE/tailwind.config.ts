@@ -38,7 +38,11 @@ export default {
       baseGreen: '#E9F1C4',
     },
     fontSize,
-    extend: {},
+    extend: {
+      zIndex: {
+        '999': '900',
+      },
+    },
   },
   plugins: [
     fluid,

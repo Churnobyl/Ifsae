@@ -12,6 +12,20 @@ import {
 const sampleUrl =
   'https://www.shutterstock.com/shutterstock/videos/1107237865/preview/stock-footage-portraits-of-happy-people-looking-at-camera-in-one-footage-beautiful-faces-of-young-women-and.mp4';
 
+interface DogFace {
+  dogId: number; // 강아지 ID
+  imgUrl: string; // 강아지 이미지 URL
+}
+
+const dogFaces: DogFace[] = [
+  { dogId: 1, imgUrl: '/src/assets/dogFace/1.jfif' },
+  { dogId: 2, imgUrl: '/src/assets/dogFace/2.jfif' },
+  { dogId: 3, imgUrl: '/src/assets/dogFace/3.jfif' },
+  { dogId: 4, imgUrl: '/src/assets/dogFace/4.jfif' },
+  { dogId: 5, imgUrl: '/src/assets/dogFace/5.jpg' },
+  { dogId: 6, imgUrl: '/src/assets/dogFace/6.jpg' },
+];
+
 const MungtsuBox = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -188,7 +202,7 @@ const MungtsuBox = () => {
           <SelectIcon label={'50'} icon={AiOutlineLike} /> {/** 좋아요 */}
           <SelectIcon label={'40'} icon={FaCommentDots} /> {/** 댓글 */}
           <SelectIcon label={'공유'} icon={FaShareAlt} /> {/** 공유 */}
-          <DogFaces />
+          <DogFaces direction={'RIGHT'} dogs={dogFaces} />
         </div>
       </div>
     </div>

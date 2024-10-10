@@ -1,12 +1,16 @@
 import { searchPostApi } from '@/apis/post/postApi';
 import { Input } from '@/components/common/Input/Input';
+import config from '@/constants/Environments';
+import { PATH } from '@/routers/pathConstants';
 import { PostPreviewType } from '@/types/post/PostPreviewType';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [videoData, setVideoData] = useState<PostPreviewType[]>([]);
+  const navigate = useNavigate();
 
   // 검색어 변경 시 상태 업데이트
   const handleChange = useCallback(
@@ -38,9 +42,12 @@ const SearchPage = () => {
               <div
                 key={video.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
+                onClick={() =>
+                  navigate('/' + PATH.VIDEO_DETAIL + '/' + video.id)
+                }
               >
                 <img
-                  src={video.imageUrl}
+                  src={config.s3VideoUrl + video.thumbnailUrl}
                   alt={video.title}
                   className="w-full h-48 object-cover"
                 />
