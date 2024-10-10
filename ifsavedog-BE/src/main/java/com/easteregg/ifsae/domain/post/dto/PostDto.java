@@ -88,6 +88,7 @@ public class PostDto {
         private String title;
         private String content;
         private String videoUrl;
+        private String thumbnailUrl;
         private ShelterPreviewDto shelter;
         private List<DogListDto> dogs;
         private List<CommentDto.Response> comments;
