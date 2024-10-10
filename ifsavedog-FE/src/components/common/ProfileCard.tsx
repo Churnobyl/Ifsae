@@ -70,7 +70,7 @@ const ProfileCard = ({
             ref={imageRef}
             src={profileImgUrl}
             alt="Profile Image"
-            className="w-20 h-20 rounded-full"
+            className="w-20 h-20 rounded-full object-cover"
           />
         </div>
 
@@ -83,7 +83,7 @@ const ProfileCard = ({
         />
 
         {/* 유저 프로필이면 닉네임과 이메일, 센터 프로필이면 이름과 주소 */}
-        <div className={`space-y-1 ${isUserProfile ? '' : 'text-sm'}`}>
+        <div className={`w-2/3 space-y-1 ${isUserProfile ? '' : 'text-sm'}`}>
           <p className="text-lg font-semibold">{name}</p>
           {isUserProfile ? (
             <p className="text-gray-500">{email}</p>
