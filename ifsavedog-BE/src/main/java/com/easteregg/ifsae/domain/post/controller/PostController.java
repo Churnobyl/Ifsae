@@ -94,7 +94,7 @@ public class PostController {
 
     @GetMapping("/dog/{dogId}")
     public ResponseEntity<?> getPostListByDogId(@PathVariable Long dogId) {
-        List<PostPreview> postList = postService.getPostList(dogId);
+        List<PostPreview> postList = postService.getPostListByDogId(dogId);
 
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
@@ -128,7 +128,7 @@ public class PostController {
 
     @GetMapping("/shelter/{shelterId}")
     public ResponseEntity<?> getPostListByShelterId(@PathVariable Long shelterId) {
-        List<PostPreview> postList = postService.getPostList(shelterId);
+        List<PostPreview> postList = postService.getPostListByShelterId(shelterId);
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 }
