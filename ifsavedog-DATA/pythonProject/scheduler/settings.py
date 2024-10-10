@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Setting:
+    PYTHONPATH: str
     DATABASE_URL: str ## mariadB
     SECRET_KEY: str ## mariaDB
     ALGORITHM: str = "HS256"
