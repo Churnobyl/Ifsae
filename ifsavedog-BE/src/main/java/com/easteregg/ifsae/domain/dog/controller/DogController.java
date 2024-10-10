@@ -41,13 +41,11 @@ public class DogController {
     /**
      * ES 개 검색
      *
-     * @param query       검색어
-     * @param searchField 검색 조건 (name, species, shelterName)
+     * @param query 검색어
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query,
-                                        @RequestParam(defaultValue = "name") String searchField) throws IOException {
-        List<Long> dogIds = searchService.searchDogs(query, searchField);
+    public ResponseEntity<?> searchDogs(@RequestParam(defaultValue = "") String query) throws IOException {
+        List<Long> dogIds = searchService.searchDogs(query);
 
         List<DogListDto> dogs = dogService.findDogsByIds(dogIds);
 
