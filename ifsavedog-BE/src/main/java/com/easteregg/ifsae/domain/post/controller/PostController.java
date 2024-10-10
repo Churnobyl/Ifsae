@@ -44,7 +44,6 @@ public class PostController {
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchPosts(@RequestParam String query) throws IOException {
-        System.out.println("query = " + query);
         List<Long> postIds = searchService.searchPosts(query);
 
         List<PostDto.Response> posts = postService.findPostsByIds(postIds);
