@@ -1,4 +1,6 @@
+import { PATH } from '@/routers/pathConstants';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface DogProps {
   dogId: number;
@@ -7,14 +9,17 @@ interface DogProps {
 
 interface DogFacesProps {
   dogs: DogProps[];
+  direction: 'LEFT' | 'RIGHT';
 }
 
-const DogFaces = ({ dogs }: DogFacesProps) => {
+const DogFaces = ({ dogs, direction }: DogFacesProps) => {
   const [collapsed, setCollapsed] = useState(true);
+  const navigate = useNavigate();
+  console.log(direction);
 
   return (
     <div
-      className={`flex w-full items-center cursor-pointer transition-all duration-300 ease-in-out ${
+      className={`flex w-full items-center justify-end cursor-pointer transition-all duration-300 ease-in-out ${
         collapsed ? 'ml-8' : ''
       }`}
       onClick={() => setCollapsed(!collapsed)}
@@ -25,12 +30,17 @@ const DogFaces = ({ dogs }: DogFacesProps) => {
           className={`w-10 h-10 rounded-full flex overflow-x-auto scrollbar-hide justify-center items-center transition-all duration-300 ease-in-out transform ${
             // 첫 4개의 이미지에는 애니메이션 적용 안 함
             index < 4
-              ? `${collapsed ? '-ml-6' : 'ml-2'}`
+              ? `${collapsed ? '-ml-6' : '-ml-2'}`
               : `${collapsed ? 'opacity-0 scale-75' : 'opacity-100 scale-100 ml-2'}`
           }`}
           style={{
             zIndex: collapsed ? 10 - index : 'auto',
             transitionDelay: index >= 4 ? `${(index - 4) * 50}ms` : '0ms',
+          }}
+          onClick={() => {
+            if (!collapsed) {
+              navigate('/' + PATH.DOG_DETAIL + '/' + dog.dogId);
+            }
           }}
         >
           <img
