@@ -18,7 +18,7 @@ def input_post_datas_and_match_post_dog(dog):
   match_post_dog(dog_id, post_id)
   
   dog_name = dog.name
-  dog_image = dog.image
+  dog_image = dog.dir
   
   shelter_id = get_shelter_id_by_dog_id(dog_id)
   

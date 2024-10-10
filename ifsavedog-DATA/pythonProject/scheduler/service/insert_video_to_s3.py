@@ -1,4 +1,5 @@
 import boto3
+from boto3.s3.transfer import TransferConfig
 from settings import config
 from models.post import *
 from models.post_dog import *
@@ -12,7 +13,7 @@ import random
 
 ## 랜덤한 포멧으로 영상을 만들어주는 함수(parameter: image, dog_id, reutrn: file_name)
 def rand_make_movie(image, id):  
-    movie_makers = [bbobbibbobbi, jjanggoo, gausian]
+    movie_makers = [bbobbibbobbi, jjanggoo, gausian, gausian, gausian]
     selected_function = random.choice(movie_makers)
     return selected_function(image, id)
 
@@ -34,11 +35,14 @@ def upload_file_to_s3(file_name, object_name=None):
         aws_secret_access_key=aws_secret_access_key,
         region_name=region_name
     )    
+    
+    transfer_config = TransferConfig(multipart_threshold=1024 * 1 * 1024, max_concurrency=10,
+                            multipart_chunksize=1024 * 1024 * 1, use_threads=True)
     if object_name is None:
         object_name = f"video/{file_name}.mp4"
     try:
         object_name = f"video/{object_name}.mp4"
-        s3.upload_file(file_name, bucket_name, object_name)
+        s3.upload_file(file_name, bucket_name, object_name, Config=transfer_config)
         print(f"{file_name} 파일이 {bucket_name}/{object_name}에 업로드되었습니다.")        
     except Exception as e:
         print(f"파일 업로드 중 오류 발생: {e}")
