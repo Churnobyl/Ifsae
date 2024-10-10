@@ -40,7 +40,7 @@ const MainPrevVideo = ({
         {/* 비디오 정보 */}
         <div className="w-full flex flex-col">
           <div className="w-full flex items-start">
-            <DogFaces dogs={dogFacesData} />
+            <DogFaces direction={'LEFT'} dogs={dogFacesData} />
           </div>
           <div className="p-2 pt-0">
             <div className="text-lg font-bold mb-1">{title}</div>

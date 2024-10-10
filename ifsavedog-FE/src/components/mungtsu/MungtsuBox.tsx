@@ -202,7 +202,7 @@ const MungtsuBox = () => {
           <SelectIcon label={'50'} icon={AiOutlineLike} /> {/** 좋아요 */}
           <SelectIcon label={'40'} icon={FaCommentDots} /> {/** 댓글 */}
           <SelectIcon label={'공유'} icon={FaShareAlt} /> {/** 공유 */}
-          <DogFaces dogs={dogFaces} />
+          <DogFaces direction={'RIGHT'} dogs={dogFaces} />
         </div>
       </div>
     </div>
