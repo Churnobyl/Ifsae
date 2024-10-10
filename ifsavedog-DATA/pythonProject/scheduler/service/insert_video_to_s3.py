@@ -13,7 +13,7 @@ import random
 
 ## 랜덤한 포멧으로 영상을 만들어주는 함수(parameter: image, dog_id, reutrn: file_name)
 def rand_make_movie(image, id):  
-    movie_makers = [bbobbibbobbi, jjanggoo, gausian]
+    movie_makers = [bbobbibbobbi, jjanggoo, gausian, gausian, gausian]
     selected_function = random.choice(movie_makers)
     return selected_function(image, id)
 

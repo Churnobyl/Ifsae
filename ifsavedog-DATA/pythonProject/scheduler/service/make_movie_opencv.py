@@ -95,18 +95,8 @@ def jjanggoo(image_name, id):
       scale = 1 + 0.5 * np.sin(t * 2 * np.pi)  # 1배에서 1.5배로 커졌다 작아짐
       resized_image = cv2.resize(rotated_image, None, fx=scale, fy=scale)
 
-      # 3. 이미지 이동 효과 (좌우로 움직임)
-      x_shift = int(100 * np.sin(t * 2 * np.pi))
-      y_shift = int(100 * np.cos(t * 2 * np.pi))
-      M_move = np.float32([[1, 0, x_shift], [0, 1, y_shift]])
-      moved_image = cv2.warpAffine(resized_image, M_move, (frame_width, frame_height))
-
-      # 4. 색상 변화 효과 (시간에 따라 색상 변화)
-      color_factor = 1 + 0.5 * np.sin(t * 2 * np.pi)
-      color_image = (moved_image * color_factor).clip(0, 255).astype(np.uint8)
-
       # 비디오에 프레임 추가
-      out.write(color_image)
+      out.write(resized_image)
 
   # 비디오 파일 저장 완료
   out.release()
