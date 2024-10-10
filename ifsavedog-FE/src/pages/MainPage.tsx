@@ -1,86 +1,77 @@
+import {
+  getLastPageNumApi,
+  getRecommendListApi,
+} from '@/apis/recommend/recommendApi';
 import MainPrevVideo from '@/components/video/MainPrevVideo';
 import { DogType } from '@/types/dog/DogType';
+import { useEffect, useRef, useState } from 'react';
 
 const MainPage = () => {
-  const videoData = [
-    {
-      id: 1,
-      thumbnailUrl: 'https://example.com/video1.jpg',
-      like: 150,
-      title: 'Golden Retriever Playing',
-      dogs: [
-        {
-          id: 1,
-          name: 'Buddy',
-          age: 2,
-          gender: 'MALE',
-          species: 'Dog',
-          image: 'https://example.com/dog1.jpg',
-        },
-        {
-          id: 2,
-          name: 'Lucy',
-          age: 3,
-          gender: 'FEMALE',
-          species: 'Dog',
-          image: 'https://example.com/dog2.jpg',
-        },
-      ],
-    },
-    {
-      id: 2,
-      thumbnailUrl: 'https://example.com/video2.jpg',
-      like: 200,
-      title: 'Poodles Jumping',
-      dogs: [
-        {
-          id: 3,
-          name: 'Charlie',
-          age: 4,
-          gender: 'MALE', // 수정
-          species: 'Dog',
-          image: 'https://example.com/dog3.jpg',
-        },
-        {
-          id: 4,
-          name: 'Max',
-          age: 2,
-          gender: 'MALE',
-          species: 'Dog',
-          image: 'https://example.com/dog4.jpg',
-        },
-      ],
-    },
-    {
-      id: 3,
-      thumbnailUrl: 'https://example.com/video3.jpg',
-      like: 120,
-      title: 'Beagles Howling',
-      dogs: [
-        {
-          id: 5,
-          name: 'Daisy',
-          age: 1,
-          gender: 'FEMALE',
-          species: 'Dog',
-          image: 'https://example.com/dog5.jpg',
-        },
-        {
-          id: 6,
-          name: 'Rocky',
-          age: 5,
-          gender: 'MALE',
-          species: 'Dog',
-          image: 'https://example.com/dog6.jpg',
-        },
-      ],
-    },
-  ];
+  const [count, setCount] = useState<number>();
+  const [lastPage, setLastPage] = useState<number | null>(null);
+  const [postList, setPostList] = useState<any[]>([]);
+  const [hasError, setHasError] = useState(false); // 에러 상태 관리 변수
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const fetchLastPage = async () => {
+      try {
+        const response = await getLastPageNumApi();
+        setLastPage(response.data.lastPage > 20 ? 1 : response.data.lastPage);
+      } catch (error) {
+        console.error('Failed to fetch last page:', error);
+        setHasError(true); // 에러 발생 시 상태 변경
+      }
+    };
+
+    fetchLastPage();
+  }, []);
+
+  // 마지막 페이지 번호를 기반으로 postList를 받아오는 useEffect
+  useEffect(() => {
+    const fetchPostList = async () => {
+      if (lastPage !== null && !hasError) {
+        // 에러가 없을 때만 요청 수행
+        try {
+          const response = await getRecommendListApi(lastPage);
+          setPostList((prevList) => [...prevList, ...response.data]);
+        } catch (error) {
+          console.error('Failed to fetch post list:', error);
+          setHasError(true); // 에러 발생 시 상태 변경
+        }
+      }
+    };
+
+    fetchPostList();
+  }, [lastPage, hasError]); // hasError 상태가 변경될 때도 실행
+
+  // Intersection Observer를 사용하여 스크롤이 마지막에 도달했을 때 lastPage를 증가
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && lastPage !== null && !hasError) {
+          setLastPage((prevPage) => {
+            const nextPage = prevPage !== null ? prevPage + 1 : 1;
+            return nextPage > 20 ? 1 : nextPage;
+          });
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [lastPage, hasError]);
 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-11/12 flex flex-col items-center">
-        {videoData.map((video) => (
+        {postList.map((video) => (
           <MainPrevVideo
             key={video.id}
             id={video.id}
@@ -90,6 +81,13 @@ const MainPage = () => {
             dogs={video.dogs as DogType[]}
           />
         ))}
+      </div>
+
+      <div
+        ref={observerRef}
+        className="w-full h-10 flex justify-center items-center mt-4"
+      >
+        더 불러 오기
       </div>
     </div>
   );

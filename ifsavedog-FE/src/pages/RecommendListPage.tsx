@@ -1,7 +1,7 @@
-import { getRecommendDogListApi } from '@/apis/recommend/recommendApi'; // API import
+import { useEffect, useRef, useState, useCallback } from 'react';
 import DogPreviewCardList from '@/components/common/DogPreviewCardList';
+import { getRecommendDogListApi } from '@/apis/recommend/recommendApi'; // API import
 import { DogType } from '@/types/dog/DogType';
-import { useEffect, useState } from 'react';
 
 const RecommendListPage = () => {
   const [dogList, setDogList] = useState<DogType[]>([]); // 강아지 목록 상태
@@ -10,6 +10,8 @@ const RecommendListPage = () => {
   const [page, setPage] = useState(1); // 현재 페이지 상태
   const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
   const maxPage = 25; // 마지막 페이지 번호
+
+  const observer = useRef<IntersectionObserver | null>(null); // Intersection Observer ref
 
   // 입양 추천 강아지 목록을 불러오는 함수
   const fetchRecommendDogList = async (pageNum: number) => {
@@ -40,12 +42,23 @@ const RecommendListPage = () => {
     }
   }, [page]); // 페이지 상태가 변경될 때마다 호출
 
-  // "더 보기" 클릭 시 페이지 번호 증가
-  const handleLoadMore = () => {
-    if (hasMore && !loading) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // 마지막에서 4번째 강아지가 화면에 들어올 때 다음 페이지 호출
+  const lastDogElementRef = useCallback(
+    (node: HTMLElement | null) => {
+      // node 타입을 HTMLElement | null로 지정
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1); // 페이지 증가
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore],
+  );
 
   // 첫 페이지 로딩 처리
   if (loading && page === 1 && dogList.length === 0) {
@@ -67,18 +80,22 @@ const RecommendListPage = () => {
         {dogList.length > 0 ? (
           <>
             <DogPreviewCardList dogList={dogList} /> {/* 강아지 목록 표시 */}
-            {hasMore && !loading && (
-              <button
-                className="mt-4 p-2 bg-blue-500 text-white rounded"
-                onClick={handleLoadMore}
-              >
-                더 보기
-              </button>
-            )}
+            {dogList.map((dog, index) => {
+              if (dogList.length - 4 === index) {
+                // 마지막에서 네 번째 항목일 때 ref 설정
+                return (
+                  <div key={dog.id} ref={lastDogElementRef}>
+                    <DogPreviewCardList dogList={[dog]} />
+                  </div>
+                );
+              } else {
+                return <DogPreviewCardList key={dog.id} dogList={[dog]} />;
+              }
+            })}
             {loading && <div>Loading more...</div>} {/* 추가 로딩 표시 */}
           </>
         ) : (
-          <div></div> // 강아지 목록이 없을 때
+          <div>추천 강아지가 없습니다.</div> // 강아지 목록이 없을 때
         )}
       </div>
     </div>

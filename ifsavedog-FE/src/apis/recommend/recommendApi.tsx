@@ -6,3 +6,11 @@ export const getRecommendDogListApi = async (pageNum: number) => {
     `${ENDPOINT.RECOMMENDED_DOG_LIST}?pageNum=${pageNum}`,
   );
 };
+
+export const getLastPageNumApi = async () => {
+  return await instance.get(ENDPOINT.RECOMMEND + '/index/lastpage');
+};
+
+export const getRecommendListApi = async (pageNum: number) => {
+  return await instance.get(ENDPOINT.RECOMMEND + `/ranking?pageNum=${pageNum}`);
+};
