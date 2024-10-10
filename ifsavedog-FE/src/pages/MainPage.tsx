@@ -44,7 +44,7 @@ const MainPage = () => {
     };
 
     fetchPostList();
-  }, [lastPage, hasError]); // hasError 상태가 변경될 때도 실행
+  }, [hasError, lastPage]); // hasError 상태가 변경될 때도 실행
 
   // Intersection Observer를 사용하여 스크롤이 마지막에 도달했을 때 lastPage를 증가
   useEffect(() => {
@@ -67,7 +67,7 @@ const MainPage = () => {
     return () => {
       if (observerRef!.current) observer.unobserve(observerRef!.current);
     };
-  }, [lastPage, hasError]);
+  }, [hasError, lastPage]);
 
   return (
     <div className="w-full flex flex-col items-center">
