@@ -16,6 +16,7 @@ import {
   createCommentApi,
 } from '@/apis/post/postApi'; // API 불러오기
 import { DogType } from '@/types/dog/DogType';
+import config from '@/constants/Environments';
 
 interface CommentType {
   id: number;
@@ -193,9 +194,11 @@ const VideoDetailPage = () => {
           <div className="mb-4">
             {/* 비디오 URL이 있는 경우 */}
             {postDetail.videoUrl ? (
-              <video controls className="w-full">
-                <source src={postDetail.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
+              <video controls autoPlay muted className="w-full">
+                <source
+                  src={config.s3VideoUrl + postDetail.videoUrl}
+                  type="video/mp4"
+                />
               </video>
             ) : (
               '영상이 없습니다.'
