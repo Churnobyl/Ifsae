@@ -1,5 +1,5 @@
 from db.mongo import get_mongo_db
-from db.maria import get_db
+from db.maria import get_db, query_random_offset
 
 from models.dog import Dog
 from models.user import User, UserSurvey
@@ -23,6 +23,16 @@ def get_all_rating():
 def get_user_rating(user_id):
     with get_db() as db:
         return db.query(Rating).filter(Rating.user_id == user_id).all()
+    
+def get_random_n_dogs(n):
+    result = []
+    with get_db() as db:
+        for _ in range(n):
+            result.append(db.query(Dog).offset(
+                query_random_offset(db, Dog)
+            ).limit(1).one())
+        return result
+        # return db.query(func.count(Dog.id)).scalar()
 
 def get_dog_image_vectors_list(dog_list):
     with get_mongo_db() as mongo:

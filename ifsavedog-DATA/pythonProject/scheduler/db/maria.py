@@ -1,7 +1,10 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from settings import config
+import random
 from contextlib import contextmanager
+
+from settings import config
+
 
 engine = create_engine(config.DATABASE_URL, pool_recycle=3600)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -13,3 +16,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def query_random_offset(db, model):
+    return int(
+        random.random() *
+        db.query(func.count(model.id)).scalar()
+    )
