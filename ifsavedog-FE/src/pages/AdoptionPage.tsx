@@ -113,7 +113,7 @@ const AdoptionPage = () => {
   useEffect(() => {
     const fetchRecommenedList = async () => {
       try {
-        const response = await getRecommendDogListApi(); // API 호출
+        const response = await getRecommendDogListApi(1); // API 호출
         setRecommenedList(response.data); // 받아온 강아지 목록 상태 업데이트
       } catch (error) {
         setError('추천 강아지 목록을 불러오는 중 오류가 발생했습니다.');
