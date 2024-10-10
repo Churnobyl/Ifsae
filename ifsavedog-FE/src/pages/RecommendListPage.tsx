@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import { getRecommendDogListApi } from '@/apis/recommend/recommendApi'; // API import
+import DogPreviewCardList from '@/components/common/DogPreviewCardList';
 import { DogType } from '@/types/dog/DogType';
+import { useEffect, useState } from 'react';
 
 const RecommendListPage = () => {
   const [dogList, setDogList] = useState<DogType[]>([]); // 강아지 목록 상태

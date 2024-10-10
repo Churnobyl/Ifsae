@@ -11,8 +11,10 @@ const SearchPage = () => {
   // 검색어 변경 시 상태 업데이트
   const handleChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
+      console.log('event : ' + event.target.value);
       setSearchTerm(event.target.value);
       await searchPostApi(event.target.value).then((response) => {
+        console.log(response);
         setVideoData(response.data);
       });
     },

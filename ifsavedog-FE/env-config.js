@@ -1,5 +1,5 @@
 window._env_ = {
-  VITE_BASE_URL: 'http://localhost:8081',
+  VITE_BASE_URL: 'http://localhost:8083',
   VITE_AXIOS_TIMEOUT: 6,
   VITE_COOKIE_NAME_FOR_LANDING_PAGE: 'hasViewed',
   VITE_COOKIE_MAX_AGE: 604800,
