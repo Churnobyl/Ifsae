@@ -36,7 +36,7 @@ const RecommendListPage = () => {
     if (page === 1 || !loading) {
       fetchRecommendDogList(page);
     }
-  }, [hasMore, page]);
+  }, [hasMore, loading, page]);
 
   // "더 보기" 클릭 시 페이지 번호 증가
   const handleLoadMore = () => {
