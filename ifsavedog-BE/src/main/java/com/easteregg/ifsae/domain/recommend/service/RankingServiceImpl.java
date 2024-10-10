@@ -50,7 +50,13 @@ public class RankingServiceImpl implements RankingService {
         }
 
         LastPage lastPage = lastPageRedisRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        lastPage.updateLastPage();
+
+        if (pageNum == 20) {
+            lastPage.initLastPage();
+        } else {
+            lastPage.updateLastPage();
+        }
+
         lastPageRedisRepository.save(lastPage);
 
         return dogIds;
