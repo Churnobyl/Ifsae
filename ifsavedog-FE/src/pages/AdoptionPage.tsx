@@ -6,6 +6,7 @@ import LeftArrow from '@/assets/icon/leftarrow.svg';
 import RightArrow from '@/assets/icon/rightarrow.svg';
 import { DogType } from '@/types/dog/DogType';
 import { followDogListApi } from '@/apis/dog/dogApi'; // API import
+import { getRecommendDogListApi } from '@/apis/recommend/recommendApi';
 
 interface DonationInfo {
   id: number;
@@ -31,33 +32,7 @@ const AdoptionPage = () => {
     },
   ];
 
-  const recommenedList = [
-    {
-      id: 1,
-      name: '루루',
-      age: 1,
-      gender: 'FEMALE',
-      species: '포메라니안',
-      image: testImage,
-    },
-    {
-      id: 2,
-      name: '코코',
-      age: 1,
-      gender: 'MALE',
-      species: '푸들',
-      image: testImage,
-    },
-    {
-      id: 3,
-      name: '보리',
-      age: 2,
-      gender: 'FEMALE',
-      species: '믹스',
-      image: testImage,
-    },
-  ] as DogType[];
-
+  const [recommenedList, setRecommenedList] = useState<DogType[]>([]);
   const [followList, setFollowList] = useState<DogType[]>([]); // 팔로우 강아지 목록 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
@@ -122,6 +97,23 @@ const AdoptionPage = () => {
         );
       }
     };
+  }, []);
+
+  // API로 추천 강아지 목록을 가져오는 함수
+  useEffect(() => {
+    const fetchRecommenedList = async () => {
+      try {
+        const response = await getRecommendDogListApi(); // API 호출
+        setRecommenedList(response.data); // 받아온 강아지 목록 상태 업데이트
+      } catch (error) {
+        setError('추천 강아지 목록을 불러오는 중 오류가 발생했습니다.');
+        console.error('Error fetching recommened list:', error);
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+
+    fetchRecommenedList(); // 컴포넌트 렌더링 시 API 호출
   }, []);
 
   // API로 팔로우 목록을 가져오는 함수
@@ -226,7 +218,7 @@ const AdoptionPage = () => {
                 </div>
               ))
             ) : (
-              <div>팔로우한 강아지가 없습니다.</div>
+              <div></div>
             )}
           </div>
         </div>
