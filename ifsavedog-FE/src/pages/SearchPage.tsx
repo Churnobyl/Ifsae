@@ -1,6 +1,5 @@
 import { searchPostApi } from '@/apis/post/postApi';
 import { Input } from '@/components/common/Input/Input';
-import config from '@/constants/Environments';
 import { PATH } from '@/routers/pathConstants';
 import { PostPreviewType } from '@/types/post/PostPreviewType';
 import { ChangeEvent, useCallback, useState } from 'react';
@@ -47,7 +46,7 @@ const SearchPage = () => {
                 }
               >
                 <img
-                  src={config.s3VideoUrl + video.thumbnailUrl}
+                  src={video.thumbnailUrl}
                   alt={video.title}
                   className="w-full h-48 object-cover"
                 />

@@ -1,6 +1,8 @@
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import DogFaces from '@/components/mungtsu/selectPanel/DogFaces';
 import SelectIcon from '@/components/mungtsu/selectPanel/SelectIcon';
-import { useEffect, useRef, useState } from 'react';
+import config from '@/constants/Environments';
+import { MungtsuResponseType } from '@/types/post/MungtsuResponseType';
 import { AiOutlineLike } from 'react-icons/ai';
 import { FaShareAlt } from 'react-icons/fa';
 import {
@@ -8,205 +10,283 @@ import {
   FaRegCirclePause,
   FaRegCirclePlay,
 } from 'react-icons/fa6';
-
-const sampleUrl =
-  'https://www.shutterstock.com/shutterstock/videos/1107237865/preview/stock-footage-portraits-of-happy-people-looking-at-camera-in-one-footage-beautiful-faces-of-young-women-and.mp4';
+import {
+  checkPostLikeApi,
+  createPostLikeApi,
+  deletePostLikeApi,
+} from '@/apis/post/postApi';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/routers/pathConstants';
 
 interface DogFace {
-  dogId: number; // 강아지 ID
-  imgUrl: string; // 강아지 이미지 URL
+  dogId: number;
+  imgUrl: string;
 }
 
-const dogFaces: DogFace[] = [
-  { dogId: 1, imgUrl: '/src/assets/dogFace/1.jfif' },
-  { dogId: 2, imgUrl: '/src/assets/dogFace/2.jfif' },
-  { dogId: 3, imgUrl: '/src/assets/dogFace/3.jfif' },
-  { dogId: 4, imgUrl: '/src/assets/dogFace/4.jfif' },
-  { dogId: 5, imgUrl: '/src/assets/dogFace/5.jpg' },
-  { dogId: 6, imgUrl: '/src/assets/dogFace/6.jpg' },
-];
+const MungtsuBox = forwardRef<HTMLDivElement, { slide: MungtsuResponseType }>(
+  ({ slide }, ref) => {
+    const { id, title, videoUrl, shelter, dogs, comments, likeCnt } = slide;
+    const dogFaces: DogFace[] = dogs.map((dog) => ({
+      dogId: dog.id,
+      imgUrl: dog.image,
+    }));
 
-const MungtsuBox = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [showButton, setShowButton] = useState(false);
-  const [progress, setProgress] = useState(0);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [liked, setLiked] = useState(false); // 좋아요 상태 관리
+    const [likeCount, setLikeCount] = useState<number>(likeCnt);
+    const navigate = useNavigate();
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
+    const handlePlayPause = () => {
+      if (videoRef.current) {
+        if (isPlaying) {
+          videoRef.current.pause();
+        } else {
+          videoRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
       }
-      setIsPlaying(!isPlaying);
-    }
-  };
+    };
 
-  useEffect(() => {
-    const videoElement = videoRef.current;
+    // 좋아요 상태 확인 함수
+    const fetchLikeStatus = useCallback(async () => {
+      try {
+        const likeStatus = await checkPostLikeApi(slide.id); // 좋아요 상태 확인 API 호출
+        setLiked(likeStatus.data.isLiked); // 좋아요 상태 저장 (true/false)
+      } catch (error) {
+        console.error('좋아요 상태 확인 중 오류 발생:', error);
+      }
+    }, [slide.id]);
 
-    const handleTimeUpdate = () => {
+    // 페이지가 로드될 때 게시물 정보와 좋아요 상태 불러오기
+    useEffect(() => {
+      if (slide.id) {
+        fetchLikeStatus(); // 좋아요 상태 확인
+      }
+    }, [fetchLikeStatus, slide.id]);
+
+    // 좋아요 상태 변경 핸들러
+    const likeHandler = async () => {
+      try {
+        if (liked) {
+          await deletePostLikeApi(slide.id); // 좋아요 취소 API 호출
+          setLiked(false); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount - 1); // 좋아요 수 감소
+        } else {
+          await createPostLikeApi(slide.id); // 좋아요 추가 API 호출
+          setLiked(true); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount + 1); // 좋아요 수 증가
+        }
+      } catch (error) {
+        console.error('좋아요 상태 변경 중 오류 발생:', error);
+      }
+    };
+
+    useEffect(() => {
+      const videoElement = videoRef.current;
+
+      const handleTimeUpdate = () => {
+        if (videoElement) {
+          const progressPercentage =
+            (videoElement.currentTime / videoElement.duration) * 100;
+          setProgress(progressPercentage);
+        }
+      };
+
+      const handleVideoEnded = () => {
+        setProgress(0);
+      };
+
       if (videoElement) {
-        const progressPercentage =
-          (videoElement.currentTime / videoElement.duration) * 100;
-        setProgress(progressPercentage);
+        videoElement.addEventListener('timeupdate', handleTimeUpdate);
+        videoElement.addEventListener('ended', handleVideoEnded);
       }
-    };
 
-    const handleVideoEnded = () => {
-      setProgress(0);
-    };
+      return () => {
+        if (videoElement) {
+          videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+          videoElement.removeEventListener('ended', handleVideoEnded);
+        }
+      };
+    }, []);
 
-    if (videoElement) {
-      videoElement.addEventListener('timeupdate', handleTimeUpdate);
-      videoElement.addEventListener('ended', handleVideoEnded);
-    }
+    useEffect(() => {
+      const videoElement = videoRef.current;
 
-    return () => {
-      if (videoElement) {
-        videoElement.removeEventListener('timeupdate', handleTimeUpdate);
-        videoElement.removeEventListener('ended', handleVideoEnded);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (videoElement) {
-              videoElement.currentTime = 0;
-              videoElement.play();
-              setIsPlaying(true);
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (videoElement) {
+                videoElement.currentTime = 0;
+                videoElement.play();
+                setIsPlaying(true);
+              }
+            } else {
+              if (videoElement) {
+                videoElement.pause();
+                setIsPlaying(false);
+              }
             }
-          } else {
-            if (videoElement) {
-              videoElement.pause();
-              setIsPlaying(false);
-            }
-          }
-        });
-      },
-      { threshold: 0.5 },
-    );
+          });
+        },
+        { threshold: 0.5 },
+      );
 
-    if (videoElement) {
-      observer.observe(videoElement);
-    }
-
-    return () => {
       if (videoElement) {
-        observer.unobserve(videoElement);
+        observer.observe(videoElement);
       }
-    };
-  }, []);
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+      return () => {
+        if (videoElement) {
+          observer.unobserve(videoElement);
+        }
+      };
+    }, []);
 
-    const showButtonOnMouseMove = () => {
-      setShowButton(true);
+    useEffect(() => {
+      let timeoutId: NodeJS.Timeout;
 
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setShowButton(false);
-      }, 2000);
-    };
+      const showButtonOnMouseMove = () => {
+        setShowButton(true);
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setShowButton(false);
+        }, 2000);
+      };
 
-    window.addEventListener('mousemove', showButtonOnMouseMove);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('mousemove', showButtonOnMouseMove);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isHovered) {
-      setShowButton(true);
-
-      const timeoutId = setTimeout(() => {
-        setShowButton(false);
-      }, 2000);
+      window.addEventListener('mousemove', showButtonOnMouseMove);
 
       return () => {
         clearTimeout(timeoutId);
+        window.removeEventListener('mousemove', showButtonOnMouseMove);
       };
-    }
-  }, [isHovered]);
+    }, []);
 
-  return (
-    <div
-      className="flex relative flex-col w-full h-full mb-4 group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{ zIndex: 10 }}
-    >
+    useEffect(() => {
+      if (isHovered) {
+        setShowButton(true);
+        const timeoutId = setTimeout(() => {
+          setShowButton(false);
+        }, 2000);
+
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      }
+    }, [isHovered]);
+
+    return (
       <div
-        className="video w-full h-full flex justify-center items-center bg-veryBlack"
-        onClick={handlePlayPause}
-        style={{ zIndex: 20 }}
+        className="relative w-full h-full mb-4 group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ zIndex: 10 }}
+        ref={ref}
       >
-        <video ref={videoRef} className="w-full h-full" muted loop>
-          <source src={sampleUrl} />
-        </video>
-        <button
-          className={`absolute text-white text-2xl transition-opacity duration-300 ${
-            showButton || !isPlaying ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 30,
-            pointerEvents: showButton || !isPlaying ? 'auto' : 'none',
-          }}
-        >
-          {isPlaying ? (
-            <FaRegCirclePause size={40} />
-          ) : (
-            <FaRegCirclePlay size={40} />
-          )}
-        </button>
         <div
-          className="absolute bottom-0 left-0 h-1 bg-red transition-width duration-200 ease-linear"
-          style={{ width: `${progress}%`, zIndex: 40 }}
-        ></div>
-      </div>
+          className="absolute video w-full h-full flex justify-center items-center bg-veryBlack z-20"
+          onClick={handlePlayPause}
+        >
+          <video ref={videoRef} className="w-full h-full" muted loop>
+            <source src={config.s3VideoUrl + videoUrl} />
+          </video>
+          <button
+            className={`absolute text-white text-2xl transition-opacity duration-300 ${
+              showButton || !isPlaying ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 30,
+              pointerEvents: showButton || !isPlaying ? 'auto' : 'none',
+            }}
+          >
+            {isPlaying ? (
+              <FaRegCirclePause size={40} />
+            ) : (
+              <FaRegCirclePlay size={40} />
+            )}
+          </button>
+          <div
+            className="absolute bottom-0 left-0 h-1 bg-red transition-width duration-200 ease-linear"
+            style={{ width: `${progress}%`, zIndex: 40 }}
+          ></div>
+        </div>
 
-      <div
-        className="select-panel absolute w-full h-full flex items-end justify-center pointer-events-none"
-        style={{ zIndex: 999 }}
-      >
-        <div className="flex flex-col p-4 w-full justify-stretch">
-          <div className={'flex flex-row text-white items-center'}>
-            <div className="w-8">
-              <img
-                src={'/src/assets/center-profile.png'}
-                className={'w-full h-full object-cover rounded-full'}
-                alt=""
+        <div
+          className="select-panel absolute w-full h-full flex items-end justify-center pointer-events-none"
+          style={{ zIndex: 50 }}
+        >
+          <div className="flex flex-col p-4 w-full justify-stretch">
+            <div
+              className={'flex flex-row text-white items-center z-50'}
+              onClick={() => {
+                navigate('/' + PATH.CENTER_DETAIL + '/' + shelter.id);
+              }}
+            >
+              <div className="w-8">
+                <img
+                  src={shelter.profileImgUrl}
+                  className={'w-full h-full object-cover rounded-full'}
+                  alt=""
+                />
+              </div>
+              <div>{shelter.name}</div>
+            </div>
+            <div
+              className={'text-white overflow-hidden z-50'}
+              onClick={() => {
+                navigate('/' + PATH.VIDEO_DETAIL + '/' + id);
+              }}
+            >
+              {title}
+            </div>
+          </div>
+          <div className={'flex flex-col items-end p-4 gap-4 z-50'}>
+            <div
+              className={'z-50'}
+              onClick={(event) => {
+                event.stopPropagation();
+                likeHandler();
+              }}
+            >
+              <SelectIcon
+                label={String(likeCount)}
+                icon={AiOutlineLike}
+                color={liked ? 'blue' : 'white'}
               />
             </div>
-            <div>아이조아보육원</div>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <SelectIcon
+                label={String(comments.length)}
+                icon={FaCommentDots}
+              />
+            </div>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <SelectIcon label={'공유'} icon={FaShareAlt} />
+            </div>
+            <div
+              className={'z-50'}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <DogFaces direction={'RIGHT'} dogs={dogFaces} />
+            </div>
           </div>
-          <div className={'text-white overflow-hidden'}>
-            밥먹고 똥싸는 강아지 모음
-          </div>
-        </div>
-        <div className={'flex flex-col items-end p-4 gap-4'}>
-          <SelectIcon label={'50'} icon={AiOutlineLike} /> {/** 좋아요 */}
-          <SelectIcon label={'40'} icon={FaCommentDots} /> {/** 댓글 */}
-          <SelectIcon label={'공유'} icon={FaShareAlt} /> {/** 공유 */}
-          <DogFaces direction={'RIGHT'} dogs={dogFaces} />
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
 
 export default MungtsuBox;
