@@ -13,5 +13,5 @@ public interface RankingService {
 
     int getUserLastPage(User user);
 
-	List<DogListDto> getRecommendDogList(User user);
+	List<DogListDto> getRecommendDogList(User user, int pageNum);
 }
