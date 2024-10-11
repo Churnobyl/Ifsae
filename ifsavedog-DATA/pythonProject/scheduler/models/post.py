@@ -1,0 +1,22 @@
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy.orm import relationship
+# from sqlalchemy.ext.declarative import declarative_base
+from models.base import Base
+
+# Base = declarative_base()
+
+class Post(Base):
+    __tablename__ = "post"
+
+    id = Column(Integer, primary_key=True)
+    like_cnt = Column(Integer, default=0)
+    view_cnt = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(DateTime(timezone=True), default=func.now())
+    shelter_id = Column(Integer)    
+    content = Column(String)
+    title = Column(String)
+    video_url = Column(String)
+    thumbnail_url = Column(String)
+    
+    # shelter = relationship("Shelter", back_populates="post")    

@@ -1,3 +1,6 @@
-from job.image_vector_filter import *
+from service.recommendation import insert_recommendation_rank
+# from service.get_datas import *
 
-rank_image_vector(29)
+insert_recommendation_rank(29)
+
+# print(get_image_vector_rank(29))

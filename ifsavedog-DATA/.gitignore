@@ -23,3 +23,5 @@ docs.zip
 archive.zip
 Dockerfile
 pythonProject/scheduler/image
+misc
+es_sync.py

@@ -1,12 +1,10 @@
 from service.insert_dog_datas import *
 from service.calculate_character import *
 from db.mongo import *
+from service.get_datas import *
 
-def calculate_dog_character_score():  
-  db = get_mongo_db()
-  result = get_image_data(db['dog_image_vector']) 
-  
-  list = make_score_id_list(result)
+def calculate_dog_character_score(new_image_vector_list):        
+  list = make_score_id_list(new_image_vector_list)
   results = score_exponential(list)
-  final = calculate_character_score(db, results)
-  insert_to_mongo_character_score(db, final)
+  final = calculate_character_score(results)
+  insert_to_mongo_character_score(final)
